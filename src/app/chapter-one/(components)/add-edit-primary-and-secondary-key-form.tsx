@@ -70,7 +70,7 @@ export default function AddEditPrimaryAndSecondaryKeyForm(props: Props) {
     <ResponsiveDrawer
       open={open}
       setOpen={setOpen}
-      title={`${user?.primaryKey===null||user?.secondaryKey===null?"Provide Primary & Secondary keys ":"Primary & Secondary keys "}`}
+      title={`${user?.primaryKey === null || user?.secondaryKey === null ? "Provide Primary & Secondary keys " : "Primary & Secondary keys "}`}
     >
       <div className="flex gap-2">
         <span>These keys are found under your profile.</span>

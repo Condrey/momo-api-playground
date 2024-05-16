@@ -1,4 +1,11 @@
-import { Box, CircleDashed, CircleSlash2, Star, Triangle, Variable } from "lucide-react";
+import {
+  Box,
+  CircleDashed,
+  CircleSlash2,
+  Star,
+  Triangle,
+  Variable,
+} from "lucide-react";
 
 export default function Page() {
   return (

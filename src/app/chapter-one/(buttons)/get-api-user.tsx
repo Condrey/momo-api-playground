@@ -36,7 +36,9 @@ export default function GetApiUser({ user }: Props) {
         ),
       );
       toast({
-        title: response.ok?"Getting sandbox user":'Failed to get Sandbox user',
+        title: response.ok
+          ? "Getting sandbox user"
+          : "Failed to get Sandbox user",
         description: JSON.stringify(
           `Status: ${response.status},StatusText: ${response.statusText}`,
         ),

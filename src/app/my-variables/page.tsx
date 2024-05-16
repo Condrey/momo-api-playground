@@ -19,10 +19,11 @@ import AuthorizationContainer from "../chapter-one/(components)/authorization-co
 import ReferenceIdContainer from "../chapter-one/(components)/reference-id-container";
 import { Metadata } from "next";
 
-export const metadata:Metadata={
-  title:'My Variables',
-  description:'List of all my variables including x-reference-id, apiKey, authorization, and many others'
-}
+export const metadata: Metadata = {
+  title: "My Variables",
+  description:
+    "List of all my variables including x-reference-id, apiKey, authorization, and many others",
+};
 
 export default async function Page() {
   const user = await fetchUserById();

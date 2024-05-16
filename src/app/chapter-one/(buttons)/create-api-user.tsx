@@ -35,7 +35,9 @@ export default function CreateApiUser({ user }: Props) {
         ),
       );
       toast({
-        title: response.ok?"Creating Sandbox user":'Failed to create sandBox user',
+        title: response.ok
+          ? "Creating Sandbox user"
+          : "Failed to create sandBox user",
         description: JSON.stringify(
           `Status: ${response.status},StatusText: ${response.statusText}`,
         ),
