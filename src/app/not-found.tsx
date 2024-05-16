@@ -3,10 +3,10 @@ export default function Page() {
   return (
     <div className="flex size-full flex-col items-center justify-center">
       <div className="flex size-[150px] items-center justify-center ">
-        <span className=" peer absolute z-50 text-2xl font-bold text-amber-500 hover:text-foreground">
+        <span className=" peer absolute z-50 text-2xl font-bold text-amber-500 hover:text-foreground dark:text-amber-300">
           404
         </span>
-        <CircleDashed className="absolute size-[90px] peer-hover:animate-spin peer-hover:text-amber-500" />
+        <CircleDashed className="absolute size-[90px] peer-hover:animate-spin peer-hover:text-amber-500 dark:peer-hover:text-amber-300" />
         <Star className="relative inset-12 animate-spin" />
         <Triangle className="relative -inset-12 animate-spin" />
         <CircleSlash2 className="relative inset-x-12 animate-spin" />

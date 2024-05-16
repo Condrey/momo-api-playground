@@ -72,7 +72,7 @@ export default function AddEditPrimaryAndSecondaryKeyForm(props: Props) {
       setOpen={setOpen}
       title={`${user?.primaryKey === null || user?.secondaryKey === null ? "Provide Primary & Secondary keys " : "Primary & Secondary keys "}`}
     >
-      <div className="flex gap-2">
+      <div className="flex flex-wrap justify-center gap-2 text-center">
         <span>These keys are found under your profile.</span>
         <a
           href={`https:momodeveloper.mtn.com/profile`}

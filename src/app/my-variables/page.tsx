@@ -46,8 +46,8 @@ export default async function Page() {
           </Avatar>
           <span>My Variables</span>
           <div className="hidden size-[150px] items-center justify-center lg:flex ">
-            <Variable className=" peer absolute z-50  size-[50px] animate-spin text-amber-500 hover:text-foreground" />
-            <CircleDashed className="absolute size-[90px] peer-hover:animate-spin peer-hover:text-amber-500" />
+            <Variable className=" peer absolute z-50  size-[50px] animate-spin text-amber-500 hover:text-foreground dark:text-amber-300" />
+            <CircleDashed className="absolute size-[90px] peer-hover:animate-spin peer-hover:text-amber-500 dark:peer-hover:text-amber-300" />
             <Star className="relative inset-12 peer-hover:animate-spin" />
             <Triangle className="relative -inset-12 peer-hover:animate-spin" />
             <CircleSlash2 className="relative inset-x-12 peer-hover:animate-spin" />
@@ -66,8 +66,8 @@ export default async function Page() {
             )}
           >
             <div className="flex size-[150px] items-center justify-center ">
-              <Stars className=" peer absolute z-50  size-[50px]  text-amber-500 hover:text-foreground" />
-              <CircleDashed className="absolute size-[90px] peer-hover:animate-spin peer-hover:text-amber-500" />
+              <Stars className=" peer absolute z-50  size-[50px]  text-amber-500 hover:text-foreground dark:text-amber-300" />
+              <CircleDashed className="absolute size-[90px] peer-hover:animate-spin peer-hover:text-amber-500 dark:peer-hover:text-amber-300" />
               <Star className="relative inset-12 peer-hover:animate-spin" />
               <Triangle className="relative -inset-12 peer-hover:animate-spin" />
               <CircleSlash2 className="relative inset-x-12 peer-hover:animate-spin" />
@@ -81,7 +81,8 @@ export default async function Page() {
               href="/chapter-one"
               className={cn(
                 buttonVariants({
-                  className: "bg-amber-500 hover:bg-amber-300",
+                  className:
+                    "bg-amber-500 hover:bg-amber-300 dark:bg-amber-300 dark:hover:bg-amber-500",
                 }),
               )}
             >

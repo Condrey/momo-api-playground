@@ -4,12 +4,12 @@ import { Suspense } from "react";
 import LayoutSideBar from "./layout-side-bar";
 export const metadata: Metadata = {
   title: {
-    template: `%s | SandBox User Provisioning`,
-    absolute: "SandBox User Provisioning",
+    template: `%s | SandBox User Provisioning Tool`,
+    absolute: "SandBox User Provisioning Tool",
     default: "MTN MoMo API playground - By Condrey James",
   },
   description: `Create Sandbox user, verify if user exists, and create an Api key`,
-  openGraph: { images: ["sandbox-user-provisioning.png"] },
+  openGraph: { images: ["/sandbox-user-provisioning.png"] },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

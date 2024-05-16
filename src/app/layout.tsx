@@ -8,6 +8,7 @@ import { Inter } from "next/font/google";
 import { auth } from "./auth";
 import "./globals.css";
 import NewComer from "./new-comer";
+import { ThemeProvider } from "./theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -69,31 +70,39 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head />
       <body className={inter.className}>
-        <main className="flex size-full min-h-dvh w-auto flex-col  gap-4  p-4 *:before:pr-2 *:before:text-2xl *:before:font-bold md:flex-row md:bg-zinc-500/5">
-          <div className=" hidden size-full *:max-w-prose md:flex md:h-dvh md:w-1/4 lg:w-auto">
-            <div
-              className={cn(
-                "flex flex-col gap-2  *:flex *:gap-2 *:rounded-full *:px-4  *:py-2",
-              )}
-            >
-              <Title title="Navigation" />
-              <span>Sand box Environment</span>
-              <ChapterLinks />
+        <ThemeProvider
+          attribute="class"
+          enableSystem
+          defaultTheme="system"
+          disableTransitionOnChange
+        >
+          <main className="flex size-full  w-auto flex-col  gap-4  p-4 *:before:pr-2 *:before:text-2xl *:before:font-bold md:flex-row md:bg-zinc-500/5">
+            <div className=" hidden size-full *:max-w-prose md:flex md:h-dvh md:w-1/4 lg:w-auto">
+              <div
+                className={cn(
+                  "flex flex-col gap-2  *:flex *:gap-2 *:rounded-full *:px-4  *:py-2",
+                )}
+              >
+                <Title title="Navigation" />
+                <span>Sand box Environment</span>
+                <ChapterLinks />
+              </div>
             </div>
-          </div>
-          <div className=" flex size-full grow md:h-dvh md:overflow-y-auto md:rounded-3xl  md:bg-white md:shadow-xl md:ring-1 md:ring-black/5  ">
-            {session !== null ? (
-              <div className="flex w-full flex-col gap-4 p-4 *:before:pr-2 *:before:text-2xl *:before:font-bold  ">
-                <Header />
-                <>{children}</>
-              </div>
-            ) : (
-              <div className="flex size-full h-dvh flex-col items-center justify-center gap-4 p-4 *:before:pr-2 *:before:text-2xl *:before:font-bold md:h-auto  ">
-                <NewComer />
-              </div>
-            )}
-          </div>
-        </main>
+            <div className=" flex size-full grow md:min-h-[95vh] md:overflow-y-auto md:rounded-3xl md:bg-white  md:p-4 md:shadow-xl md:ring-1 md:ring-black/5 dark:md:bg-background  ">
+              {session !== null ? (
+                <div className="flex w-full flex-col gap-4  *:before:pr-2 *:before:text-2xl *:before:font-bold  ">
+                  <Header />
+                  <>{children}</>
+                </div>
+              ) : (
+                <div className="flex size-full h-dvh flex-col items-center justify-center gap-4 p-4 *:before:pr-2 *:before:text-2xl *:before:font-bold md:h-auto  ">
+                  <NewComer />
+                </div>
+              )}
+            </div>
+          </main>
+        </ThemeProvider>
+
         <Toaster />
       </body>
     </html>
