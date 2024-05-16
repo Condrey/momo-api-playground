@@ -8,7 +8,7 @@ import { Inter } from "next/font/google";
 import { auth } from "./auth";
 import "./globals.css";
 import NewComer from "./new-comer";
-import { ThemeProvider } from "./theme-provider";
+import { ThemeProvider } from "../components/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -101,9 +101,10 @@ export default async function RootLayout({
               )}
             </div>
           </main>
+          <Toaster />
+
         </ThemeProvider>
 
-        <Toaster />
       </body>
     </html>
   );

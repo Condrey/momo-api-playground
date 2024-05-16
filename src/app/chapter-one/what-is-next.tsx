@@ -1,20 +1,24 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import LoadingButton from "@/components/ui/loading-button";
 import { toast } from "@/components/ui/use-toast";
 import { resetUserVariables } from "@/lib/db/actions/primary-and-secondary-key-actions";
 import { ServerMessage, cn } from "@/lib/utils";
 import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 interface Props {
   user: User | null;
 }
 export default function WhatIsNext({ user }: Props) {
   const isApiKeyPresent = user?.apiKey !== null;
+  const [isLoading,setIsLoading] =useState(false)
 
   const router = useRouter();
   async function handleClick() {
     try {
+    setIsLoading(true)
       const response: ServerMessage = await resetUserVariables();
       toast({
         title: response.title!,
@@ -28,6 +32,7 @@ export default function WhatIsNext({ user }: Props) {
         variant: "destructive",
       });
     } finally {
+      setIsLoading(false)
       router.refresh();
     }
   }
@@ -41,7 +46,7 @@ export default function WhatIsNext({ user }: Props) {
     >
       <hr />
       <span>What is next?</span>
-      <Button onClick={handleClick}>Re-Start drill</Button>
+      <LoadingButton loading={isLoading} onClick={handleClick}>Re-Start drill</LoadingButton>
     </div>
   );
 }

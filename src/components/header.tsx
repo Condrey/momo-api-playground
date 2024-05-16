@@ -3,6 +3,7 @@ import { PhoneCall } from "lucide-react";
 import { SessionProvider } from "next-auth/react";
 import Link from "next/link";
 import UserToggle from "./user-toggle";
+import { ThemeToggle } from "./theme-toggle";
 
 export default async function Header() {
   const phoneNumber = "+256776239674";
@@ -11,7 +12,8 @@ export default async function Header() {
   return (
     <div className="flex w-full flex-col gap-4 pb-6">
       <div className="text-xl font-bold text-amber-500 dark:text-amber-300 md:text-2xl  lg:text-3xl ">
-        <div className="float-right text-sm">
+        <div className="float-right text-sm flex items-center gap-4">
+          <ThemeToggle/>
           <SessionProvider>
             <UserToggle user={user} />
           </SessionProvider>
