@@ -1,27 +1,21 @@
 import BreadCrumb from "@/components/bread-crumb";
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata } from "next";
 import { Suspense } from "react";
 import LayoutSideBar from "./layout-side-bar";
 
-export async function generateMetadata(
-  parent: ResolvingMetadata,
-): Promise<Metadata> {
-  const previousImages = (await parent).openGraph?.images || [];
-  return {
-    title: {
-      template: `%s - SandBox User Provisioning Tool | MTN MoMo API playground - By Condrey James`,
-      absolute: "SandBox User Provisioning Tool",
-      default: "MTN MoMo API playground - By Condrey James",
-    },
-    description: `Create Sandbox user, verify if user exists, and create an Api key`,
-    openGraph: {
-      images: [
-        "https://lzowhnjutjzukacetzpc.supabase.co/storage/v1/object/public/momo-api-bucket/04.%20sandbox%20user%20provisioning%20tool.png",
-        ...previousImages,
-      ],
-    },
-  };
-}
+export const metadata: Metadata = {
+  title: {
+    template: `%s - SandBox User Provisioning Tool | MTN MoMo API playground - By Condrey James`,
+    absolute: "SandBox User Provisioning Tool",
+    default: "MTN MoMo API playground - By Condrey James",
+  },
+  description: `Create Sandbox user, verify if user exists, and create an Api key`,
+  openGraph: {
+    images: [
+      "https://lzowhnjutjzukacetzpc.supabase.co/storage/v1/object/public/momo-api-bucket/04.%20sandbox%20user%20provisioning%20tool.png",
+    ],
+  },
+};
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
