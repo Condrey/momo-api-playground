@@ -19,6 +19,7 @@ import {
 } from "@/lib/validation/primary-and-secondary-key-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -74,7 +75,7 @@ export default function AddEditPrimaryAndSecondaryKeyForm(props: Props) {
     >
       <div className="flex flex-wrap justify-center gap-2 text-center">
         <span>These keys are found under your profile.</span>
-        <a
+        <Link
           href={`https:momodeveloper.mtn.com/profile`}
           target="_blank"
           rel="noopener noreferrer"
@@ -82,7 +83,7 @@ export default function AddEditPrimaryAndSecondaryKeyForm(props: Props) {
           title="See my Primary and Secondary keys."
         >
           Click here to see
-        </a>
+        </Link>
       </div>
       <Form {...form}>
         <form className="space-y-4  " onSubmit={form.handleSubmit(onSubmit)}>
