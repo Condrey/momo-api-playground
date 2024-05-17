@@ -76,7 +76,7 @@ export default function AddEditPrimaryAndSecondaryKeyForm(props: Props) {
       <div className="flex flex-wrap justify-center gap-2 text-center">
         <span>These keys are found under your profile.</span>
         <Link
-          href={`https:momodeveloper.mtn.com/profile`}
+          href={`https://momodeveloper.mtn.com/profile`}
           target="_blank"
           rel="noopener noreferrer"
           className="font-bold text-amber-600"
