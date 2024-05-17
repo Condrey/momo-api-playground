@@ -52,7 +52,7 @@ export const metadata: Metadata = {
         url: "https://lzowhnjutjzukacetzpc.supabase.co/storage/v1/object/public/momo-api-bucket/opengraphy-big.png", // Must be an absolute URL
         width: 1800,
         height: 1600,
-        alt: "My custom alt",
+        alt: "openGraph",
       },
     ],
     locale: "en_US",
