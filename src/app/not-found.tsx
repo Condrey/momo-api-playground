@@ -1,3 +1,4 @@
+import ChapterLinks from "@/components/chapter-links";
 import { Triangle, CircleDashed, Star, CircleSlash2, Box } from "lucide-react";
 export default function Page() {
   return (
@@ -13,6 +14,14 @@ export default function Page() {
         <Box className="relative  -inset-y-12 animate-spin" />
       </div>
       <span>Sorry this page does not exist</span>
+      <div className="flex flex-col gap-4 *:flex *:gap-2 *:rounded-full *:px-4 *:py-2">
+        <div className=" flex w-full items-center gap-2">
+          <hr className=" flex grow" />
+          <span>Navigate other areas</span>
+          <hr className=" flex grow" />
+        </div>
+        <ChapterLinks />
+      </div>
     </div>
   );
 }

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     default: "MTN MoMo API playground - By Condrey James",
   },
   description: `Create Sandbox user, verify if user exists, and create an Api key`,
-  openGraph: { images: ["/sandbox-user-provisioning.png"] },
+  openGraph: { images: ["https://lzowhnjutjzukacetzpc.supabase.co/storage/v1/object/public/momo-api-bucket/04.%20sandbox%20user%20provisioning%20tool.png"] },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
