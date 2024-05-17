@@ -10,11 +10,21 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Check, CheckCheck, Computer, Monitor, Moon, MoonIcon, Sun, SunIcon, Tv2 } from "lucide-react";
+import {
+  Check,
+  CheckCheck,
+  Computer,
+  Monitor,
+  Moon,
+  MoonIcon,
+  Sun,
+  SunIcon,
+  Tv2,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function ThemeToggle() {
-  const { setTheme,theme } = useTheme();
+  const { setTheme, theme } = useTheme();
 
   return (
     <DropdownMenu>
@@ -22,22 +32,26 @@ export function ThemeToggle() {
         <Button
           variant="ghost"
           size="icon"
-          className="rounded-full p-0 size-[50px]"
+          className="size-[50px] rounded-full p-0"
         >
           <SunIcon className=" size-[35px]  rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 " />
-          <MoonIcon className="size-[35px] absolute   rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <MoonIcon className="absolute size-[35px]   rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="*:flex *:gap-2 *:items-center">
+      <DropdownMenuContent
+        align="end"
+        className="*:flex *:items-center *:gap-2"
+      >
         <DropdownMenuItem onClick={() => setTheme("light")}>
-        <Sun/>  Light <Check className={cn(theme!=="light"&&"hidden")}/>
+          <Sun /> Light <Check className={cn(theme !== "light" && "hidden")} />
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
-         <Moon/> Dark  <Check className={cn(theme!=="dark"&&"hidden")}/>
+          <Moon /> Dark <Check className={cn(theme !== "dark" && "hidden")} />
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
-          <Monitor/> System <Check className={cn(theme!=="system"&&"hidden")}/>
+          <Monitor /> System{" "}
+          <Check className={cn(theme !== "system" && "hidden")} />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

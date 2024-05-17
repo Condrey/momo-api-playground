@@ -12,8 +12,8 @@ export default async function Header() {
   return (
     <div className="flex w-full flex-col gap-4 pb-6">
       <div className="text-xl font-bold text-amber-500 dark:text-amber-300 md:text-2xl  lg:text-3xl ">
-        <div className="float-right text-sm flex items-center gap-4">
-          <ThemeToggle/>
+        <div className="float-right flex items-center gap-4 text-sm">
+          <ThemeToggle />
           <SessionProvider>
             <UserToggle user={user} />
           </SessionProvider>
