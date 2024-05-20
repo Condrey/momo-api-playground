@@ -1,11 +1,10 @@
-
 "use client";
 
 import { cn } from "@/lib/utils";
 import { CheckCheck, Copy } from "lucide-react";
 import { useState } from "react";
 interface Props {
-    accessToken: string | null;
+  accessToken: string | null;
 }
 export default function AccessTokenContainer({ accessToken }: Props) {
   const [isCopied, setIsCopied] = useState<boolean>(false);
@@ -21,6 +20,8 @@ export default function AccessTokenContainer({ accessToken }: Props) {
     <>
       <div className={cn(accessToken === null ? "hidden" : "flex flex-col")}>
         <span>Your Access Token</span>
+        <span className="font-bold leading-loose">Please note that this expires in 3600 </span>
+
         <div className="w-full rounded-md border bg-stone-800 p-2 font-normal text-white">
           <Copy
             onClick={handleCopy}

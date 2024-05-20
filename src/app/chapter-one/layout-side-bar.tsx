@@ -11,8 +11,8 @@ export default async function LayoutSideBar() {
     <div className=" w-full space-y-4 *:w-full *:gap-2 *:font-bold lg:w-5/12">
       <CallbackUrlContainer callbackUrl={user?.callbackUrl!} />
       <ReferenceIdContainer referenceId={user?.referenceId!} />
-      <AuthorizationContainer authorization={user?.authorization!} />
       <ApiKeyContainer apiKey={user?.apiKey!} />
+      <AuthorizationContainer authorization={user?.authorization!} />
     </div>
   );
 }

@@ -5,14 +5,14 @@ import LayoutSideBar from "./layout-side-bar";
 
 export const metadata: Metadata = {
   title: {
-    template: `%s - SandBox User Provisioning Tool | MTN MoMo API playground - By Condrey James`,
-    absolute: "SandBox User Provisioning Tool | MTN MoMo API playground - By Condrey James",
+    template: `%s - Collection | MTN MoMo API playground - By Condrey James`,
+    absolute: "Collection | MTN MoMo API playground - By Condrey James",
     default: "MTN MoMo API playground - By Condrey James",
   },
-  description: `Create Sandbox user, verify if user exists, and create an Api key`,
+  description: `Enable remote collection of bills, fees or taxes.`,
   openGraph: {
     images: [
-      "https://lzowhnjutjzukacetzpc.supabase.co/storage/v1/object/public/momo-api-bucket/04.%20sandbox%20user%20provisioning%20tool.png",
+      "https://lzowhnjutjzukacetzpc.supabase.co/storage/v1/object/public/momo-api-bucket/02-collection.png",
     ],
   },
 };
@@ -23,7 +23,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <BreadCrumb
         breadCrumbs={[
           { title: "Home", href: "/" },
-          { title: "Sandbox user provisioning", href: "/chapter-one" },
+          { title: "Collection", href: "/chapter-two" },
         ]}
       />
       <div className="flex flex-col-reverse  lg:flex-row ">

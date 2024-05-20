@@ -81,10 +81,11 @@ export default function CreateAccessToken({ user }: Props) {
         >
           /collection/token/ - POST
         </span>
-        <p className=" block">
+      
+      </ProductSubtitleContainer>
+      <p className=" block">
           Access token has an expiry time of 3600 from the time it was created
         </p>
-      </ProductSubtitleContainer>
       <LoadingButton
         className={cn(isAccessTokenGot && " translate-x-10 rotate-3")}
         disabled={isAccessTokenGot}
