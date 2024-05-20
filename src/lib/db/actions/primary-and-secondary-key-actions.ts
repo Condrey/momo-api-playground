@@ -1,12 +1,16 @@
 "use server";
 import { auth } from "@/app/auth";
+import { ServerMessage } from "@/lib/utils";
+import {
+  CallBackUrlSchema,
+  callBackUrlSchema,
+} from "@/lib/validation/callback-url-validation";
 import {
   CreatePrimaryAndSecondaryKeySchema,
   createPrimaryAndSecondaryKeySchema,
 } from "@/lib/validation/primary-and-secondary-key-validation";
 import { Session } from "next-auth";
 import prisma from "../prisma";
-import { ServerMessage } from "@/lib/utils";
 
 export async function createPrimaryAndSecondaryKey(
   formData: CreatePrimaryAndSecondaryKeySchema,
@@ -85,6 +89,9 @@ export async function resetUserVariables(): Promise<ServerMessage> {
         referenceId: null,
         authorization: null,
         isUserPresent: false,
+        callbackUrl: null,
+        accessToken: null,
+        accessTokenCreatedTime: null,
       },
     });
   } catch (e) {
@@ -100,5 +107,59 @@ export async function resetUserVariables(): Promise<ServerMessage> {
     type: "success",
     title: "Boo-yah.!",
     message: "Your variables were reset.",
+  };
+}
+
+export async function createCallbackUrl(
+  formData: CallBackUrlSchema,
+): Promise<ServerMessage> {
+  //Validate form fields using Zod
+  const parseResult = callBackUrlSchema.safeParse(formData);
+  //If form validation occurs, return errors early, otherwise, proceed.
+  if (!parseResult.success) {
+    console.error(parseResult.error);
+    return {
+      errors: JSON.stringify(parseResult.error.flatten().fieldErrors),
+      type: "error",
+      message:
+        "Missing fields. Failed to create callbackUrl, you have missing fields.",
+    };
+  }
+  //Prepare data for insertion into the database
+  const { callbackUrl } = parseResult.data;
+
+  const session: Session | null = await auth();
+  const userId = session?.user.id!;
+
+  //Check if user is permitted to perform this action
+  if (!session?.user.id) {
+    console.error("Not authorized");
+    return {
+      type: "warning",
+      message: "You are unauthorized to perform this action.",
+    };
+  }
+
+  // Insert data into the database
+  try {
+    await prisma.user.update({
+      where: { id: userId! },
+      data: {
+        callbackUrl,
+      },
+    });
+  } catch (e) {
+    //If a database error occurs, return a more specific error.
+    console.error(e);
+    return {
+      type: "error",
+      message: "Database error: Failed to create callback url.",
+    };
+  }
+
+  return {
+    type: "success",
+    title: "Bingo.!",
+    message: "Successfully updated your callback url.",
   };
 }

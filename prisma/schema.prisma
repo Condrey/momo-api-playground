@@ -14,22 +14,25 @@ generator client {
 }
 
 model User {
-  id            String          @id @default(cuid())
-  name          String?
-  email         String          @unique
-  emailVerified DateTime?
-  image         String?
-  role          Role            @default(USER)
-  primaryKey    String?
-  secondaryKey  String?
-  referenceId   String?
-  isUserPresent Boolean?        @default(false)
-  authorization String?
-  apiKey        String?
-  accounts      Account[]
-  sessions      Session[]
+  id                     String          @id @default(cuid())
+  name                   String?
+  email                  String          @unique
+  emailVerified          DateTime?
+  image                  String?
+  role                   Role            @default(USER)
+  primaryKey             String?
+  secondaryKey           String?
+  referenceId            String?
+  isUserPresent          Boolean?        @default(false)
+  authorization          String?
+  apiKey                 String?
+  accessToken            String?
+  accessTokenCreatedTime String?
+  callbackUrl            String?
+  accounts               Account[]
+  sessions               Session[]
   // Optional for WebAuthn support
-  Authenticator Authenticator[]
+  Authenticator          Authenticator[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

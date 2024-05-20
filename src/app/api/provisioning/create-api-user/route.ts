@@ -15,14 +15,17 @@ export async function POST(req: Request) {
         { status: 400 },
       );
     }
-    const { primaryKey, secondaryKey,referenceId } = parseResult.data;
-
-    const callbackUrl = "https://momo-api.vercel.app";
-    const subscriptionKey = primaryKey;
-    const url = `https://sandbox.momodeveloper.mtn.com/v1_0/apiuser`;
-
     const generatedReferenceId = generateUUID();
     const session = await auth();
+
+    const { primaryKey, secondaryKey, referenceId } = parseResult.data;
+    const user = await prisma.user.findUnique({
+      where: { id: session?.user.id! },
+    });
+
+    const callbackUrl = user?.callbackUrl;
+    const subscriptionKey = primaryKey;
+    const url = `https://sandbox.momodeveloper.mtn.com/v1_0/apiuser`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -37,7 +40,7 @@ export async function POST(req: Request) {
     if (response.ok) {
       await prisma.user.update({
         where: { id: session?.user.id! },
-        data: {  referenceId: generatedReferenceId },
+        data: { referenceId: generatedReferenceId },
       });
       return Response.json({ message: response }, { status: 200 });
     } else {

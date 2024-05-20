@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import AddEditCAllbackUrl from "../(components)/add-edit-callback-url";
 
 interface Props {
   user: User | null;
@@ -15,6 +16,10 @@ interface Props {
 export default function CreateApiUser({ user }: Props) {
   const [responseMsg, setResponseMsg] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [hideAddCallbackUrl, setHideAddCallbackUrl] = useState<boolean>(
+    user?.callbackUrl !== null && user?.callbackUrl !==undefined
+  );
+  const [open, setOpen] = useState<boolean>(false);
   const isReferenceIdSaved = user?.referenceId !== null;
   const router = useRouter();
   async function handleClick() {
@@ -26,6 +31,7 @@ export default function CreateApiUser({ user }: Props) {
           referenceId: user?.referenceId ?? "",
           primaryKey: user?.primaryKey ?? "",
           secondaryKey: user?.secondaryKey ?? "",
+          
         }),
       });
       const data = await response.json();
@@ -55,6 +61,10 @@ export default function CreateApiUser({ user }: Props) {
       router.refresh();
     }
   }
+
+  function addCallBackUrlClicked() {
+    setOpen(true);
+  }
   return (
     <>
       <ProductSubtitleContainer isChecked={isReferenceIdSaved}>
@@ -69,14 +79,22 @@ export default function CreateApiUser({ user }: Props) {
         </span>
       </ProductSubtitleContainer>
       <LoadingButton
+        onClick={addCallBackUrlClicked}
+        loading={false}
+        className={cn(hideAddCallbackUrl && "hidden")}
+      >
+        Provide callBack Url
+      </LoadingButton>
+      <LoadingButton
         className={cn(isReferenceIdSaved && " translate-x-10 rotate-3")}
-        disabled={isReferenceIdSaved}
+        disabled={isReferenceIdSaved || !hideAddCallbackUrl}
         onClick={handleClick}
         loading={isLoading}
       >
         Create Api User
       </LoadingButton>
       <ResponseContainer message={responseMsg} />
+      <AddEditCAllbackUrl open={open} setOpen={setOpen} user={user} />
     </>
   );
 }

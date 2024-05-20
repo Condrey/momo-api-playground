@@ -18,6 +18,8 @@ import ApiKeyContainer from "../chapter-one/(components)/api-key-container";
 import AuthorizationContainer from "../chapter-one/(components)/authorization-container";
 import ReferenceIdContainer from "../chapter-one/(components)/reference-id-container";
 import { Metadata } from "next";
+import CallbackUrlContainer from "../chapter-one/(components)/callback-url-container";
+import AccessTokenContainer from "../chapter-two/(components)/access-token-container";
 
 export const metadata: Metadata = {
   title: "My Variables",
@@ -55,9 +57,24 @@ export default async function Page() {
           </div>
         </div>
         <div className="rounded-md border p-4 *:max-w-prose">
+           {/**
+           * 
+           * chapter one
+           * 
+           * 
+           */}
+          <CallbackUrlContainer callbackUrl={user?.callbackUrl!} />
           <ReferenceIdContainer referenceId={user?.referenceId!} />
           <AuthorizationContainer authorization={user?.authorization!} />
           <ApiKeyContainer apiKey={user?.apiKey!} />
+          <hr />
+          {/**
+           * 
+           * chapter two
+           * 
+           * 
+           */}
+          <AccessTokenContainer accessToken={user?.accessToken!}/>
           <div
             className={cn(
               user?.referenceId !== null

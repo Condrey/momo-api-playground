@@ -1,12 +1,21 @@
 import { auth } from "@/app/auth";
 import prisma from "@/lib/db/prisma";
+import getAuthorization from "@/lib/momo-utils/get-authorization";
 import { createSandboxUserProvisioningSchema } from "@/lib/validation/sandbox-user-provisioning-validation";
+import { z } from "zod";
 
 export async function POST(req: Request) {
   const body = await req.json();
+   
+  const schema = z.object({
+    primaryKey:z.string().min(1),
+    authorization:z.string().min(1)
+  })
+
+
 
   try {
-    const parseResult = createSandboxUserProvisioningSchema.safeParse(body);
+    const parseResult = schema.safeParse(body);
     if (!parseResult.success) {
       return Response.json(
         { error: "Invalid input, check your request body." },
@@ -14,25 +23,28 @@ export async function POST(req: Request) {
       );
     }
 
-    const { referenceId, primaryKey, secondaryKey } = parseResult.data;
+    const { authorization, primaryKey } = parseResult.data;
     const subscriptionKey = primaryKey;
-    const url = `https://sandbox.momodeveloper.mtn.com/v1_0/apiuser/${referenceId}`;
+    const url = `https://sandbox.momodeveloper.mtn.com/collection/token/`;
 
     const session = await auth();
 
     const response = await fetch(url, {
-      method: "GET",
+      method: "POST",
       headers: {
-        "Cache-Control": "no-cache",
+        "Authorization":authorization,
+        "Cache-Control":"no-cache",
         "Ocp-Apim-Subscription-Key": subscriptionKey,
       },
     });
-
+    const data = await response.json();
     if (response.ok) {
-      const data = await response.json();
+      const accessToken = data.access_token;
+      const currentTime  = Date.now()
+
       await prisma.user.update({
         where: { id: session?.user.id! },
-        data: { isUserPresent: true },
+        data: { accessToken, accessTokenCreatedTime: `${currentTime}`},
       });
       return Response.json({ message: data }, { status: 200 });
     } else {

@@ -8,39 +8,39 @@ import { cn } from "@/lib/utils";
 import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+
 interface Props {
   user: User | null;
 }
-export default function GetApiUser({ user }: Props) {
-  const router = useRouter();
-  const isUserPresent = user?.isUserPresent !== false;
-
+export default function CreateAccessToken({ user }: Props) {
   const [responseMsg, setResponseMsg] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const isAccessTokenGot =
+    user?.accessToken !== null && user?.accessToken !== undefined;
+  const router = useRouter();
   async function handleClick() {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/provisioning/get-api-user", {
+      const response = await fetch("/api/provisioning/create-access-token", {
         method: "POST",
         body: JSON.stringify({
-          referenceId: user?.referenceId!,
-          primaryKey: user?.primaryKey!,
-          secondaryKey: user?.secondaryKey!,
+          primaryKey: user?.primaryKey ?? "",
+          authorization: user?.authorization ?? "",
         }),
       });
       const data = await response.json();
+      console.log(data);
 
       if (response.ok) {
         setResponseMsg(
           JSON.stringify(
-            `providerCallbackHost: ${data.message.providerCallbackHost},targetEnvironment: ${data.message.targetEnvironment}`,
+            `access_token: ${data.message.access_token},token_type: ${data.message.token_type},expires_in:${data.message.expires_in}`,
           ),
         );
         toast({
           title: "Creating Access Token",
           description: JSON.stringify(
-            `providerCallbackHost: ${data.message.providerCallbackHost},targetEnvironment: ${data.message.targetEnvironment}`,
+            `access_token: ${data.message.access_token},token_type: ${data.message.token_type},expires_in:${data.message.expires_in}`,
           ),
         });
       } else {
@@ -71,22 +71,27 @@ export default function GetApiUser({ user }: Props) {
   }
   return (
     <>
-      <ProductSubtitleContainer isChecked={isUserPresent}>
+      <ProductSubtitleContainer isChecked={isAccessTokenGot}>
         <span
           className={cn(
-            isUserPresent
-              ? ' before:content-["Got_User:"]'
-              : ' before:content-["Get_User:"]',
+            isAccessTokenGot
+              ? ' before:content-["Created_Access_Token:"]'
+              : ' before:content-["Create_Access_Token:"]',
           )}
-        >{` /v1_0/apiuser/{X-Reference-Id} - GET`}</span>
+        >
+          /collection/token/ - POST
+        </span>
+        <p className=" block">
+          Access token has an expiry time of 3600 from the time it was created
+        </p>
       </ProductSubtitleContainer>
       <LoadingButton
-        className={cn(isUserPresent && " -translate-x-10 -rotate-3")}
+        className={cn(isAccessTokenGot && " translate-x-10 rotate-3")}
+        disabled={isAccessTokenGot}
         onClick={handleClick}
         loading={isLoading}
-        disabled={isUserPresent}
       >
-        Get Api User
+        Create Access Token
       </LoadingButton>
       <ResponseContainer message={responseMsg} />
     </>

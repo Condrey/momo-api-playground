@@ -10,7 +10,7 @@ export default function ResponseContainer({ message }: Props) {
         className={cn(
           message === undefined
             ? "hidden"
-            : " flex min-h-[150] max-w-prose flex-col items-center justify-center rounded-md bg-gradient-to-br from-red-400  to-fuchsia-400 p-4",
+            : " flex min-h-[150] max-w-prose flex-col items-center justify-center break-all rounded-md bg-gradient-to-br from-red-400  to-fuchsia-400 p-4",
         )}
       >
         <span className="font-bold">{message}</span>

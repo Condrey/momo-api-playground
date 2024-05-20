@@ -1,14 +1,5 @@
 import ProductTitleContainer from "@/components/product-title-container";
 import { fetchUserById } from "@/lib/db/data/user-data";
-import {
-  Triangle,
-  CircleDashed,
-  Home,
-  Star,
-  CircleSlash,
-  CircleSlash2,
-  Box,
-} from "lucide-react";
 import CreateApiKey from "./(buttons)/create-api-key";
 import CreateApiUser from "./(buttons)/create-api-user";
 import GetApiUser from "./(buttons)/get-api-user";
