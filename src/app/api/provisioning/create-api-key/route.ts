@@ -1,5 +1,6 @@
 import { auth } from "@/app/auth";
 import prisma from "@/lib/db/prisma";
+import getAuthorization from "@/lib/momo-utils/get-authorization";
 import { createSandboxUserProvisioningSchema } from "@/lib/validation/sandbox-user-provisioning-validation";
 
 export async function POST(req: Request) {
@@ -30,9 +31,11 @@ export async function POST(req: Request) {
     const data = await response.json();
     if (response.ok) {
       const apiKey = data.apiKey;
+      const authorization = getAuthorization(referenceId, apiKey);
+
       await prisma.user.update({
         where: { id: session?.user.id! },
-        data: { apiKey },
+        data: { apiKey, authorization },
       });
       return Response.json({ message: data }, { status: 200 });
     } else {

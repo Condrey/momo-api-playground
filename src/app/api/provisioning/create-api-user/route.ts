@@ -1,7 +1,6 @@
 import { auth } from "@/app/auth";
 import prisma from "@/lib/db/prisma";
 import generateUUID from "@/lib/momo-utils/generate-uuid";
-import getAuthorization from "@/lib/momo-utils/get-authorization";
 import { createSandboxUserProvisioningSchema } from "@/lib/validation/sandbox-user-provisioning-validation";
 
 export async function POST(req: Request) {
@@ -16,14 +15,13 @@ export async function POST(req: Request) {
         { status: 400 },
       );
     }
-    const { primaryKey, secondaryKey } = parseResult.data;
+    const { primaryKey, secondaryKey,referenceId } = parseResult.data;
 
     const callbackUrl = "https://momo-api.vercel.app";
     const subscriptionKey = primaryKey;
     const url = `https://sandbox.momodeveloper.mtn.com/v1_0/apiuser`;
 
-    const authorization = getAuthorization(primaryKey, secondaryKey);
-    const referenceId = generateUUID();
+    const generatedReferenceId = generateUUID();
     const session = await auth();
 
     const response = await fetch(url, {
@@ -31,7 +29,7 @@ export async function POST(req: Request) {
       headers: {
         "Content-Type": "application/json",
         "Cache-Control": "no-cache",
-        "X-Reference-Id": referenceId,
+        "X-Reference-Id": generatedReferenceId,
         "Ocp-Apim-Subscription-Key": subscriptionKey,
       },
       body: JSON.stringify({ providerCallbackHost: callbackUrl }),
@@ -39,7 +37,7 @@ export async function POST(req: Request) {
     if (response.ok) {
       await prisma.user.update({
         where: { id: session?.user.id! },
-        data: { authorization, referenceId },
+        data: {  referenceId: generatedReferenceId },
       });
       return Response.json({ message: response }, { status: 200 });
     } else {
