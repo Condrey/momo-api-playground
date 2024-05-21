@@ -33,9 +33,7 @@ export default function GetApiUser({ user }: Props) {
 
       if (response.ok) {
         setResponseMsg(
-          JSON.stringify(
-            `providerCallbackHost: ${data.message.providerCallbackHost},targetEnvironment: ${data.message.targetEnvironment}`,
-          ),
+          `{\n"providerCallbackHost": "${data.message.providerCallbackHost}",\n"targetEnvironment": "${data.message.targetEnvironment}"\n}`,
         );
         toast({
           title: "Creating Access Token",
@@ -45,9 +43,7 @@ export default function GetApiUser({ user }: Props) {
         });
       } else {
         setResponseMsg(
-          JSON.stringify(
-            `Status: ${response.status},StatusText: ${response.statusText}`,
-          ),
+          `{\n"Status": "${response.status}",\n"StatusText": "${response.statusText}\n}"`,
         );
         toast({
           title: "Failed to create Access Token",

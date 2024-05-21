@@ -1,4 +1,5 @@
 import BreadCrumb from "@/components/bread-crumb";
+import SmallCodeSnippetContainer from "@/components/small-code-snippet-container";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
 import { fetchUserById } from "@/lib/db/data/user-data";
@@ -15,11 +16,6 @@ import {
 } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
-import ApiKeyContainer from "../chapter-one/(components)/api-key-container";
-import AuthorizationContainer from "../chapter-one/(components)/authorization-container";
-import CallbackUrlContainer from "../chapter-one/(components)/callback-url-container";
-import ReferenceIdContainer from "../chapter-one/(components)/reference-id-container";
-import AccessTokenContainer from "../chapter-two/(components)/access-token-container";
 
 export const metadata: Metadata = {
   title: "My Variables",
@@ -63,10 +59,20 @@ export default async function Page() {
            *
            *
            */}
-          <CallbackUrlContainer callbackUrl={user?.callbackUrl!} />
-          <ReferenceIdContainer referenceId={user?.referenceId!} />
-          <ApiKeyContainer apiKey={user?.apiKey!} />
-          <AuthorizationContainer authorization={user?.authorization!} />
+          <SmallCodeSnippetContainer
+            text={user?.callbackUrl!}
+            title="Your callbackUrl"
+          />
+          <SmallCodeSnippetContainer
+            text={user?.referenceId!}
+            title="Your X-Reference-Id"
+          />
+          <SmallCodeSnippetContainer text={user?.apiKey!} title="Your apiKey" />
+          <SmallCodeSnippetContainer
+            text={user?.authorization!}
+            title="Your Authorization"
+            subtitle="Please note, authorization expires in 1 hour"
+          />
           <hr />
           {/**
            *
@@ -74,7 +80,10 @@ export default async function Page() {
            *
            *
            */}
-          <AccessTokenContainer accessToken={user?.accessToken!} />
+          <SmallCodeSnippetContainer
+            text={user?.accessToken!}
+            title="Your accessToken"
+          />
           <div
             className={cn(
               user?.referenceId !== null

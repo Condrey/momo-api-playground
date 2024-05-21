@@ -16,9 +16,9 @@ interface Props {
 export default function CreateApiUser({ user }: Props) {
   const [responseMsg, setResponseMsg] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [hideAddCallbackUrl, setHideAddCallbackUrl] = useState<boolean>(
-    user?.callbackUrl !== null && user?.callbackUrl !==undefined
-  );
+  const hideAddCallbackUrl: boolean =
+    user?.callbackUrl !== null && user?.callbackUrl !== undefined;
+
   const [open, setOpen] = useState<boolean>(false);
   const isReferenceIdSaved = user?.referenceId !== null;
   const router = useRouter();
@@ -31,14 +31,11 @@ export default function CreateApiUser({ user }: Props) {
           referenceId: user?.referenceId ?? "",
           primaryKey: user?.primaryKey ?? "",
           secondaryKey: user?.secondaryKey ?? "",
-          
         }),
       });
       const data = await response.json();
       setResponseMsg(
-        JSON.stringify(
-          `Status: ${response.status},StatusText: ${response.statusText}`,
-        ),
+        `{\n"Status": "${response.status}",\n"StatusText": "${response.statusText}"\n}`,
       );
       toast({
         title: response.ok

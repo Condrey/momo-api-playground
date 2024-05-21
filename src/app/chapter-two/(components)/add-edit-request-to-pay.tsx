@@ -12,12 +12,11 @@ import {
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
 import ResponsiveDrawer from "@/components/ui/responsive-drawer";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { generateIds } from "@/lib/momo-utils/generate-ids";
 import {
-  RequestToPaySchema,
-  requestToPaySchema,
+  CreateRequestToPaySchema,
+  createRequestToPaySchema,
 } from "@/lib/validation/request-to-pay-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
@@ -34,8 +33,8 @@ export default function AddEditRequestToPay(props: Props) {
   const { open, setOpen, user } = props;
   const router = useRouter();
   const generatedIds = generateIds(user?.id!);
-  const form = useForm<RequestToPaySchema>({
-    resolver: zodResolver(requestToPaySchema),
+  const form = useForm<CreateRequestToPaySchema>({
+    resolver: zodResolver(createRequestToPaySchema),
     defaultValues: {
       accessToken: user?.accessToken || "",
       callbackUrl: user?.callbackUrl || "",
@@ -47,14 +46,13 @@ export default function AddEditRequestToPay(props: Props) {
       externalId: generatedIds[0],
       partyId: generatedIds[1],
       payerMessage: "Some random text",
-      payeeNote: 'Please change this text',
+      payeeNote: "Please change this text",
     },
   });
 
-  async function onSubmit(input: RequestToPaySchema) {
+  async function onSubmit(input: CreateRequestToPaySchema) {
     const body = JSON.stringify(input);
     try {
-      console.log("input: ", body);
       const response = await fetch("/api/collection/request-to-pay", {
         method: "POST",
         body,
@@ -98,11 +96,7 @@ export default function AddEditRequestToPay(props: Props) {
     }
   }
   return (
-    <ResponsiveDrawer
-      open={open}
-      setOpen={setOpen}
-      title='Request to pay'
-    >
+    <ResponsiveDrawer open={open} setOpen={setOpen} title="Request to pay">
       <Form {...form}>
         <form className="space-y-4  " onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
@@ -182,7 +176,7 @@ export default function AddEditRequestToPay(props: Props) {
                 <FormLabel className=" uppercase">Payer Message</FormLabel>
 
                 <FormControl>
-                  <Input  placeholder={field.name} {...field} />
+                  <Input placeholder={field.name} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -196,7 +190,7 @@ export default function AddEditRequestToPay(props: Props) {
                 <FormLabel className=" uppercase">Payee Note</FormLabel>
 
                 <FormControl>
-                  <Input  placeholder={field.name} {...field} />
+                  <Input placeholder={field.name} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -26,9 +26,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           { title: "Collection", href: "/chapter-two" },
         ]}
       />
-      <div className="flex flex-col-reverse  lg:flex-row ">
+      <div className="flex flex-col-reverse  gap-4 lg:flex-row ">
         {/* children  */}
-        <div className=" flex w-full flex-col gap-4 lg:p-4 *:before:pr-2 *:before:text-2xl *:before:font-bold lg:w-2/3 ">
+        <div className=" flex w-full flex-col gap-4 *:before:pr-2 *:before:text-2xl *:before:font-bold lg:w-2/3 lg:p-4 ">
           {children}
         </div>
         {/* side bar information  */}

@@ -30,7 +30,9 @@ export default function CreateApiKey({ user }: Props) {
 
       if (response.ok) {
         const data = await response.json();
-        setResponseMsg(JSON.stringify(data.message));
+        setResponseMsg(
+          `{\n"Status":"${response.status}",\n"StatusText":"${response.statusText}",\n"apiKey":"${data.message}"\n}`,
+        );
         toast({
           title: "Creating Api Key Success",
           description: JSON.stringify(data.message),
@@ -38,9 +40,7 @@ export default function CreateApiKey({ user }: Props) {
       } else {
         console.error("Not ok response: ", response.statusText);
         setResponseMsg(
-          JSON.stringify(
-            `Status: ${response.status},StatusText: ${response.statusText}`,
-          ),
+          `{\n"Status": "${response.status}",\n"StatusText": "${response.statusText}\n}"`,
         );
         toast({
           title: "Failed to create Api Key",

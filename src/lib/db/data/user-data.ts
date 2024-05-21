@@ -21,7 +21,8 @@ export async function fetchUserByIdWithRequestToPay(id?: string) {
     const session = await auth();
     const userId = id || session?.user.id;
     return await prisma.user.findUnique({
-      where: { id: userId },include:{RequestToPay:true}
+      where: { id: userId },
+      include: { RequestToPay: { orderBy: { createdAt: "desc" } } },
     });
   } catch (e) {
     console.error("Error fetching user :", e);

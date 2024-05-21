@@ -33,9 +33,7 @@ export default function CreateAccessToken({ user }: Props) {
 
       if (response.ok) {
         setResponseMsg(
-          JSON.stringify(
-            `access_token: ${data.message.access_token},token_type: ${data.message.token_type},expires_in:${data.message.expires_in}`,
-          ),
+          `{\n"access_token": "${data.message.access_token}",\n"token_type": "${data.message.token_type}",\n"expires_in":"${data.message.expires_in}"\n}`,
         );
         toast({
           title: "Creating Access Token",
@@ -45,9 +43,7 @@ export default function CreateAccessToken({ user }: Props) {
         });
       } else {
         setResponseMsg(
-          JSON.stringify(
-            `Status: ${response.status},StatusText: ${response.statusText}`,
-          ),
+          `{\n"Status": "${response.status}",\n"StatusText": "${response.statusText}\n}"`,
         );
         toast({
           title: "Failed to create Access Token",
@@ -81,17 +77,16 @@ export default function CreateAccessToken({ user }: Props) {
         >
           /collection/token/ - POST
         </span>
-      
       </ProductSubtitleContainer>
-        <p className=" block">
-          Access token has an expiry time of 3600 from the time it was created
-        </p>
+      <p className=" block">
+        Access token has an expiry time of 3600 from the time it was created
+      </p>
       <LoadingButton
         onClick={handleClick}
         loading={isLoading}
-        variant={isAccessTokenGot?'green':'default'}
+        variant={isAccessTokenGot ? "green" : "default"}
       >
-        {isAccessTokenGot?"Re-create Access Token":"Create Access Token"}
+        {isAccessTokenGot ? "Re-create Access Token" : "Create Access Token"}
       </LoadingButton>
       <ResponseContainer message={responseMsg} />
     </>

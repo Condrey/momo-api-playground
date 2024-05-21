@@ -40,7 +40,7 @@ export default function WhatIsNext({ user }: Props) {
     <div
       className={cn(
         isApiKeyPresent
-          ? " flex w-full flex-col gap-4 p-4 *:before:pr-2 *:before:text-2xl *:before:font-bold  "
+          ? " flex w-full flex-col gap-4 *:before:pr-2 *:before:text-2xl *:before:font-bold lg:p-4  "
           : "hidden",
       )}
     >
@@ -49,12 +49,12 @@ export default function WhatIsNext({ user }: Props) {
       <LoadingButton loading={isLoading} onClick={handleClick}>
         Re-Start drill
       </LoadingButton>
-      <div className="flex flex-col gap-4 *:flex *:gap-2 *:rounded-full *:px-4 *:py-2">
-        <div className=" flex w-full items-center gap-2">
-          <hr className=" flex grow" />
-          <span>Or navigate to</span>
-          <hr className=" flex grow" />
-        </div>
+      <div className=" flex w-full items-center gap-2">
+        <hr className=" flex grow" />
+        <span>Or navigate to</span>
+        <hr className=" flex grow" />
+      </div>
+      <div className="flex flex-col items-center gap-4 *:flex *:w-full *:max-w-prose *:gap-2 *:rounded-full *:px-4 *:py-2">
         <ChapterLinks />
       </div>
     </div>

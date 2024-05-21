@@ -37,7 +37,7 @@ export async function POST(req: Request) {
         where: { id: session?.user.id! },
         data: { apiKey, authorization },
       });
-      return Response.json({ message: data }, { status: 200 });
+      return Response.json({ message: data.apiKey }, { status: 200 });
     } else {
       return Response.json({ message: response.statusText }, { status: 400 });
     }

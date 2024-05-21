@@ -6,13 +6,11 @@ import { z } from "zod";
 
 export async function POST(req: Request) {
   const body = await req.json();
-   
+
   const schema = z.object({
-    primaryKey:z.string().min(1),
-    authorization:z.string().min(1)
-  })
-
-
+    primaryKey: z.string().min(1),
+    authorization: z.string().min(1),
+  });
 
   try {
     const parseResult = schema.safeParse(body);
@@ -32,19 +30,19 @@ export async function POST(req: Request) {
     const response = await fetch(url, {
       method: "POST",
       headers: {
-        "Authorization":authorization,
-        "Cache-Control":"no-cache",
+        Authorization: authorization,
+        "Cache-Control": "no-cache",
         "Ocp-Apim-Subscription-Key": subscriptionKey,
       },
     });
     const data = await response.json();
     if (response.ok) {
       const accessToken = data.access_token;
-      const currentTime  = Date.now()
+      const currentTime = Date.now();
 
       await prisma.user.update({
         where: { id: session?.user.id! },
-        data: { accessToken, accessTokenCreatedTime: `${currentTime}`},
+        data: { accessToken, accessTokenCreatedTime: `${currentTime}` },
       });
       return Response.json({ message: data }, { status: 200 });
     } else {

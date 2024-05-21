@@ -6,7 +6,8 @@ import LayoutSideBar from "./layout-side-bar";
 export const metadata: Metadata = {
   title: {
     template: `%s - SandBox User Provisioning Tool | MTN MoMo API playground - By Condrey James`,
-    absolute: "SandBox User Provisioning Tool | MTN MoMo API playground - By Condrey James",
+    absolute:
+      "SandBox User Provisioning Tool | MTN MoMo API playground - By Condrey James",
     default: "MTN MoMo API playground - By Condrey James",
   },
   description: `Create Sandbox user, verify if user exists, and create an Api key`,
@@ -28,7 +29,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       />
       <div className="flex flex-col-reverse  gap-4 lg:flex-row ">
         {/* children  */}
-        <div className=" flex w-full flex-col gap-4 lg:p-4 *:before:pr-2 *:before:text-2xl *:before:font-bold lg:w-2/3 ">
+        <div className=" flex w-full flex-col gap-4 *:before:pr-2 *:before:text-2xl *:before:font-bold lg:w-2/3 lg:p-4 ">
           {children}
         </div>
         {/* side bar information  */}

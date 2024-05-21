@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const requestToPaySchema = z.object({
+export const createRequestToPaySchema = z.object({
   accessToken: z.string().min(1),
   callbackUrl: z.string().min(1),
   referenceId: z.string().min(1),
@@ -19,4 +19,13 @@ export const requestToPaySchema = z.object({
   payeeNote: z.string().min(10, { message: "Type more ..." }),
 });
 
-export type RequestToPaySchema = z.infer<typeof requestToPaySchema>;
+export const updateRequestToPaySchema = createRequestToPaySchema.extend({
+  id: z.string().min(5),
+});
+export const deleteRequestToPaySchema = z.object({
+  id: z.string().min(5),
+});
+
+export type CreateRequestToPaySchema = z.infer<typeof createRequestToPaySchema>;
+export type UpdateRequestToPaySchema = z.infer<typeof updateRequestToPaySchema>;
+export type DeleteRequestToPaySchema = z.infer<typeof deleteRequestToPaySchema>;

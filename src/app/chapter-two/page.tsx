@@ -1,5 +1,8 @@
 import ProductTitleContainer from "@/components/product-title-container";
-import { fetchUserById, fetchUserByIdWithRequestToPay } from "@/lib/db/data/user-data";
+import {
+  fetchUserById,
+  fetchUserByIdWithRequestToPay,
+} from "@/lib/db/data/user-data";
 import CreateAccessToken from "./(buttons)/create-access_token";
 import RequestToPay from "./(buttons)/request-to-pay";
 import { User } from "@prisma/client";

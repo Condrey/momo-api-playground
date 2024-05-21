@@ -1,12 +1,12 @@
 import { auth } from "@/app/auth";
 import prisma from "@/lib/db/prisma";
 import generateReferenceId from "@/lib/momo-utils/generate-reference-id";
-import { requestToPaySchema } from "@/lib/validation/request-to-pay-validation";
+import { createRequestToPaySchema } from "@/lib/validation/request-to-pay-validation";
 
 export async function POST(req: Request) {
   const body = await req.json();
 
-  const parseResult = requestToPaySchema.safeParse(body);
+  const parseResult = createRequestToPaySchema.safeParse(body);
   if (!parseResult.success) {
     return Response.json(
       { error: "Invalid input, check your request body." },
@@ -71,7 +71,7 @@ export async function POST(req: Request) {
           data: {
             ...parseResult.data,
             userId: session?.user.id!,
-            referenceId:referenceId,
+            referenceId: referenceId,
             accessToken: `Bearer ${accessToken}`,
           },
         });

@@ -4,23 +4,40 @@ import { cn } from "@/lib/utils";
 import { CheckCheck, Copy } from "lucide-react";
 import { useState } from "react";
 interface Props {
-  accessToken: string | null;
+  title?: string;
+  text: string | null;
+  subtitle?: string;
+  isMultiLine?: boolean;
 }
-export default function AccessTokenContainer({ accessToken }: Props) {
+export default function SmallCodeSnippetContainer(props: Props) {
+  const {
+    text,
+    subtitle,
+    isMultiLine = true,
+    title = "Your Access Token",
+  } = props;
   const [isCopied, setIsCopied] = useState<boolean>(false);
   function handleCopy() {
-    if (accessToken !== null) {
+    if (text !== null) {
       navigator.clipboard
-        .writeText(accessToken)
+        .writeText(text)
         .then(() => setIsCopied(true))
         .catch((error) => console.error("Error copying to clipboard:", error));
     }
   }
   return (
     <>
-      <div className={cn(accessToken === null ? "hidden" : "flex flex-col")}>
-        <span>Your Access Token</span>
-        <span className="font-bold leading-loose">Please note that this expires in 3600 </span>
+      <div
+        className={cn(
+          text === null || text === undefined ? "hidden" : "flex flex-col",
+        )}
+      >
+        <span>{title}</span>
+        <span
+          className={cn(subtitle ? "flex font-bold leading-loose" : "hidden")}
+        >
+          {subtitle}
+        </span>
 
         <div className="w-full rounded-md border bg-stone-800 p-2 font-normal text-white">
           <Copy
@@ -37,9 +54,12 @@ export default function AccessTokenContainer({ accessToken }: Props) {
               !isCopied && "hidden",
             )}
           />
-          <p className=" select-all whitespace-pre-line break-all">{`${
-            accessToken ?? ""
-          }`}</p>
+          <p
+            className={cn(
+              "text-ellipsis whitespace-pre-line break-all",
+              isMultiLine ? "line-clamp-3" : "line-clamp-1",
+            )}
+          >{`${text ?? ""}`}</p>
         </div>
       </div>
     </>
