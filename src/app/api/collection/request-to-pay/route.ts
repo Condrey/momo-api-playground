@@ -71,6 +71,7 @@ export async function POST(req: Request) {
           data: {
             ...parseResult.data,
             userId: session?.user.id!,
+            referenceId:referenceId,
             accessToken: `Bearer ${accessToken}`,
           },
         });

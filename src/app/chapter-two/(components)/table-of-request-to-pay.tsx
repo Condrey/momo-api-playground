@@ -22,15 +22,15 @@ interface Props {
 
 export default function TableOfRequestToPay({ user }: Props) {
   const requestsToPay = user?.RequestToPay;
-  const numberOfRequests = `${requestsToPay?.length} request${requestsToPay?.length===1?'':'s'}`
+  const numberOfRequests = `${requestsToPay?.length} request${requestsToPay?.length === 1 ? "" : "s"}`;
   const [showTable, setShowTable] = useState(true);
   return (
     <>
       <div
-        className="flex cursor-pointer gap-4 items-center"
+        className="flex cursor-pointer items-center gap-4"
         onClick={() => setShowTable(!showTable)}
       >
-        <span className="peer hover:text-amber-500 dark:hover:text-amber-300 text-xl">
+        <span className="peer text-xl hover:text-amber-500 dark:hover:text-amber-300">
           Table showing requests made{" "}
           <Badge variant={"destructive"}>{numberOfRequests}</Badge>
         </span>
@@ -38,8 +38,8 @@ export default function TableOfRequestToPay({ user }: Props) {
           {showTable ? "Hide table" : "Show table"}
         </span>
       </div>
-      <Table className={cn(showTable ? "table" : "hidden")}>
-        <TableHeader>
+      <Table className={cn(showTable ? "table " : "hidden")}>
+        <TableHeader className="bg-foreground *:text-background dark:bg-background dark:*:text-foreground dark:border">
           <TableHead>#</TableHead>
           <TableHead>Amount</TableHead>
           <TableHead>Currency</TableHead>
@@ -52,14 +52,23 @@ export default function TableOfRequestToPay({ user }: Props) {
           {requestsToPay?.map((request, index) => {
             const numbering = index + 1;
             return (
-              <TableRow key={request.id} className=" *:min-w-sm">
+              <TableRow
+                key={request.id}
+                className="odd:bg-stone-700 even:bg-amber-300 odd:text-stone-50 even:text-slate-950 dark:odd:bg-secondary dark:even:bg-amber-200/50 dark:even:text-background"
+              >
                 <TableCell>{numbering}</TableCell>
                 <TableCell>{request.amount}</TableCell>
                 <TableCell>{request.currency}</TableCell>
                 <TableCell>{request.externalId}</TableCell>
                 <TableCell>{request.partyId}</TableCell>
-                <TableCell>{request.payerMessage}</TableCell>
-                <TableCell>{request.payeeNote}</TableCell>
+                <TableCell>
+                  <span className="flex flex-nowrap">
+                    {request.payerMessage}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <span className="flex flex-nowrap">{request.payeeNote}</span>
+                </TableCell>
               </TableRow>
             );
           })}
