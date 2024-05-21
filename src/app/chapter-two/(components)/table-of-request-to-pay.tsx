@@ -54,7 +54,7 @@ export default function TableOfRequestToPay({ user }: Props) {
             return (
               <TableRow
                 key={request.id}
-                className="odd:bg-stone-700 even:bg-amber-300 odd:text-stone-50 even:text-slate-950 dark:odd:bg-secondary dark:even:bg-amber-200/50 dark:even:text-background"
+                className="odd:bg-stone-700 even:bg-amber-300 odd:text-stone-50 odd:hover:text-foreground even:text-slate-950 dark:odd:bg-secondary dark:even:bg-amber-200/50 dark:even:text-background"
               >
                 <TableCell>{numbering}</TableCell>
                 <TableCell>{request.amount}</TableCell>
@@ -62,12 +62,12 @@ export default function TableOfRequestToPay({ user }: Props) {
                 <TableCell>{request.externalId}</TableCell>
                 <TableCell>{request.partyId}</TableCell>
                 <TableCell>
-                  <span className="flex flex-nowrap">
+                  <span className="flex flex-nowrap w-64 lg:w-auto line-clamp-1 overflow-ellipsis">
                     {request.payerMessage}
                   </span>
                 </TableCell>
                 <TableCell>
-                  <span className="flex flex-nowrap">{request.payeeNote}</span>
+                  <span className="flex flex-nowrap w-64 lg:w-auto line-clamp-1 overflow-ellipsis">{request.payeeNote}</span>
                 </TableCell>
               </TableRow>
             );
