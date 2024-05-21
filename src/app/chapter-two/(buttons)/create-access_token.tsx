@@ -83,16 +83,15 @@ export default function CreateAccessToken({ user }: Props) {
         </span>
       
       </ProductSubtitleContainer>
-      <p className=" block">
+        <p className=" block">
           Access token has an expiry time of 3600 from the time it was created
         </p>
       <LoadingButton
-        className={cn(isAccessTokenGot && " translate-x-10 rotate-3")}
-        disabled={isAccessTokenGot}
         onClick={handleClick}
         loading={isLoading}
+        variant={isAccessTokenGot?'green':'default'}
       >
-        Create Access Token
+        {isAccessTokenGot?"Re-create Access Token":"Create Access Token"}
       </LoadingButton>
       <ResponseContainer message={responseMsg} />
     </>

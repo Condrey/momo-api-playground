@@ -48,7 +48,6 @@ export default function AddEditCAllbackUrl(props: Props) {
         variant: response.type === "error" ? "destructive" : "default",
       });
     } catch (e) {
-      console.error("error.....................: ", e);
       toast({
         title: "Server Error",
         description: "Something is wrong with the server, please try again.!",

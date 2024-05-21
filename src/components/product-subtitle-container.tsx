@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { CheckCheck } from "lucide-react";
 interface Props {
   children: React.ReactNode;
-  isChecked: boolean;
+  isChecked?: boolean;
 }
 export default function ProductSubtitleContainer({
   children,

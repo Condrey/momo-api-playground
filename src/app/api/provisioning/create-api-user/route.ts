@@ -1,6 +1,6 @@
 import { auth } from "@/app/auth";
 import prisma from "@/lib/db/prisma";
-import generateUUID from "@/lib/momo-utils/generate-uuid";
+import GenerateReferenceId from "@/lib/momo-utils/generate-reference-id";
 import { createSandboxUserProvisioningSchema } from "@/lib/validation/sandbox-user-provisioning-validation";
 
 export async function POST(req: Request) {
@@ -15,7 +15,7 @@ export async function POST(req: Request) {
         { status: 400 },
       );
     }
-    const generatedReferenceId = generateUUID();
+    const generatedReferenceId = GenerateReferenceId();
     const session = await auth();
 
     const { primaryKey, secondaryKey, referenceId } = parseResult.data;
