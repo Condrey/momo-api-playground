@@ -218,6 +218,7 @@ export default function AddEditRequestToPay(props: Props) {
           />
 
           <div className="flex justify-end">
+            <span>Refresh if button not clickable</span>
             <LoadingButton loading={form.formState.isSubmitting} type="submit">
               Request Payment
             </LoadingButton>

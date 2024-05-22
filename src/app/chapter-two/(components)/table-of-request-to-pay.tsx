@@ -22,7 +22,6 @@ import { UpdateRequestToPaySchema } from "@/lib/validation/request-to-pay-valida
 import { Prisma } from "@prisma/client";
 import { DefaultArgs, GetFindResult } from "@prisma/client/runtime/library";
 import { HoverCardTrigger } from "@radix-ui/react-hover-card";
-import { Dot } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import SmallCodeSnippetContainer from "../../../components/small-code-snippet-container";
@@ -151,21 +150,23 @@ export default function TableOfRequestToPay({ user }: Props) {
       >
         <AlertTitle className=" underline">Table key</AlertTitle>
         <AlertDescription>
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex mb-3 flex-wrap items-center justify-center gap-2 lg:items-start lg:justify-start">
             <span className="font-bold">Status</span>
-            <div className="flex items-center">
-              <Dot className="size-16 text-green-700" /> Checked, verified
+            <div className="flex items-center gap-2">
+              <div className=" size-3 rounded-full bg-green-700" /> Checked,
+              verified
             </div>
-            <div className="flex items-center">
-              <Dot className="size-16 text-blue-700" /> Not checked
+            <div className="flex items-center gap-2">
+              <div className=" size-3 rounded-full bg-blue-700" /> Not checked
             </div>
-            <div className="flex items-center">
-              <Dot className="size-16 text-red-700" /> Timed out
+            <div className="flex items-center gap-2">
+              <div className=" size-3 rounded-full bg-red-700" /> Timed out
             </div>
           </div>
-          <span className="  font-semibold">
+          <span className="font-semibold">
             To verify request transaction status,hover over the respective table
-            entry with the cursor. Mobile devise users should use PCs at this point.
+            entry with the cursor. Mobile device users should use PCs at this
+            point.
           </span>
         </AlertDescription>
       </Alert>
@@ -191,7 +192,7 @@ export default function TableOfRequestToPay({ user }: Props) {
             return (
               <HoverCard key={request.id}>
                 <HoverCardTrigger asChild>
-                  <TableRow className="odd:bg-stone-700 odd:text-stone-50 even:bg-amber-300 even:text-slate-950 odd:hover:text-foreground dark:odd:bg-secondary dark:even:bg-amber-200/50 dark:even:text-background">
+                  <TableRow className="odd:bg-stone-700 odd:text-stone-50 even:bg-amber-300 even:text-slate-950 odd:hover:text-foreground dark:odd:bg-secondary dark:even:bg-background dark:even:text-foreground">
                     <TableCell> {numbering}</TableCell>
                     <TableCell>{request.amount}</TableCell>
                     <TableCell>{request.currency}</TableCell>

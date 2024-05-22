@@ -32,10 +32,10 @@ export function ThemeToggle() {
         <Button
           variant="ghost"
           size="icon"
-          className="size-[50px] rounded-full p-0"
+          className="size-[30px] md:size-[40px] xl:size-[50px] rounded-full p-0"
         >
-          <SunIcon className=" size-[35px]  rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 " />
-          <MoonIcon className="absolute size-[35px]   rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <SunIcon className=" size-full  rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 " />
+          <MoonIcon className="absolute size-full  rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
