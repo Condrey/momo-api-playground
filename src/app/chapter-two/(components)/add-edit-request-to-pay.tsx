@@ -21,6 +21,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface Props {
@@ -51,37 +52,56 @@ export default function AddEditRequestToPay(props: Props) {
   });
 
   async function onSubmit(input: CreateRequestToPaySchema) {
-    const body = JSON.stringify(input);
     try {
-      const response = await fetch("/api/collection/request-to-pay", {
-        method: "POST",
-        body,
-      });
+      // first create an access token
+      const accessTokenResponse = await fetch(
+        "/api/provisioning/create-access-token",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            primaryKey: user?.primaryKey ?? "",
+            authorization: user?.authorization ?? "",
+          }),
+        },
+      );
+      if (accessTokenResponse.ok) {
+        const data = await accessTokenResponse.json();
+        //Now you can request to pay
+        const editedInput:CreateRequestToPaySchema = {...input,accessToken: data.message.access_token}
+        const body = JSON.stringify(editedInput);
+        const response = await fetch("/api/collection/request-to-pay", {
+          method: "POST",
+          body,
+        });
 
-      if (response.ok) {
-        if (response.status === 500) {
-          const data = await response.json();
-          toast({
-            title: "Request was a success",
-            description: `${data.statusText}`,
-          });
+        if (response.ok) {
+          if (response.status === 500) {
+            const data = await response.json();
+            toast({
+              title: "Request was a success",
+              description: `${data.statusText}`,
+            });
+          } else {
+            const data = await response.json();
+            toast({
+              title: "Request was a success",
+              description: `${data.message}`,
+            });
+          }
         } else {
-          const data = await response.json();
+          const data = response.status;
+
+          console.log("No Ok data:", data);
+
           toast({
-            title: "Request was a success",
-            description: `${data.message}`,
+            title: "Failed request",
+            description: JSON.stringify(response.statusText),
+            variant: "destructive",
           });
         }
       } else {
-        const data = response.status;
-
-        console.log("No Ok data:", data);
-
-        toast({
-          title: "Failed request",
-          description: JSON.stringify(response.statusText),
-          variant: "destructive",
-        });
+        console.error("Error getting accessToken: ", accessTokenResponse);
+        throw new Error("Error getting accessToken");
       }
     } catch (e) {
       console.log("Server Error: ", e);
