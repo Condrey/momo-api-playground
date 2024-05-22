@@ -23,7 +23,7 @@ export async function POST(req: Request) {
       where: { id: session?.user.id! },
     });
 
-    const callbackUrl = user?.callbackUrl;
+    const callbackHost = user?.callbackHost;
     const subscriptionKey = primaryKey;
     const url = `https://sandbox.momodeveloper.mtn.com/v1_0/apiuser`;
 
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
         "X-Reference-Id": generatedReferenceId,
         "Ocp-Apim-Subscription-Key": subscriptionKey,
       },
-      body: JSON.stringify({ providerCallbackHost: callbackUrl }),
+      body: JSON.stringify({ providerCallbackHost: callbackHost }),
     });
     if (response.ok) {
       await prisma.user.update({

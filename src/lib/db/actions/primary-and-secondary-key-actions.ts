@@ -154,13 +154,13 @@ export async function createCallbackUrl(
     console.error(e);
     return {
       type: "error",
-      message: "Database error: Failed to create callback url.",
+      message: "Database error: Failed to create callback url and host.",
     };
   }
 
   return {
     type: "success",
     title: "Bingo.!",
-    message: "Successfully updated your callback url.",
+    message: "Successfully updated your callback url and host.",
   };
 }
