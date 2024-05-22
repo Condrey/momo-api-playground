@@ -126,7 +126,7 @@ export async function createCallbackUrl(
     };
   }
   //Prepare data for insertion into the database
-  const { callbackUrl } = parseResult.data;
+  const { callbackUrl,callbackHost } = parseResult.data;
 
   const session: Session | null = await auth();
   const userId = session?.user.id!;
@@ -146,6 +146,7 @@ export async function createCallbackUrl(
       where: { id: userId! },
       data: {
         callbackUrl,
+        callbackHost
       },
     });
   } catch (e) {

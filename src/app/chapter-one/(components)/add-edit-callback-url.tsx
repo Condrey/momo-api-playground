@@ -3,6 +3,7 @@
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormMessage,
@@ -36,6 +37,7 @@ export default function AddEditCAllbackUrl(props: Props) {
     resolver: zodResolver(callBackUrlSchema),
     defaultValues: {
       callbackUrl: user?.callbackUrl || "",
+      callbackHost: user?.callbackHost || "",
     },
   });
 
@@ -62,26 +64,41 @@ export default function AddEditCAllbackUrl(props: Props) {
     <ResponsiveDrawer
       open={open}
       setOpen={setOpen}
-      title={`${user?.primaryKey === null || user?.secondaryKey === null ? "Add your callback host" : "Callback host"}`}
+      title={`${user?.primaryKey === null || user?.secondaryKey === null ? "Add your callback host & url " : "Callback host & url"}`}
     >
       <Form {...form}>
         <form className="space-y-4  " onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
+        <FormField
             control={form.control}
-            name={"callbackUrl"}
+            name={"callbackHost"}
             render={({ field }) => (
               <FormItem>
                 <FormControl>
                   <Input placeholder="Callback host" {...field} />
                 </FormControl>
                 <FormMessage />
+                <FormDescription>Host is in the form: something.com</FormDescription>
+              </FormItem>
+            )}
+          />
+             <FormField
+            control={form.control}
+            name={"callbackUrl"}
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input placeholder="Callback url" {...field} />
+                </FormControl>
+                <FormMessage />
+                <FormDescription>Url is in the form: https://something.com/api/sandbox-callback</FormDescription>
+
               </FormItem>
             )}
           />
 
           <div className="flex justify-end">
             <LoadingButton loading={form.formState.isSubmitting} type="submit">
-              Save Callback Url
+              Save Callback Url & Host
             </LoadingButton>
           </div>
         </form>

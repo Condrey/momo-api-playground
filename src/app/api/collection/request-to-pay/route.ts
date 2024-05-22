@@ -43,7 +43,7 @@ export async function POST(req: Request) {
       method: "POST",
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        // "X-Callback-Url": '',
+        "X-Callback-Url": callbackUrl,
         "X-Reference-Id": referenceId,
         "X-Target-Environment": targetEnvironment,
         "Content-Type": "application/json",
