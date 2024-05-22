@@ -62,7 +62,7 @@ export default function AddEditCAllbackUrl(props: Props) {
     <ResponsiveDrawer
       open={open}
       setOpen={setOpen}
-      title={`${user?.primaryKey === null || user?.secondaryKey === null ? "Add your callback Url" : "Callback Url"}`}
+      title={`${user?.primaryKey === null || user?.secondaryKey === null ? "Add your callback host" : "Callback host"}`}
     >
       <Form {...form}>
         <form className="space-y-4  " onSubmit={form.handleSubmit(onSubmit)}>
