@@ -72,7 +72,7 @@ export default function AddEditCAllbackUrl(props: Props) {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="Callback url" {...field} />
+                  <Input placeholder="Callback host" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
