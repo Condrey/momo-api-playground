@@ -34,11 +34,11 @@ export async function createPrimaryAndSecondaryKey(
   const userId = session?.user.id!;
 
   //Check if user is permitted to perform this action
-  if (!session?.user.id) {
+  if (!userId) {
     console.error("Not authorized");
     return {
       type: "warning",
-      message: "You are unauthorized to perform this action.",
+      message: "You are unauthorized to perform this action.  If logged in check your session.",
     };
   }
 
@@ -72,11 +72,11 @@ export async function resetUserVariables(): Promise<ServerMessage> {
   const userId = session?.user.id!;
 
   //Check if user is permitted to perform this action
-  if (!session?.user.id) {
+  if (!userId) {
     console.error("Not authorized");
     return {
       type: "warning",
-      message: "You are unauthorized to perform this action.",
+      message: "You are unauthorized to perform this action. If logged in check your session. ",
     };
   }
 
@@ -132,11 +132,11 @@ export async function createCallbackUrl(
   const userId = session?.user.id!;
 
   //Check if user is permitted to perform this action
-  if (!session?.user.id) {
+  if (!userId) {
     console.error("Not authorized");
     return {
       type: "warning",
-      message: "You are unauthorized to perform this action.",
+      message: "You are unauthorized to perform this action.  If logged in check your session. ",
     };
   }
 
