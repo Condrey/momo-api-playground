@@ -77,12 +77,11 @@ export default function GetApiUser({ user }: Props) {
         >{` /v1_0/apiuser/{X-Reference-Id} - GET`}</span>
       </ProductSubtitleContainer>
       <LoadingButton
-        className={cn(isUserPresent && " -translate-x-10 -rotate-3")}
         onClick={handleClick}
         loading={isLoading}
-        disabled={isUserPresent}
+        variant={isUserPresent?"green":"default"}
       >
-        Get Api User
+       {isUserPresent? "Repeat Get Api User": "Get Api User"}
       </LoadingButton>
       <ResponseContainer message={responseMsg} />
     </>

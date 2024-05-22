@@ -74,7 +74,6 @@ export default function CreateApiKey({ user }: Props) {
         >{` /v1_0/apiuser/{X-Reference-Id}/apikey - POST`}</span>
       </ProductSubtitleContainer>
       <LoadingButton
-        className={cn(isApiKeyPresent && " translate-x-10 rotate-3")}
         onClick={handleClick}
         disabled={isApiKeyPresent}
         loading={isLoading}

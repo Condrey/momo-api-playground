@@ -83,7 +83,6 @@ export default function CreateApiUser({ user }: Props) {
         Provide callBack Url
       </LoadingButton>
       <LoadingButton
-        className={cn(isReferenceIdSaved && " translate-x-10 rotate-3")}
         disabled={isReferenceIdSaved || !hideAddCallbackUrl}
         onClick={handleClick}
         loading={isLoading}

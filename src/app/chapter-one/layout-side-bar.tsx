@@ -7,6 +7,10 @@ export default async function LayoutSideBar() {
   return (
     <div className=" w-full space-y-4 *:w-full *:gap-2 *:font-bold lg:w-5/12">
       <SmallCodeSnippetContainer
+        text={user?.callbackHost!}
+        title="Your callbackHost"
+      />
+       <SmallCodeSnippetContainer
         text={user?.callbackUrl!}
         title="Your callbackUrl"
       />

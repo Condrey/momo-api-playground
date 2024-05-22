@@ -151,7 +151,7 @@ export default function TableOfRequestToPay({ user }: Props) {
       >
         <AlertTitle className=" underline">Table key</AlertTitle>
         <AlertDescription>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="font-bold">Status</span>
             <div className="flex items-center">
               <Dot className="size-16 text-green-700" /> Checked, verified
@@ -163,9 +163,9 @@ export default function TableOfRequestToPay({ user }: Props) {
               <Dot className="size-16 text-red-700" /> Timed out
             </div>
           </div>
-          <span>
-            To verify request transaction status, click on the respective table
-            entry
+          <span className="  font-semibold">
+            To verify request transaction status,hover over the respective table
+            entry with the cursor. Mobile devise users should use PCs at this point.
           </span>
         </AlertDescription>
       </Alert>

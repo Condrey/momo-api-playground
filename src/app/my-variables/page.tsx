@@ -60,6 +60,10 @@ export default async function Page() {
            *
            */}
           <SmallCodeSnippetContainer
+            text={user?.callbackHost!}
+            title="Your callbackHost"
+          />
+          <SmallCodeSnippetContainer
             text={user?.callbackUrl!}
             title="Your callbackUrl"
           />
