@@ -33,10 +33,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           {children}
         </div>
         {/* side bar information  */}
-
-        <Suspense>
+        <div className="hidden lg:flex">
+<Suspense>
           <LayoutSideBar />
         </Suspense>
+</div>
       </div>
     </div>
   );

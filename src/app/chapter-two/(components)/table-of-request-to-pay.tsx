@@ -25,6 +25,8 @@ import { HoverCardTrigger } from "@radix-ui/react-hover-card";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import SmallCodeSnippetContainer from "../../../components/small-code-snippet-container";
+import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
 
 interface Props {
   user: GetFindResult<
@@ -37,103 +39,16 @@ export default function TableOfRequestToPay({ user }: Props) {
   const requestsToPay = user?.RequestToPay;
   const numberOfRequests = `${requestsToPay?.length} request${requestsToPay?.length === 1 ? "" : "s"}`;
   const [showTable, setShowTable] = useState(true);
-  const [isDeletingTransaction, setIsDeletingTransaction] = useState(false);
-  const [isDeletingAll, setIsDeletingAll] = useState(false);
-  const [isCheckingStatus, setIsCheckingStatus] = useState(false);
-  const [responseMsg, setResponseMsg] = useState<undefined | string>(undefined);
-  const router = useRouter();
 
-  async function checkTransactionStatus(transaction: UpdateRequestToPaySchema) {
-    try {
-      setIsCheckingStatus(true);
-      const body = JSON.stringify(transaction);
-      const response = await fetch("/api/collection/confirm-request-to-pay", {
-        method: "POST",
-        body,
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setResponseMsg(JSON.stringify(data.message2));
-        toast({
-          title: "Request was a success",
-          description: `${data.message}`,
-        });
-      } else {
-        const data = response.status;
-
-        console.log("No Ok data:", data);
-
-        toast({
-          title: "Failed request",
-          description: JSON.stringify(response.statusText),
-          variant: "destructive",
-        });
-      }
-    } catch (e) {
-      console.log("Server Error: ", e);
-      toast({
-        title: "Server Error",
-        description: "Something is wrong with the server, please try again.!",
-        variant: "destructive",
-      });
-    } finally {
-      setIsCheckingStatus(false);
-      router.refresh();
-    }
-  }
-
-  async function deleteTransaction(transaction: UpdateRequestToPaySchema) {
-    try {
-      setIsDeletingTransaction(true);
-      const response: ServerMessage = await deleteRequestToPay(transaction);
-      toast({
-        title: response.title,
-        description: response.message,
-        variant: response.type === "error" ? "destructive" : "default",
-      });
-    } catch (error) {
-      console.error("error:", error);
-      toast({
-        title: "Server error",
-        description: "There is a problem with the server, try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsDeletingTransaction(false);
-      router.refresh();
-    }
-  }
-
-  async function deleteAllTransactions(userId: string) {
-    try {
-      setIsDeletingAll(true);
-      const response: ServerMessage = await deleteAllRequestsToPay(userId);
-      toast({
-        title: response.title,
-        description: response.message,
-        variant: response.type === "error" ? "destructive" : "default",
-      });
-    } catch (error) {
-      toast({
-        title: "Server error",
-        description: "There is a problem with the server, try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsDeletingAll(false);
-      router.refresh();
-    }
-  }
-
+ 
   return (
     <>
       <div
-        className="flex cursor-pointer items-center gap-4"
+        className="flex flex-wrap cursor-pointer items-center gap-4"
         onClick={() => setShowTable(!showTable)}
       >
-        <span className="peer text-xl font-semibold uppercase hover:text-amber-500 dark:hover:text-amber-300">
-          Table showing requests made{" "}
+        <span title={showTable?'Hide table':'Show table'} className="peer flex flex-wrap gap-2 items-center text-xl font-semibold uppercase hover:text-amber-500 dark:hover:text-amber-300">
+         {!showTable?<EyeOff/>:<Eye/>} Table showing requests made{" "}
           <Badge variant={"destructive"}>{numberOfRequests}</Badge>
         </span>
         <span className="hidden md:hover:flex md:peer-hover:flex">
@@ -163,12 +78,7 @@ export default function TableOfRequestToPay({ user }: Props) {
               <div className=" size-3 rounded-full bg-red-700" /> Timed out
             </div>
           </div>
-          <span className="font-semibold">
-            To verify request transaction status,hover over the respective table
-            entry with the cursor. Mobile device users should use PCs at this
-            point.
-          </span>
-        </AlertDescription>
+                </AlertDescription>
       </Alert>
 
       <Table className={cn(showTable ? "table " : "hidden")}>
@@ -190,9 +100,10 @@ export default function TableOfRequestToPay({ user }: Props) {
             const timeDifference = Date.now() - request.createdAt.getTime();
             const isExpired: boolean = timeDifference > 1 * 1000 * 60 * 60;
             return (
-              <HoverCard key={request.id}>
-                <HoverCardTrigger asChild>
-                  <TableRow className="odd:bg-stone-700 odd:text-stone-50 even:bg-amber-300 even:text-slate-950 odd:hover:text-foreground dark:odd:bg-secondary dark:even:bg-background dark:even:text-foreground">
+          
+        
+                  <Link title="click to view transaction" key={request.id} href={`/chapter-two/request-to-pay/${request.id}`} 
+                   className="table-row odd:bg-stone-700 odd:text-stone-50 odd:hover:bg-stone-500 odd:hover:text-stone-50 even:bg-amber-300 even:text-slate-950 even:hover:bg-amber-200 dark:odd:bg-secondary dark:odd:hover:bg-secondary/50 dark:even:bg-background dark:border-x dark:even:text-foreground" >
                     <TableCell> {numbering}</TableCell>
                     <TableCell>{request.amount}</TableCell>
                     <TableCell>{request.currency}</TableCell>
@@ -229,77 +140,13 @@ export default function TableOfRequestToPay({ user }: Props) {
                         {request.payeeNote}
                       </span>
                     </TableCell>
-                  </TableRow>
-                </HoverCardTrigger>
-                <HoverCardContent className="flex w-full max-w-md flex-col items-center gap-4 *:w-full *:space-y-2 md:flex-row">
-                  <div className="flex flex-col items-center  gap-2 *:w-full">
-                    <span className="hidden items-center justify-center text-center text-stone-700/50 dark:text-secondary/90  md:flex md:flex-row md:text-4xl lg:text-5xl">{`#${numbering}`}</span>
-                    <LoadingButton
-                      loading={isCheckingStatus}
-                      variant={"default"}
-                      onClick={() =>
-                        checkTransactionStatus(
-                          request as UpdateRequestToPaySchema,
-                        )
-                      }
-                    >
-                      Check Status
-                    </LoadingButton>
-                    <LoadingButton
-                      variant={"destructive"}
-                      loading={isDeletingTransaction}
-                      onClick={() =>
-                        deleteTransaction(request as UpdateRequestToPaySchema)
-                      }
-                    >
-                      Delete Transaction
-                    </LoadingButton>
-                    <LoadingButton
-                      variant={"destructive"}
-                      loading={isDeletingAll}
-                      onClick={() => deleteAllTransactions(request.userId)}
-                    >
-                      Delete All
-                    </LoadingButton>
-                    <span
-                      className={cn(
-                        !isExpired
-                          ? "hidden"
-                          : "flex justify-center text-center font-bold text-destructive",
-                      )}
-                    >
-                      Timed out transaction
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-4 *:space-y-2 ">
-                    <SmallCodeSnippetContainer
-                      title={`Transaction#${numbering}'s reference id`}
-                      text={request.referenceId}
-                      isMultiLine={false}
-                    />
-                    <SmallCodeSnippetContainer
-                      title={`Transaction#${numbering}'s authorization`}
-                      text={request.accessToken}
-                      isMultiLine={false}
-                    />
-                    <SmallCodeSnippetContainer
-                      title={`Financial Transaction Id`}
-                      text={
-                        request.financialTransactionId === null
-                          ? null
-                          : `${request.financialTransactionId}`
-                      }
-                      isMultiLine={false}
-                    />
-                  </div>
-                </HoverCardContent>
-              </HoverCard>
+                </Link>
+            
             );
           })}
         </TableBody>
         <TableCaption>These are your requests</TableCaption>
       </Table>
-      <ResponseContainer message={responseMsg} />
     </>
   );
 }

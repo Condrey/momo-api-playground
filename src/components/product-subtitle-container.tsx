@@ -9,7 +9,7 @@ export default function ProductSubtitleContainer({
   isChecked = false,
 }: Props) {
   return (
-    <div className="flex gap-2 *:before:pr-2 *:before:text-2xl *:before:font-bold ">
+    <div className="flex mt-12 gap-2 *:before:pr-2 *:before:text-2xl *:before:font-bold ">
       <CheckCheck className={cn("text-green-700", !isChecked && "hidden")} />
       {children}
     </div>

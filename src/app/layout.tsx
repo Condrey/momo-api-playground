@@ -5,11 +5,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Image from "next/image";
+import { ThemeProvider } from "../components/theme-provider";
 import { auth } from "./auth";
 import "./globals.css";
 import NewComer from "./new-comer";
-import { ThemeProvider } from "../components/theme-provider";
-import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -81,7 +81,7 @@ export default async function RootLayout({
             <div className=" hidden size-full *:max-w-prose md:flex md:h-dvh md:w-1/4 lg:w-auto">
               <div className="flex flex-col items-center gap-6">
                 <Image
-                  src="/momo-logo.png"
+                  src="/momo-logo2.png"
                   alt="logo"
                   width={150}
                   height={150}
