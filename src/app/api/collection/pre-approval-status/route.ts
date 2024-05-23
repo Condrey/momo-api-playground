@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     const url = `https://sandbox.momodeveloper.mtn.com/collection/v2_0/preapproval/${referenceId}`;
 
     const response = await fetch(url, {
-      method: "POST",
+      method: "GET",
       headers: {
         Authorization: authorization,
         "X-Target-Environment": targetEnvironment,
@@ -37,10 +37,10 @@ export async function POST(req: Request) {
       },
     });
     if (response.ok) {
-      console.log("OkResponse: ", response);
+      const data = await response.json();
       return Response.json(
         {
-          message: `${response.statusText},${response.status}`,
+          message: data,
         },
         { status: response.status },
       );

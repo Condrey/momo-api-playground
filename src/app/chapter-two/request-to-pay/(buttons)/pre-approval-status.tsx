@@ -4,8 +4,7 @@ import ProductSubtitleContainer from "@/components/product-subtitle-container";
 import ResponseContainer from "@/components/response-container";
 import LoadingButton from "@/components/ui/loading-button";
 import { toast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
-import { RequestToPay, User } from "@prisma/client";
+import { RequestToPay } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -15,38 +14,34 @@ interface Props {
 export default function PreApprovalStatus({ request }: Props) {
   const [responseMsg, setResponseMsg] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-   const router = useRouter();
+  const router = useRouter();
   async function handleClick() {
     setIsLoading(true);
     try {
       const response = await fetch("/api/collection/pre-approval-status", {
         method: "POST",
         body: JSON.stringify({
-            referenceId:request?.referenceId??'',
+          referenceId: request?.PreApprovalReferenceId ?? "",
           primaryKey: request?.primaryKey ?? "",
           authorization: request?.accessToken ?? "",
-          targetEnvironment:'sandbox',
+          targetEnvironment: "sandbox",
         }),
       });
-      const data = await response.json();
-      console.log(data);
 
       if (response.ok) {
-        setResponseMsg(
-          `{\n"access_token": "${data.message.access_token}",\n"token_type": "${data.message.token_type}",\n"expires_in":"${data.message.expires_in}"\n}`,
-        );
+        const data = await response.json();
+
+        setResponseMsg(JSON.stringify(data.message));
         toast({
-          title: "Creating Access Token",
-          description: JSON.stringify(
-            `access_token: ${data.message.access_token},token_type: ${data.message.token_type},expires_in:${data.message.expires_in}`,
-          ),
+          title: "Verifying pre-Approval status",
+          description: `{\n"Status": "${response.status}",\n"StatusText": "${response.statusText}\n}"`,
         });
       } else {
         setResponseMsg(
           `{\n"Status": "${response.status}",\n"StatusText": "${response.statusText}\n}"`,
         );
         toast({
-          title: "Failed to create Access Token",
+          title: "Failed to verify pre-Approval status",
           description: JSON.stringify(
             `Status: ${response.status},StatusText: ${response.statusText}`,
           ),
@@ -67,22 +62,16 @@ export default function PreApprovalStatus({ request }: Props) {
   }
   return (
     <>
-   <ProductSubtitleContainer isChecked={false}>
-<span className=' before:content-["Get_Pre-Approval_Status:"]'>
-  {` /collection/v2_0/preapproval/{referenceId} - GET`}
-</span>
-</ProductSubtitleContainer>
-    
-      <LoadingButton
-        onClick={handleClick}
-        loading={isLoading}
-      >
+      <ProductSubtitleContainer isChecked={false}>
+        <span className=' before:content-["Get_Pre-Approval_Status:"]'>
+          {` /collection/v2_0/preapproval/{referenceId} - GET`}
+        </span>
+      </ProductSubtitleContainer>
+
+      <LoadingButton onClick={handleClick} loading={isLoading}>
         Check Pre-Approval Status
       </LoadingButton>
       <ResponseContainer message={responseMsg} />
     </>
   );
 }
-
-
-

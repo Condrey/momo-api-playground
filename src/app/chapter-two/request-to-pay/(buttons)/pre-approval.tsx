@@ -22,10 +22,15 @@ export default function PreApproval({ request }: Props) {
       </ProductSubtitleContainer>
 
       <LoadingButton loading={open} onClick={() => setOpen(true)}>
-        Create Pre-Approval 
+        Create Pre-Approval
       </LoadingButton>
       <ResponseContainer message={responseMsg} />
-      <CreatePreApprovalForm open={open} request={request} setOpen={setOpen} setResponseMsg={setResponseMsg} />
+      <CreatePreApprovalForm
+        open={open}
+        request={request}
+        setOpen={setOpen}
+        setResponseMsg={setResponseMsg}
+      />
     </>
   );
 }

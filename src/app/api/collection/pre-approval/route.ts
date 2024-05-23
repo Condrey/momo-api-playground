@@ -19,8 +19,9 @@ export async function POST(req: Request) {
     primaryKey,
     callbackUrl,
     targetEnvironment,
-   payerCurrency,
-    partyId,validityTime,
+    payerCurrency,
+    partyId,
+    validityTime,
     payerMessage,
     // referenceId,
   } = parseResult.data;
@@ -29,41 +30,38 @@ export async function POST(req: Request) {
 
   try {
     const subscriptionKey = primaryKey;
-    const referenceId = GenerateReferenceId()
+    const referenceId = GenerateReferenceId();
     const url = `https://sandbox.momodeveloper.mtn.com/collection/v2_0/preapproval`;
-
 
     const response = await fetch(url, {
       method: "POST",
       headers: {
         Authorization: authorization,
-        "X-Callback-Url":callbackUrl,
-        "X-Reference-Id":referenceId,
+        "X-Callback-Url": callbackUrl,
+        "X-Reference-Id": referenceId,
         "X-Target-Environment": targetEnvironment,
-        "Content-Type":"application/json",
+        "Content-Type": "application/json",
         "Cache-Control": "no-cache",
         "Ocp-Apim-Subscription-Key": subscriptionKey,
       },
-      body:JSON.stringify({
+      body: JSON.stringify({
         payer: {
-            partyIdType: "MSISDN",
-            partyId: partyId,
+          partyIdType: "MSISDN",
+          partyId: partyId,
         },
         payerCurrency: payerCurrency,
         payerMessage: payerMessage,
-        validityTime: validityTime
-    })
+        validityTime: validityTime,
+      }),
     });
     if (response.ok) {
-        await prisma.requestToPay.update(
-            {
-                where:{id:id!},
-                data:{
-                    referenceId:referenceId!
-                }
-            }
-        )
-          return Response.json(
+      await prisma.requestToPay.update({
+        where: { id: id! },
+        data: {
+          PreApprovalReferenceId: referenceId!,
+        },
+      });
+      return Response.json(
         {
           message: `${response.statusText},${response.status}`,
         },

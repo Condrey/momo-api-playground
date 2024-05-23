@@ -14,7 +14,12 @@ import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
 import ResponsiveDrawer from "@/components/ui/responsive-drawer";
 import { toast } from "@/components/ui/use-toast";
-import { CreatePreApprovalSchema, UpdatePreApprovalSchema, createPreApprovalSchema, updatePreApprovalSchema } from "@/lib/validation/pre-approval-validation";
+import {
+  CreatePreApprovalSchema,
+  UpdatePreApprovalSchema,
+  createPreApprovalSchema,
+  updatePreApprovalSchema,
+} from "@/lib/validation/pre-approval-validation";
 import {
   CreateRequestToPaySchema,
   createRequestToPaySchema,
@@ -27,22 +32,22 @@ import { useForm } from "react-hook-form";
 interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
-  setResponseMsg: (responseMsg: string|undefined) => void;
+  setResponseMsg: (responseMsg: string | undefined) => void;
   request: RequestToPay | null;
 }
 
 export default function CreatePreApprovalForm(props: Props) {
-  const { open, setOpen, request,setResponseMsg } = props;
+  const { open, setOpen, request, setResponseMsg } = props;
   const router = useRouter();
   const form = useForm<UpdatePreApprovalSchema>({
     resolver: zodResolver(updatePreApprovalSchema),
     defaultValues: {
-        id:request?.id??'',
+      id: request?.id ?? "",
       authorization: request?.accessToken ?? "",
       callbackUrl: request?.callbackUrl ?? "",
       referenceId: request?.referenceId ?? "",
       targetEnvironment: "sandbox",
-      primaryKey: request?.primaryKey??"",
+      primaryKey: request?.primaryKey ?? "",
       partyId: request?.partyId ?? undefined,
       payerCurrency: request?.currency ?? "EUR",
       payerMessage: request?.payerMessage ?? "",
@@ -59,14 +64,17 @@ export default function CreatePreApprovalForm(props: Props) {
       });
 
       if (response.ok) {
-        setResponseMsg(`{\n"Status":"${response.status}"\n"StatusText":"${response.statusText}"\n}`)
+        setResponseMsg(
+          `{\n"Status":"${response.status}"\n"StatusText":"${response.statusText}"\n}`,
+        );
         toast({
-            title: "Request was a success",
-            description: `Accepted`,
-          });
-
+          title: "Request was a success",
+          description: `Accepted`,
+        });
       } else {
-setResponseMsg(`{\n"Status":"${response.status}"\n"StatusText":"${response.statusText}"\n}`)
+        setResponseMsg(
+          `{\n"Status":"${response.status}"\n"StatusText":"${response.statusText}"\n}`,
+        );
 
         toast({
           title: "Failed request",
@@ -140,7 +148,7 @@ setResponseMsg(`{\n"Status":"${response.status}"\n"StatusText":"${response.statu
             )}
           />
 
-<FormField
+          <FormField
             control={form.control}
             name={"validityTime"}
             render={({ field }) => (

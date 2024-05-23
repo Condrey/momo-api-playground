@@ -38,15 +38,21 @@ export default function TransactionParams({ request }: Props) {
             isMultiLine={false}
           />
           {/* callback url  */}
-             <SmallCodeSnippetContainer
+          <SmallCodeSnippetContainer
             title={`Callback Url`}
             text={request?.callbackUrl!}
             isMultiLine={false}
           />
           {/* payer message   */}
-           <SmallCodeSnippetContainer
+          <SmallCodeSnippetContainer
             title={`Payer Message`}
             text={request?.payerMessage!}
+            isMultiLine={false}
+          />
+          {/* Pre-Approval Reference Id  */}
+          <SmallCodeSnippetContainer
+            title={`Pre-Approval Reference Id`}
+            text={request?.PreApprovalReferenceId!}
             isMultiLine={false}
           />
         </div>

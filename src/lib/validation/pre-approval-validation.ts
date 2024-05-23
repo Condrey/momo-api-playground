@@ -18,8 +18,9 @@ export const createPreApprovalSchema = z.object({
   validityTime: z.number().min(120, "This is needed too, must be >= 120"),
 });
 
-export const updatePreApprovalSchema = createPreApprovalSchema.extend({id:z.string()})
+export const updatePreApprovalSchema = createPreApprovalSchema.extend({
+  id: z.string(),
+});
 
 export type CreatePreApprovalSchema = z.infer<typeof createPreApprovalSchema>;
 export type UpdatePreApprovalSchema = z.infer<typeof updatePreApprovalSchema>;
-
