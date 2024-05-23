@@ -1,7 +1,5 @@
 import { auth } from "@/app/auth";
 import prisma from "@/lib/db/prisma";
-import getAuthorization from "@/lib/momo-utils/get-authorization";
-import { createSandboxUserProvisioningSchema } from "@/lib/validation/sandbox-user-provisioning-validation";
 import { z } from "zod";
 
 export async function POST(req: Request) {

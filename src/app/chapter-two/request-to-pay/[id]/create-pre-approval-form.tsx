@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
 import ResponsiveDrawer from "@/components/ui/responsive-drawer";
 import { toast } from "@/components/ui/use-toast";
-import { CreatePreApprovalSchema, createPreApprovalSchema } from "@/lib/validation/pre-approval-validation";
+import { CreatePreApprovalSchema, UpdatePreApprovalSchema, createPreApprovalSchema, updatePreApprovalSchema } from "@/lib/validation/pre-approval-validation";
 import {
   CreateRequestToPaySchema,
   createRequestToPaySchema,
@@ -34,9 +34,10 @@ interface Props {
 export default function CreatePreApprovalForm(props: Props) {
   const { open, setOpen, request,setResponseMsg } = props;
   const router = useRouter();
-  const form = useForm<CreatePreApprovalSchema>({
-    resolver: zodResolver(createPreApprovalSchema),
+  const form = useForm<UpdatePreApprovalSchema>({
+    resolver: zodResolver(updatePreApprovalSchema),
     defaultValues: {
+        id:request?.id??'',
       authorization: request?.accessToken ?? "",
       callbackUrl: request?.callbackUrl ?? "",
       referenceId: request?.referenceId ?? "",
@@ -49,7 +50,7 @@ export default function CreatePreApprovalForm(props: Props) {
     },
   });
 
-  async function onSubmit(input: CreatePreApprovalSchema) {
+  async function onSubmit(input: UpdatePreApprovalSchema) {
     try {
       const body = JSON.stringify(input);
       const response = await fetch("/api/collection/pre-approval", {

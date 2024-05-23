@@ -1,13 +1,11 @@
-import { auth } from "@/app/auth";
 import prisma from "@/lib/db/prisma";
 import GenerateReferenceId from "@/lib/momo-utils/generate-reference-id";
-import { createPreApprovalSchema } from "@/lib/validation/pre-approval-validation";
-import { updateRequestToPaySchema } from "@/lib/validation/request-to-pay-validation";
+import { updatePreApprovalSchema } from "@/lib/validation/pre-approval-validation";
 
 export async function POST(req: Request) {
   const body = await req.json();
 
-  const parseResult = createPreApprovalSchema.safeParse(body);
+  const parseResult = updatePreApprovalSchema.safeParse(body);
   if (!parseResult.success) {
     return Response.json(
       { error: "Invalid input, check your request body." },
@@ -16,6 +14,7 @@ export async function POST(req: Request) {
   }
 
   const {
+    id,
     authorization,
     primaryKey,
     callbackUrl,
@@ -23,23 +22,23 @@ export async function POST(req: Request) {
    payerCurrency,
     partyId,validityTime,
     payerMessage,
-    referenceId,
+    // referenceId,
   } = parseResult.data;
   //TODO unused
   //--- referenceId
 
   try {
     const subscriptionKey = primaryKey;
+    const referenceId = GenerateReferenceId()
     const url = `https://sandbox.momodeveloper.mtn.com/collection/v2_0/preapproval`;
 
-    const session = await auth();
 
     const response = await fetch(url, {
       method: "POST",
       headers: {
         Authorization: authorization,
         "X-Callback-Url":callbackUrl,
-        "X-Reference-Id":GenerateReferenceId(),
+        "X-Reference-Id":referenceId,
         "X-Target-Environment": targetEnvironment,
         "Content-Type":"application/json",
         "Cache-Control": "no-cache",
@@ -56,7 +55,14 @@ export async function POST(req: Request) {
     })
     });
     if (response.ok) {
-        console.log('OkResponse: ',response);        
+        await prisma.requestToPay.update(
+            {
+                where:{id:id!},
+                data:{
+                    referenceId:referenceId!
+                }
+            }
+        )
           return Response.json(
         {
           message: `${response.statusText},${response.status}`,

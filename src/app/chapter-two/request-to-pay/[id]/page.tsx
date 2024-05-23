@@ -10,6 +10,7 @@ import { UpdateRequestToPaySchema } from "@/lib/validation/request-to-pay-valida
 import TransactionStatus from "../(buttons)/transaction-status";
 import { RequestToPay } from "@prisma/client";
 import PreApproval from "../(buttons)/pre-approval";
+import PreApprovalStatus from "../(buttons)/pre-approval-status";
 
 interface Props {
   params: { id: string };
@@ -65,6 +66,7 @@ export default async function Page({ params }: Props) {
       <DeleteTransaction request={request as UpdateRequestToPaySchema} />
       <TransactionStatus request={request!} />
       <PreApproval request={request!} />
+      <PreApprovalStatus request={request!} />
 
       {/* transaction's params */}
       <TransactionParams request={request} />
