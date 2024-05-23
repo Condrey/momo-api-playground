@@ -15,38 +15,32 @@ export default async function Page() {
 
   return (
     <>
-
-<div className="flex flex-col-reverse  gap-4 lg:flex-row ">
-
+      <div className="flex flex-col-reverse  gap-4 lg:flex-row ">
         {/* children  */}
         <div className=" flex w-full flex-col gap-4 *:before:pr-2 *:before:text-2xl *:before:font-bold lg:w-2/3 lg:p-4 ">
-        <BreadCrumb
-        breadCrumbs={[
-          { title: "Home", href: "/" },
-          { title: "Collection", href: "/chapter-two" },
-        ]}
-      />
-        <ProductTitleContainer productTitle="Collection" />
-      {/* sidebar components  */}
-      <div className="flex lg:hidden max-w-prose">
-        <LayoutSideBar/>
-      </div>
+          <BreadCrumb
+            breadCrumbs={[
+              { title: "Home", href: "/" },
+              { title: "Collection", href: "/chapter-two" },
+            ]}
+          />
+          <ProductTitleContainer productTitle="Collection" />
+          {/* sidebar components  */}
+          <div className="flex max-w-prose lg:hidden">
+            <LayoutSideBar />
+          </div>
 
-{/* Main components */}
-      <CreateAccessToken user={user} />
-      <RequestToPay user={user} />
-              </div>
+          {/* Main components */}
+          <CreateAccessToken user={user} />
+          <RequestToPay user={user} />
+        </div>
         {/* side bar information  */}
-<div className="hidden lg:flex">
-<Suspense>
-          <LayoutSideBar />
-        </Suspense>
-</div>
-        
+        <div className="hidden lg:flex">
+          <Suspense>
+            <LayoutSideBar />
+          </Suspense>
+        </div>
       </div>
-     
- 
-
-      </>
+    </>
   );
 }

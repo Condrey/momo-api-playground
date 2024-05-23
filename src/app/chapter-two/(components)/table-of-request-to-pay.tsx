@@ -40,15 +40,17 @@ export default function TableOfRequestToPay({ user }: Props) {
   const numberOfRequests = `${requestsToPay?.length} request${requestsToPay?.length === 1 ? "" : "s"}`;
   const [showTable, setShowTable] = useState(true);
 
- 
   return (
     <>
       <div
-        className="flex flex-wrap cursor-pointer items-center gap-4"
+        className="flex cursor-pointer flex-wrap items-center gap-4"
         onClick={() => setShowTable(!showTable)}
       >
-        <span title={showTable?'Hide table':'Show table'} className="peer flex flex-wrap gap-2 items-center text-xl font-semibold uppercase hover:text-amber-500 dark:hover:text-amber-300">
-         {!showTable?<EyeOff/>:<Eye/>} Table showing requests made{" "}
+        <span
+          title={showTable ? "Hide table" : "Show table"}
+          className="peer flex flex-wrap items-center gap-2 text-xl font-semibold uppercase hover:text-amber-500 dark:hover:text-amber-300"
+        >
+          {!showTable ? <EyeOff /> : <Eye />} Table showing requests made{" "}
           <Badge variant={"destructive"}>{numberOfRequests}</Badge>
         </span>
         <span className="hidden md:hover:flex md:peer-hover:flex">
@@ -65,7 +67,7 @@ export default function TableOfRequestToPay({ user }: Props) {
       >
         <AlertTitle className=" underline">Table key</AlertTitle>
         <AlertDescription>
-          <div className="flex mb-3 flex-wrap items-center justify-center gap-2 lg:items-start lg:justify-start">
+          <div className="mb-3 flex flex-wrap items-center justify-center gap-2 lg:items-start lg:justify-start">
             <span className="font-bold">Status</span>
             <div className="flex items-center gap-2">
               <div className=" size-3 rounded-full bg-green-700" /> Checked,
@@ -78,7 +80,7 @@ export default function TableOfRequestToPay({ user }: Props) {
               <div className=" size-3 rounded-full bg-red-700" /> Timed out
             </div>
           </div>
-                </AlertDescription>
+        </AlertDescription>
       </Alert>
 
       <Table className={cn(showTable ? "table " : "hidden")}>
@@ -100,48 +102,49 @@ export default function TableOfRequestToPay({ user }: Props) {
             const timeDifference = Date.now() - request.createdAt.getTime();
             const isExpired: boolean = timeDifference > 1 * 1000 * 60 * 60;
             return (
-          
-        
-                  <Link title="click to view transaction" key={request.id} href={`/chapter-two/request-to-pay/${request.id}`} 
-                   className="table-row odd:bg-stone-700 odd:text-stone-50 odd:hover:bg-stone-500 odd:hover:text-stone-50 even:bg-amber-300 even:text-slate-950 even:hover:bg-amber-200 dark:odd:bg-secondary dark:odd:hover:bg-secondary/50 dark:even:bg-background dark:border-x dark:even:text-foreground" >
-                    <TableCell> {numbering}</TableCell>
-                    <TableCell>{request.amount}</TableCell>
-                    <TableCell>{request.currency}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center space-x-2">
-                        <div
-                          className={cn(
-                            " size-3 rounded-full",
-                            isChecked ? " bg-green-700" : " bg-blue-700",
-                          )}
-                        />
-                        <div
-                          className={cn(
-                            " size-3 rounded-full bg-red-700",
-                            isExpired ? " visible" : " invisible",
-                          )}
-                        />
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <span className="line-clamp-1 flex w-96  select-all flex-nowrap overflow-ellipsis ">
-                        {request.referenceId}
-                      </span>
-                    </TableCell>
-                    <TableCell>{request.externalId}</TableCell>
-                    <TableCell>{request.partyId}</TableCell>
-                    <TableCell>
-                      <span className="line-clamp-1 flex w-64  flex-nowrap overflow-ellipsis ">
-                        {request.payerMessage}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <span className="line-clamp-1 flex w-64 flex-nowrap overflow-ellipsis ">
-                        {request.payeeNote}
-                      </span>
-                    </TableCell>
-                </Link>
-            
+              <Link
+                title="click to view transaction"
+                key={request.id}
+                href={`/chapter-two/request-to-pay/${request.id}`}
+                className="table-row odd:bg-stone-700 odd:text-stone-50 even:bg-amber-300 even:text-slate-950 odd:hover:bg-stone-500 odd:hover:text-stone-50 even:hover:bg-amber-200 dark:border-x dark:odd:bg-secondary dark:even:bg-background dark:even:text-foreground dark:odd:hover:bg-secondary/50"
+              >
+                <TableCell> {numbering}</TableCell>
+                <TableCell>{request.amount}</TableCell>
+                <TableCell>{request.currency}</TableCell>
+                <TableCell>
+                  <div className="flex items-center space-x-2">
+                    <div
+                      className={cn(
+                        " size-3 rounded-full",
+                        isChecked ? " bg-green-700" : " bg-blue-700",
+                      )}
+                    />
+                    <div
+                      className={cn(
+                        " size-3 rounded-full bg-red-700",
+                        isExpired ? " visible" : " invisible",
+                      )}
+                    />
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <span className="line-clamp-1 flex w-96  select-all flex-nowrap overflow-ellipsis ">
+                    {request.referenceId}
+                  </span>
+                </TableCell>
+                <TableCell>{request.externalId}</TableCell>
+                <TableCell>{request.partyId}</TableCell>
+                <TableCell>
+                  <span className="line-clamp-1 flex w-64  flex-nowrap overflow-ellipsis ">
+                    {request.payerMessage}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <span className="line-clamp-1 flex w-64 flex-nowrap overflow-ellipsis ">
+                    {request.payeeNote}
+                  </span>
+                </TableCell>
+              </Link>
             );
           })}
         </TableBody>

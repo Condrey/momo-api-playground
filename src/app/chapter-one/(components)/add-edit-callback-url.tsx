@@ -68,7 +68,7 @@ export default function AddEditCAllbackUrl(props: Props) {
     >
       <Form {...form}>
         <form className="space-y-4  " onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField
+          <FormField
             control={form.control}
             name={"callbackHost"}
             render={({ field }) => (
@@ -77,11 +77,13 @@ export default function AddEditCAllbackUrl(props: Props) {
                   <Input placeholder="Callback host" {...field} />
                 </FormControl>
                 <FormMessage />
-                <FormDescription>Host is in the form: something.com</FormDescription>
+                <FormDescription>
+                  Host is in the form: something.com
+                </FormDescription>
               </FormItem>
             )}
           />
-             <FormField
+          <FormField
             control={form.control}
             name={"callbackUrl"}
             render={({ field }) => (
@@ -90,8 +92,9 @@ export default function AddEditCAllbackUrl(props: Props) {
                   <Input placeholder="Callback url" {...field} />
                 </FormControl>
                 <FormMessage />
-                <FormDescription>Url is in the form: https://something.com/api/sandbox-callback</FormDescription>
-
+                <FormDescription>
+                  Url is in the form: https://something.com/api/sandbox-callback
+                </FormDescription>
               </FormItem>
             )}
           />

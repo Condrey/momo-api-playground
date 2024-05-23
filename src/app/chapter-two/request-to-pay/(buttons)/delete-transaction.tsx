@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import LoadingButton from "@/components/ui/loading-button";
 import { toast } from "@/components/ui/use-toast";
 import { deleteRequestToPay } from "@/lib/db/actions/collection/request-to-pay-actions";
@@ -7,13 +7,13 @@ import { UpdateRequestToPaySchema } from "@/lib/validation/request-to-pay-valida
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-interface Props{
-    request:UpdateRequestToPaySchema
+interface Props {
+  request: UpdateRequestToPaySchema;
 }
 
-export default function DeleteTransaction({request}:Props){
-    const [isDeletingTransaction, setIsDeletingTransaction] = useState(false);
-const router = useRouter()
+export default function DeleteTransaction({ request }: Props) {
+  const [isDeletingTransaction, setIsDeletingTransaction] = useState(false);
+  const router = useRouter();
   async function deleteTransaction(transaction: UpdateRequestToPaySchema) {
     try {
       setIsDeletingTransaction(true);
@@ -36,15 +36,15 @@ const router = useRouter()
     }
   }
 
-  return <>
-   <LoadingButton
-                      variant={"destructive"}
-                      loading={isDeletingTransaction}
-                      onClick={() =>
-                        deleteTransaction(request)
-                      }
-                    >
-                      Delete Transaction
-                    </LoadingButton></>
-
+  return (
+    <>
+      <LoadingButton
+        variant={"destructive"}
+        loading={isDeletingTransaction}
+        onClick={() => deleteTransaction(request)}
+      >
+        Delete Transaction
+      </LoadingButton>
+    </>
+  );
 }

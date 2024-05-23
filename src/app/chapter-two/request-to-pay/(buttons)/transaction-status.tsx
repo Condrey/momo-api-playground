@@ -1,18 +1,22 @@
-'use client'
+"use client";
+import ProductSubtitleContainer from "@/components/product-subtitle-container";
 import ResponseContainer from "@/components/response-container";
 import LoadingButton from "@/components/ui/loading-button";
 import { toast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 import { UpdateRequestToPaySchema } from "@/lib/validation/request-to-pay-validation";
+import { RequestToPay } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface Props {
-  request: UpdateRequestToPaySchema;
+  request: RequestToPay;
 }
 export default function TransactionStatus({ request }: Props) {
   const router = useRouter();
   const [isCheckingStatus, setIsCheckingStatus] = useState(false);
   const [responseMsg, setResponseMsg] = useState<undefined | string>(undefined);
+  const isChecked: boolean = request?.isChecked!;
 
   async function checkTransactionStatus(transaction: UpdateRequestToPaySchema) {
     try {
@@ -31,10 +35,9 @@ export default function TransactionStatus({ request }: Props) {
           description: `${data.message}`,
         });
       } else {
-        const data = response.status;
-
-        console.log("No Ok data:", data);
-
+        setResponseMsg(
+          `{\n"Status":"${response.status}"\n"StatusText":"${response.statusText}"\n}`,
+        );
         toast({
           title: "Failed request",
           description: JSON.stringify(response.statusText),
@@ -56,13 +59,27 @@ export default function TransactionStatus({ request }: Props) {
 
   return (
     <>
+      <ProductSubtitleContainer isChecked={isChecked}>
+        <span
+          className={cn(
+            isChecked
+              ? ' before:content-["Got_Request_to_Pay_Transaction_Status:"]'
+              : ' before:content-["Get_Request_to_Pay_Transaction_Status:"]',
+          )}
+        >
+          {` /collection/v1_0/requesttopay/{referenceId} - GET`}
+        </span>
+      </ProductSubtitleContainer>
+
       <LoadingButton
         loading={isCheckingStatus}
-        variant={"default"}
-        onClick={() => checkTransactionStatus(request)}
+        variant={isChecked ? "green" : "default"}
+        onClick={() =>
+          checkTransactionStatus(request as UpdateRequestToPaySchema)
+        }
       >
-        Check Status
-      </LoadingButton>{" "}
+        {isChecked ? "Re-Check Transaction Status" : "Check Transaction Status"}
+      </LoadingButton>
       <ResponseContainer message={responseMsg} />
     </>
   );

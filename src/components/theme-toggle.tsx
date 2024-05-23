@@ -29,10 +29,11 @@ export function ThemeToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button title="Click to change theme"
+        <Button
+          title="Click to change theme"
           variant="ghost"
           size="icon"
-          className="size-[30px] md:size-[40px] xl:size-[50px] rounded-full p-0"
+          className="size-[30px] rounded-full p-0 md:size-[40px] xl:size-[50px]"
         >
           <SunIcon className=" size-auto  rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 " />
           <MoonIcon className="absolute size-auto  rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />

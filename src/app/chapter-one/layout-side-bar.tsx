@@ -10,7 +10,7 @@ export default async function LayoutSideBar() {
         text={user?.callbackHost!}
         title="Your callbackHost"
       />
-       <SmallCodeSnippetContainer
+      <SmallCodeSnippetContainer
         text={user?.callbackUrl!}
         title="Your callbackUrl"
       />

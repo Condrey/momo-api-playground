@@ -37,8 +37,6 @@ export async function POST(req: Request) {
 
     const session = await auth();
 
-    
-
     const response = await fetch(url, {
       method: "POST",
       headers: {

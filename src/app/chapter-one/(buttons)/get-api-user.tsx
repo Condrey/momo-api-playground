@@ -79,9 +79,9 @@ export default function GetApiUser({ user }: Props) {
       <LoadingButton
         onClick={handleClick}
         loading={isLoading}
-        variant={isUserPresent?"green":"default"}
+        variant={isUserPresent ? "green" : "default"}
       >
-       {isUserPresent? "Repeat Get Api User": "Get Api User"}
+        {isUserPresent ? "Repeat Get Api User" : "Get Api User"}
       </LoadingButton>
       <ResponseContainer message={responseMsg} />
     </>

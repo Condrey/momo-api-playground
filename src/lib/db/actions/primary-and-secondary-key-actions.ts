@@ -38,7 +38,8 @@ export async function createPrimaryAndSecondaryKey(
     console.error("Not authorized");
     return {
       type: "warning",
-      message: "You are unauthorized to perform this action.  If logged in check your session.",
+      message:
+        "You are unauthorized to perform this action.  If logged in check your session.",
     };
   }
 
@@ -76,7 +77,8 @@ export async function resetUserVariables(): Promise<ServerMessage> {
     console.error("Not authorized");
     return {
       type: "warning",
-      message: "You are unauthorized to perform this action. If logged in check your session. ",
+      message:
+        "You are unauthorized to perform this action. If logged in check your session. ",
     };
   }
 
@@ -126,7 +128,7 @@ export async function createCallbackUrl(
     };
   }
   //Prepare data for insertion into the database
-  const { callbackUrl,callbackHost } = parseResult.data;
+  const { callbackUrl, callbackHost } = parseResult.data;
 
   const session: Session | null = await auth();
   const userId = session?.user.id!;
@@ -136,7 +138,8 @@ export async function createCallbackUrl(
     console.error("Not authorized");
     return {
       type: "warning",
-      message: "You are unauthorized to perform this action.  If logged in check your session. ",
+      message:
+        "You are unauthorized to perform this action.  If logged in check your session. ",
     };
   }
 
@@ -146,7 +149,7 @@ export async function createCallbackUrl(
       where: { id: userId! },
       data: {
         callbackUrl,
-        callbackHost
+        callbackHost,
       },
     });
   } catch (e) {

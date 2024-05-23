@@ -67,7 +67,10 @@ export default function AddEditRequestToPay(props: Props) {
       if (accessTokenResponse.ok) {
         const data = await accessTokenResponse.json();
         //Now you can request to pay
-        const editedInput:CreateRequestToPaySchema = {...input,accessToken: data.message.access_token}
+        const editedInput: CreateRequestToPaySchema = {
+          ...input,
+          accessToken: data.message.access_token,
+        };
         const body = JSON.stringify(editedInput);
         const response = await fetch("/api/collection/request-to-pay", {
           method: "POST",
@@ -217,7 +220,7 @@ export default function AddEditRequestToPay(props: Props) {
             )}
           />
 
-          <div className="flex justify-end">
+          <div className="flex items-center justify-between gap-4">
             <span>Refresh if button not clickable</span>
             <LoadingButton loading={form.formState.isSubmitting} type="submit">
               Request Payment

@@ -27,8 +27,11 @@ export default function UserToggle({ user }: Props) {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger title="Click to view more" className="rounded-full">
-          <Avatar className="ring-offset-3 size-[30px] md:size-[40px] xl:size-[50px] ring-1 ring-stone-700/20">
+        <DropdownMenuTrigger
+          title="Click to view more"
+          className="rounded-full"
+        >
+          <Avatar className="ring-offset-3 size-[30px] ring-1 ring-stone-700/20 md:size-[40px] xl:size-[50px]">
             <AvatarFallback>
               <User2 />
             </AvatarFallback>

@@ -9,11 +9,11 @@ interface Props {
   userId: string;
 }
 export default function DeleteAllTransactions({ userId }: Props) {
-    const router = useRouter();
-    const [isDeletingAll, setIsDeletingAll] = useState<boolean>(false);
+  const router = useRouter();
+  const [isDeletingAll, setIsDeletingAll] = useState<boolean>(false);
 
   async function deleteAllTransactions(userId: string) {
-     try {
+    try {
       setIsDeletingAll(true);
       const response: ServerMessage = await deleteAllRequestsToPay(userId);
       toast({
