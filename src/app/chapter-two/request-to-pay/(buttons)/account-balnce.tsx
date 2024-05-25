@@ -11,17 +11,16 @@ import { useState } from "react";
 interface Props {
   request: RequestToPay | null;
 }
-export default function PreApprovalStatus({ request }: Props) {
+export default function AccountBalance({ request }: Props) {
   const [responseMsg, setResponseMsg] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   async function handleClick() {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/collection/pre-approval-status", {
+      const response = await fetch("/api/collection/account-balance", {
         method: "POST",
         body: JSON.stringify({
-          referenceId: request?.PreApprovalReferenceId ?? "",
           primaryKey: request?.primaryKey ?? "",
           authorization: request?.accessToken ?? "",
           targetEnvironment: "sandbox",
@@ -33,15 +32,15 @@ export default function PreApprovalStatus({ request }: Props) {
 
         setResponseMsg(JSON.stringify(data.message));
         toast({
-          title: "Verifying pre-Approval status",
-          description: `{\n"Status": "${response.status}",\n"StatusText": "${response.statusText}\n}"`,
+          title: "Account balance",
+          description: `Status: "${response.status}",StatusText: "${response.statusText}`,
         });
       } else {
         setResponseMsg(
           `{\n"Status": "${response.status}",\n"StatusText": "${response.statusText}"\n}`,
         );
         toast({
-          title: "Failed to verify pre-Approval status",
+          title: "Failed to get Account balance",
           description: JSON.stringify(
             `Status: ${response.status},StatusText: ${response.statusText}`,
           ),
@@ -63,13 +62,13 @@ export default function PreApprovalStatus({ request }: Props) {
   return (
     <>
       <ProductSubtitleContainer isChecked={false}>
-        <span className=' before:content-["Get_Pre-Approval_Status:"]'>
-          {` /collection/v2_0/preapproval/{referenceId} - GET`}
+        <span className=' before:content-["Get_Account_Balance:"]'>
+          {` /collection/v1_0/account/balance - GET`}
         </span>
       </ProductSubtitleContainer>
 
       <LoadingButton onClick={handleClick} loading={isLoading}>
-        Check Pre-Approval Status
+        Get Account Balance
       </LoadingButton>
       <ResponseContainer message={responseMsg} />
     </>

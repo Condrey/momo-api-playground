@@ -1,16 +1,18 @@
 import BreadCrumb from "@/components/bread-crumb";
-import SmallCodeSnippetContainer from "@/components/small-code-snippet-container";
 import Title from "@/components/title";
 import { fetchRequestToPayById } from "@/lib/db/data/request-to-pay-data";
 import { cn } from "@/lib/utils";
-import { Metadata } from "next";
-import TransactionParams from "./transaction-params";
-import DeleteTransaction from "../(buttons)/delete-transaction";
 import { UpdateRequestToPaySchema } from "@/lib/validation/request-to-pay-validation";
-import TransactionStatus from "../(buttons)/transaction-status";
 import { RequestToPay } from "@prisma/client";
+import { Metadata } from "next";
+import BasicUserInfo from "../(buttons)/basic-user-info";
+import DeleteTransaction from "../(buttons)/delete-transaction";
 import PreApproval from "../(buttons)/pre-approval";
 import PreApprovalStatus from "../(buttons)/pre-approval-status";
+import TransactionStatus from "../(buttons)/transaction-status";
+import TransactionParams from "./transaction-params";
+import AccountBalance from "../(buttons)/account-balnce";
+import RequestToWithdrawV1 from "../(buttons)/request-to-withhhdraw-v1";
 
 interface Props {
   params: { id: string };
@@ -31,7 +33,7 @@ export default async function Page({ params }: Props) {
   const isExpired: boolean = timeDifference > 1 * 1000 * 60 * 60;
 
   return (
-    <>
+    < >
       <BreadCrumb
         breadCrumbs={[
           { title: "Home", href: "/" },
@@ -42,7 +44,7 @@ export default async function Page({ params }: Props) {
           },
         ]}
       />
-      <div className="flex flex-col gap-4 *:w-full lg:flex-row">
+      <div className="flex flex-col gap-12 *:w-full lg:flex-row lg:gap-4">
         {/* Main div  */}
         <div className=" flex flex-col gap-4 pt-6 *:gap-4 lg:w-3/4">
           <Title title="Request to pay transaction" />
@@ -71,8 +73,11 @@ export default async function Page({ params }: Props) {
           {/* Buttons  */}
           <DeleteTransaction request={request as UpdateRequestToPaySchema} />
           <TransactionStatus request={request!} />
+          <BasicUserInfo request={request!} />
+          <AccountBalance request={request!} />
           <PreApproval request={request!} />
           <PreApprovalStatus request={request!} />
+          <RequestToWithdrawV1 request={request!} />
 
           {/* transaction's params */}
           <div className="flex flex-col items-center gap-4 *:gap-2 lg:hidden">
@@ -80,7 +85,7 @@ export default async function Page({ params }: Props) {
           </div>
         </div>
         {/* side bar div*/}
-        <div className="hidden flex-col items-center gap-4 *:gap-2 lg:flex">
+        <div className="hidden flex-col gap-4 *:gap-2 lg:flex lg:items-center">
           <TransactionParams request={request} />
         </div>
       </div>

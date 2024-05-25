@@ -34,9 +34,9 @@ export async function POST(req: Request) {
         where: { id: session?.user.id! },
         data: { isUserPresent: true },
       });
-      return Response.json({ message: data }, { status: 200 });
+      return Response.json({ message: data }, { status: response.status });
     } else {
-      return Response.json({ message: response.statusText }, { status: 400 });
+      return Response.json({ message: response.statusText }, { status: response.status });
     }
   } catch (error) {
     return Response.json({ error: `ServerError: ${error}` }, { status: 500 });

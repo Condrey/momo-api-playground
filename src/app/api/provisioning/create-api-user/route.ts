@@ -42,9 +42,9 @@ export async function POST(req: Request) {
         where: { id: session?.user.id! },
         data: { referenceId: generatedReferenceId },
       });
-      return Response.json({ message: response }, { status: 200 });
+      return Response.json({ message: response }, { status: response.status });
     } else {
-      return Response.json({ message: response.statusText }, { status: 400 });
+      return Response.json({ message: response.statusText }, { status: response.status });
     }
   } catch (error) {
     return Response.json({ message: `ServerError: ${error}` }, { status: 500 });
