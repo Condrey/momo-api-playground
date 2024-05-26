@@ -29,7 +29,7 @@ export default function SmallCodeSnippetContainer(props: Props) {
     <>
       <div
         className={cn(
-          text === null || text === undefined ? "hidden" : "flex flex-col",
+          text === null || text === undefined ? "hidden" : "flex flex-col max-w-sm",
         )}
       >
         <span>{title}</span>
