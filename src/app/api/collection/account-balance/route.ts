@@ -13,12 +13,11 @@ export async function POST(req: Request) {
   if (!parseResult.success) {
     return Response.json(
       { error: "Invalid input, check your request body." },
-      { status: 400 ,statusText:"Invalid input, check your request body."},
+      { status: 400, statusText: "Invalid input, check your request body." },
     );
   }
 
-  const { authorization, primaryKey, targetEnvironment } =
-    parseResult.data;
+  const { authorization, primaryKey, targetEnvironment } = parseResult.data;
   //TODO unused
   //--- referenceId
 
@@ -46,11 +45,14 @@ export async function POST(req: Request) {
     } else {
       return Response.json(
         { error: response.statusText },
-        { status: response.status,statusText:response.statusText },
+        { status: response.status, statusText: response.statusText },
       );
     }
   } catch (e) {
     console.error("ServerError: ", e);
-    return Response.json({ error: "Server error" }, { status: 500,statusText:'Server error.' });
+    return Response.json(
+      { error: "Server error" },
+      { status: 500, statusText: "Server error." },
+    );
   }
 }

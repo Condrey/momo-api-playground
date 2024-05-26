@@ -72,7 +72,7 @@ export default function CreateApiUser({ user }: Props) {
               : ' before:content-["Create_User:"]',
           )}
         >
-          /apiuser - POST
+          /v1_0/apiuser - POST
         </span>
       </ProductSubtitleContainer>
       <LoadingButton

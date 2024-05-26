@@ -14,9 +14,9 @@ import LoadingButton from "@/components/ui/loading-button";
 import ResponsiveDrawer from "@/components/ui/responsive-drawer";
 import { toast } from "@/components/ui/use-toast";
 import {
-  UpdateRequestToWithdrawV1Schema,
-  updateRequestToWithdrawV1Schema,
-} from "@/lib/validation/request-to-withdraw-v1-validation";
+  UpdateRequestToWithdrawSchema,
+  updateRequestToWithdrawSchema,
+} from "@/lib/validation/request-to-withdraw-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RequestToPay } from "@prisma/client";
 import { useRouter } from "next/navigation";
@@ -32,8 +32,8 @@ interface Props {
 export default function CreateRequestToWithdrawV1Form(props: Props) {
   const { open, setOpen, request, setResponseMsg } = props;
   const router = useRouter();
-  const form = useForm<UpdateRequestToWithdrawV1Schema>({
-    resolver: zodResolver(updateRequestToWithdrawV1Schema),
+  const form = useForm<UpdateRequestToWithdrawSchema>({
+    resolver: zodResolver(updateRequestToWithdrawSchema),
     defaultValues: {
       id: request?.id ?? "",
       authorization: request?.accessToken ?? "",
@@ -50,7 +50,7 @@ export default function CreateRequestToWithdrawV1Form(props: Props) {
     },
   });
 
-  async function onSubmit(input: UpdateRequestToWithdrawV1Schema) {
+  async function onSubmit(input: UpdateRequestToWithdrawSchema) {
     try {
       const body = JSON.stringify(input);
       const response = await fetch("/api/collection/request-to-withdraw-v1", {
@@ -60,7 +60,9 @@ export default function CreateRequestToWithdrawV1Form(props: Props) {
 
       if (response.ok) {
         const data = await response.json();
-        setResponseMsg(          `{\n"Status":"${response.status}"\n"StatusText":"${response.statusText}"\n}`      );
+        setResponseMsg(
+          `{\n"Status":"${response.status}"\n"StatusText":"${response.statusText}"\n}`,
+        );
         toast({
           title: "Request was a success",
           description: response.statusText,

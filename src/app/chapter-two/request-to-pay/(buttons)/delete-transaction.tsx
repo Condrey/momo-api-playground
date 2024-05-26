@@ -32,7 +32,7 @@ export default function DeleteTransaction({ request }: Props) {
       });
     } finally {
       setIsDeletingTransaction(false);
-      router.refresh();
+      router.replace("/chapter-two");
     }
   }
 

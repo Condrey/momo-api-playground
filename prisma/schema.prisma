@@ -110,6 +110,7 @@ model RequestToPay {
   partyId                Float?
   payerMessage           String?
   payeeNote              String?
+  notificationMessage    String?
   isChecked              Boolean             @default(false)
   financialTransactionId Float?
   user                   User                @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -133,12 +134,34 @@ model RequestToWithdraw {
   amount            String?
   currency          String?
   payerMessage      String?
+  isChecked         Boolean      @default(false)
   user              User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
   requestToPay      RequestToPay @relation(fields: [requestToPayId], references: [id], onDelete: Cascade)
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
   userId            String?
   requestToPayId    String
+}
+
+model Payments {
+  id                      String  @id @unique @default(cuid())
+  authorization           String?
+  primaryKey              String?
+  callbackUrl             String?
+  targetEnvironment       String?
+  currency                String?
+  externalTransactionId   Float?
+  customerReference       String?
+  serviceProviderUserName String?
+  amount                  String?
+  couponId                String?
+  productId               String?
+  productOfferingId       String?
+  receiverMessage         String?
+  senderNote              String?
+  maxNumberOfRetries      Int?
+  includeSenderCharges    Boolean
+  referenceId             String?
 }
 
 enum Role {

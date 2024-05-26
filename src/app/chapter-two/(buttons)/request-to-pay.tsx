@@ -7,6 +7,7 @@ import { DefaultArgs, GetFindResult } from "@prisma/client/runtime/library";
 import { useState } from "react";
 import AddEditRequestToPay from "../(components)/add-edit-request-to-pay";
 import TableOfRequestToPay from "../(components)/table-of-request-to-pay";
+import DeleteAllTransactions from "../request-to-pay/(buttons)/delete-all-transactions";
 interface Props {
   user: GetFindResult<
     Prisma.$UserPayload<DefaultArgs>,
@@ -38,6 +39,7 @@ export default function RequestToPay({ user }: Props) {
        * Responsive drawer for creating request to pay
        *
        */}
+      <> {hasRequestToPay && <DeleteAllTransactions userId={user?.id!} />}</>
       <AddEditRequestToPay open={open} setOpen={setOpen} user={user} />
     </>
   );

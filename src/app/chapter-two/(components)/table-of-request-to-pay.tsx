@@ -1,8 +1,5 @@
-import ResponseContainer from "@/components/response-container";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { HoverCard, HoverCardContent } from "@/components/ui/hover-card";
-import LoadingButton from "@/components/ui/loading-button";
 import {
   Table,
   TableBody,
@@ -10,23 +7,14 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
 } from "@/components/ui/table";
-import { toast } from "@/components/ui/use-toast";
-import {
-  deleteAllRequestsToPay,
-  deleteRequestToPay,
-} from "@/lib/db/actions/collection/request-to-pay-actions";
-import { ServerMessage, cn } from "@/lib/utils";
-import { UpdateRequestToPaySchema } from "@/lib/validation/request-to-pay-validation";
+import { cn } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 import { DefaultArgs, GetFindResult } from "@prisma/client/runtime/library";
-import { HoverCardTrigger } from "@radix-ui/react-hover-card";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import SmallCodeSnippetContainer from "../../../components/small-code-snippet-container";
-import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import DeleteAllTransactions from "../request-to-pay/(buttons)/delete-all-transactions";
 
 interface Props {
   user: GetFindResult<
@@ -82,9 +70,8 @@ export default function TableOfRequestToPay({ user }: Props) {
           </div>
         </AlertDescription>
       </Alert>
-
       <Table className={cn(showTable ? "table " : "hidden")}>
-        <TableHeader className="bg-foreground *:text-background dark:border dark:bg-background dark:*:text-foreground">
+        <TableHeader>
           <TableHead>#</TableHead>
           <TableHead>Amount</TableHead>
           <TableHead>Currency</TableHead>
@@ -106,7 +93,7 @@ export default function TableOfRequestToPay({ user }: Props) {
                 title="click to view transaction"
                 key={request.id}
                 href={`/chapter-two/request-to-pay/${request.id}`}
-                className="table-row odd:bg-stone-700 odd:text-stone-50 even:bg-amber-300 even:text-slate-950 odd:hover:bg-stone-500 odd:hover:text-stone-50 even:hover:bg-amber-200 dark:border-x dark:odd:bg-secondary dark:even:bg-background dark:even:text-foreground dark:odd:hover:bg-secondary/50"
+                className="table-row cursor-pointer odd:bg-stone-700 odd:text-stone-50 even:bg-amber-300 even:text-slate-950 odd:hover:bg-stone-500 odd:hover:text-stone-50 even:hover:bg-amber-200 dark:border-x dark:odd:bg-secondary dark:even:bg-background dark:even:text-foreground dark:odd:hover:bg-secondary/50"
               >
                 <TableCell> {numbering}</TableCell>
                 <TableCell>{request.amount}</TableCell>

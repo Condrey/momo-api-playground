@@ -5,6 +5,7 @@ export async function fetchRequestToPayById(id: string) {
   try {
     return await prisma.requestToPay.findUnique({
       where: { id },
+      include: { RequestToWithdraw: true },
     });
   } catch (e) {
     console.error("Error fetching request to pay :", e);

@@ -44,7 +44,10 @@ export async function POST(req: Request) {
       });
       return Response.json({ message: response }, { status: response.status });
     } else {
-      return Response.json({ message: response.statusText }, { status: response.status });
+      return Response.json(
+        { message: response.statusText },
+        { status: response.status },
+      );
     }
   } catch (error) {
     return Response.json({ message: `ServerError: ${error}` }, { status: 500 });

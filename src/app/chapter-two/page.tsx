@@ -9,6 +9,7 @@ import { User } from "@prisma/client";
 import BreadCrumb from "@/components/bread-crumb";
 import LayoutSideBar from "./layout-side-bar";
 import { Suspense } from "react";
+import CreatePayments from "./(buttons)/create-paymens";
 
 export default async function Page() {
   const user = await fetchUserByIdWithRequestToPay();
@@ -33,6 +34,7 @@ export default async function Page() {
           {/* Main components */}
           <CreateAccessToken user={user} />
           <RequestToPay user={user} />
+          <CreatePayments user={user as User} />
         </div>
         {/* side bar information  */}
         <div className="hidden lg:flex">

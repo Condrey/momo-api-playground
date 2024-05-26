@@ -92,10 +92,6 @@ export default function AddEditRequestToPay(props: Props) {
             });
           }
         } else {
-          const data = response.status;
-
-          console.log("No Ok data:", data);
-
           toast({
             title: "Failed request",
             description: JSON.stringify(response.statusText),
@@ -103,7 +99,7 @@ export default function AddEditRequestToPay(props: Props) {
           });
         }
       } else {
-        console.error("Error getting accessToken: ", accessTokenResponse);
+        console.error("Error getting accessToken: ");
         throw new Error("Error getting accessToken");
       }
     } catch (e) {

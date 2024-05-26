@@ -43,14 +43,14 @@ export default function SmallCodeSnippetContainer(props: Props) {
           <Copy
             onClick={handleCopy}
             className={cn(
-              "float-right size-8 rounded-md p-2 hover:bg-stone-500",
+              "pointer-events-auto float-right size-8 rounded-md p-2 hover:bg-stone-500",
               isCopied && "hidden",
             )}
           />
           <CheckCheck
             onClick={handleCopy}
             className={cn(
-              "float-right size-8 rounded-md p-2 hover:bg-stone-500",
+              "pointer-events-auto float-right size-8 rounded-md p-2 hover:bg-stone-500",
               !isCopied && "hidden",
             )}
           />

@@ -12,7 +12,7 @@ import { useState } from "react";
 interface Props {
   request: RequestToPay;
 }
-export default function TransactionStatus({ request }: Props) {
+export default function RequestToPayTransactionStatus({ request }: Props) {
   const router = useRouter();
   const [isCheckingStatus, setIsCheckingStatus] = useState(false);
   const [responseMsg, setResponseMsg] = useState<undefined | string>(undefined);

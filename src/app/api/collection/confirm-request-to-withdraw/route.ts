@@ -1,31 +1,35 @@
+import { auth } from "@/app/auth";
+import prisma from "@/lib/db/prisma";
+import { updateRequestToPaySchema } from "@/lib/validation/request-to-pay-validation";
 import { z } from "zod";
 
 export async function POST(req: Request) {
   const body = await req.json();
 
   const schema = z.object({
-    partyId: z.string(),
-    primaryKey: z.string(),
+    id: z.string(),
     authorization: z.string(),
+    referenceId: z.string(),
     targetEnvironment: z.string(),
+    primaryKey: z.string(),
   });
 
   const parseResult = schema.safeParse(body);
   if (!parseResult.success) {
     return Response.json(
       { error: "Invalid input, check your request body." },
-      { status: 400, statusText: "Invalid input, check your request body." },
+      { status: 400 },
     );
   }
 
-  const { authorization, primaryKey, targetEnvironment, partyId } =
+  const { id, authorization, primaryKey, targetEnvironment, referenceId } =
     parseResult.data;
   //TODO unused
-  //--- referenceId
+  //--- callbackUrl,referenceId
 
   try {
     const subscriptionKey = primaryKey;
-    const url = `https://sandbox.momodeveloper.mtn.com/collection/v1_0/accountholder/msisdn/${partyId}/basicuserinfo`;
+    const url = `https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttowithdraw/${referenceId}`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -38,6 +42,14 @@ export async function POST(req: Request) {
     });
     if (response.ok) {
       const data = await response.json();
+
+      await prisma.requestToWithdraw.update({
+        where: { id: id! },
+        data: {
+          isChecked: true,
+        },
+      });
+
       return Response.json(
         {
           message: data,

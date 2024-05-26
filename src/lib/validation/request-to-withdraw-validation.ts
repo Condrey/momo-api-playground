@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createRequestToWithdrawV1Schema = z.object({
+export const createRequestToWithdrawSchema = z.object({
   authorization: z.string().min(1),
   callbackUrl: z.string().min(1),
   referenceId: z.string().min(1),
@@ -20,14 +20,14 @@ export const createRequestToWithdrawV1Schema = z.object({
     .min(10, { message: "Make the message >10 characters at least." }),
 });
 
-export const updateRequestToWithdrawV1Schema =
-  createRequestToWithdrawV1Schema.extend({
+export const updateRequestToWithdrawSchema =
+  createRequestToWithdrawSchema.extend({
     id: z.string(),
   });
 
-export type CreateRequestToWithdrawV1Schema = z.infer<
-  typeof createRequestToWithdrawV1Schema
+export type CreateRequestToWithdrawSchema = z.infer<
+  typeof createRequestToWithdrawSchema
 >;
-export type UpdateRequestToWithdrawV1Schema = z.infer<
-  typeof updateRequestToWithdrawV1Schema
+export type UpdateRequestToWithdrawSchema = z.infer<
+  typeof updateRequestToWithdrawSchema
 >;

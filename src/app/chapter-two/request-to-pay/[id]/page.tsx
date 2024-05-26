@@ -3,16 +3,20 @@ import Title from "@/components/title";
 import { fetchRequestToPayById } from "@/lib/db/data/request-to-pay-data";
 import { cn } from "@/lib/utils";
 import { UpdateRequestToPaySchema } from "@/lib/validation/request-to-pay-validation";
-import { RequestToPay } from "@prisma/client";
+import { Prisma } from "@prisma/client";
+import { DefaultArgs, GetFindResult } from "@prisma/client/runtime/library";
 import { Metadata } from "next";
+import AccountBalance from "../(buttons)/account-balnce";
 import BasicUserInfo from "../(buttons)/basic-user-info";
 import DeleteTransaction from "../(buttons)/delete-transaction";
 import PreApproval from "../(buttons)/pre-approval";
 import PreApprovalStatus from "../(buttons)/pre-approval-status";
-import TransactionStatus from "../(buttons)/transaction-status";
-import TransactionParams from "./transaction-params";
-import AccountBalance from "../(buttons)/account-balnce";
+import RequestToPayTransactionStatus from "../(buttons)/request-to-pay-transaction-status";
+import RequestToWithdrawTransactionStatus from "../(buttons)/request-to-withdraw-transaction-status";
 import RequestToWithdrawV1 from "../(buttons)/request-to-withhhdraw-v1";
+import RequestToWithdrawV2 from "../(buttons)/request-to-withhhdraw-v2";
+import TransactionParams from "./transaction-params";
+import DeliveryNotification from "../(buttons)/delivery-notification";
 
 interface Props {
   params: { id: string };
@@ -27,13 +31,17 @@ export const metadata: Metadata = {
 export default async function Page({ params }: Props) {
   const { id } = params;
   // fetch the request to pay from the database
-  const request: RequestToPay | null = await fetchRequestToPayById(id);
+  const request: GetFindResult<
+    Prisma.$RequestToPayPayload<DefaultArgs>,
+    { include: { RequestToWithdraw: boolean } }
+  > | null = await fetchRequestToPayById(id);
   const isChecked: boolean = request?.isChecked!;
   const timeDifference = Date.now() - request!.createdAt.getTime();
   const isExpired: boolean = timeDifference > 1 * 1000 * 60 * 60;
+  const requestsToWithdraw = request?.RequestToWithdraw;
 
   return (
-    < >
+    <>
       <BreadCrumb
         breadCrumbs={[
           { title: "Home", href: "/" },
@@ -72,12 +80,18 @@ export default async function Page({ params }: Props) {
 
           {/* Buttons  */}
           <DeleteTransaction request={request as UpdateRequestToPaySchema} />
-          <TransactionStatus request={request!} />
+          <RequestToPayTransactionStatus request={request!} />
           <BasicUserInfo request={request!} />
           <AccountBalance request={request!} />
+          <DeliveryNotification request={request!} />
           <PreApproval request={request!} />
           <PreApprovalStatus request={request!} />
           <RequestToWithdrawV1 request={request!} />
+          <RequestToWithdrawV2 request={request!} />
+          <RequestToWithdrawTransactionStatus
+            requestsToWithdraw={requestsToWithdraw!}
+            isExpired={isExpired}
+          />
 
           {/* transaction's params */}
           <div className="flex flex-col items-center gap-4 *:gap-2 lg:hidden">

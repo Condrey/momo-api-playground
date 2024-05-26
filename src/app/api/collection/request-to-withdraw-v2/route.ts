@@ -1,12 +1,12 @@
 import { auth } from "@/app/auth";
 import prisma from "@/lib/db/prisma";
 import generateReferenceId from "@/lib/momo-utils/generate-reference-id";
-import { updateRequestToWithdrawV1Schema } from "@/lib/validation/request-to-withdraw-v1-validation";
+import { updateRequestToWithdrawSchema } from "@/lib/validation/request-to-withdraw-validation";
 
 export async function POST(req: Request) {
   const body = await req.json();
 
-  const parseResult = updateRequestToWithdrawV1Schema.safeParse(body);
+  const parseResult = updateRequestToWithdrawSchema.safeParse(body);
   if (!parseResult.success) {
     return Response.json(
       { error: "Invalid input, check your request body." },

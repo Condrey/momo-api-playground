@@ -55,6 +55,12 @@ export default function TransactionParams({ request }: Props) {
             text={request?.PreApprovalReferenceId!}
             isMultiLine={false}
           />
+          {/* Delivery notification  */}
+          <SmallCodeSnippetContainer
+            title={`Delivery notification`}
+            text={request?.notificationMessage!}
+            isMultiLine={true}
+          />
         </div>
       </div>
     </>

@@ -35,13 +35,12 @@ export default function DeleteAllTransactions({ userId }: Props) {
 
   return (
     <>
-      {" "}
       <LoadingButton
         variant={"destructive"}
         loading={isDeletingAll}
         onClick={() => deleteAllTransactions(userId)}
       >
-        Delete All
+        Delete All Transactions
       </LoadingButton>
     </>
   );
