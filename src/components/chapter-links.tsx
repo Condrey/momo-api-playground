@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { ClassValue } from "clsx";
-import { BoxIcon, Home, ListStartIcon, LucideIcon } from "lucide-react";
+import { BoxIcon, Home, ListStartIcon, LucideIcon, Network } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -11,6 +11,7 @@ export default function ChapterLinks() {
   const links: { label: string; icon: LucideIcon; href: string }[] = [
     { label: "SandBox User Provisioning", icon: BoxIcon, href: "/chapter-one" },
     { label: "Collection", icon: ListStartIcon, href: "/chapter-two" },
+    { label: "Disbursement", icon: Network, href: "/chapter-three" },
   ];
   let isNewPath = false;
 
