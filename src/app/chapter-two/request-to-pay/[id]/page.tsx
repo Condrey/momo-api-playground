@@ -70,12 +70,10 @@ export default async function Page({ params }: Props) {
             <div
               className={cn(
                 " size-3 rounded-full bg-red-700",
-                isExpired ? " visible" : " invisible",
+                isExpired ? " flex" : " hidden",
               )}
             />
-            <span className={cn(isExpired ? "visible" : "hidden")}>
-              Timed out
-            </span>
+            <span className={cn(isExpired ? "flex" : "hidden")}>Timed out</span>
           </div>
 
           {/* Buttons  */}

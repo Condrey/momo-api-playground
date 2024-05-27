@@ -1,12 +1,12 @@
 import { auth } from "@/app/auth";
 import prisma from "@/lib/db/prisma";
 import generateReferenceId from "@/lib/momo-utils/generate-reference-id";
-import { createPaymentsSchema } from "@/lib/validation/payments-validation";
+import { createInvoicesSchema } from "@/lib/validation/invoices-validation";
 
 export async function POST(req: Request) {
   const body = await req.json();
 
-  const parseResult = createPaymentsSchema.safeParse(body);
+  const parseResult = createInvoicesSchema.safeParse(body);
   if (!parseResult.success) {
     return Response.json(
       { error: "Invalid input, check your request body." },
@@ -20,17 +20,12 @@ export async function POST(req: Request) {
     callbackUrl,
     targetEnvironment,
     currency,
-    externalTransactionId,
-    customerReference,
-    serviceProviderUserName,
+    externalId,
     amount,
-    couponId,
-    productId,
-    productOfferingId,
-    receiverMessage,
-    senderNote,
-    maxNumberOfRetries,
-    includeSenderCharges,
+    description,
+    payeePartyId,
+    intendedPayerPartyId,
+    validityDuration,
     // referenceId,
   } = parseResult.data;
   //TODO unused
@@ -39,7 +34,7 @@ export async function POST(req: Request) {
   try {
     const subscriptionKey = primaryKey;
     const referenceId = generateReferenceId();
-    const url = `https://sandbox.momodeveloper.mtn.com/collection/v2_0/payment`;
+    const url = `https://sandbox.momodeveloper.mtn.com/collection/v2_0/invoice`;
     const session = await auth();
 
     const response = await fetch(url, {
@@ -54,24 +49,23 @@ export async function POST(req: Request) {
         "Ocp-Apim-Subscription-Key": subscriptionKey,
       },
       body: JSON.stringify({
-        externalTransactionId: `${externalTransactionId}`,
-        money: {
-          amount: amount,
-          currency: currency,
+        externalId: externalId,
+        amount: amount,
+        currency: currency,
+        validityDuration: validityDuration,
+        intendedPayer: {
+          partyIdType: "MSISDN",
+          partyId: intendedPayerPartyId,
         },
-        customerReference: customerReference,
-        serviceProviderUserName: serviceProviderUserName,
-        couponId: couponId,
-        productId: productId,
-        productOfferingId: productOfferingId,
-        receiverMessage: receiverMessage,
-        senderNote: senderNote,
-        maxNumberOfRetries: maxNumberOfRetries,
-        includeSenderCharges: includeSenderCharges,
+        payee: {
+          partyIdType: "MSISDN",
+          partyId: payeePartyId,
+        },
+        description: description,
       }),
     });
     if (response.ok) {
-      await prisma.payment.create({
+      await prisma.invoice.create({
         data: {
           authorization: `Bearer ${authorization}`,
           userId: session?.user.id,
@@ -79,17 +73,12 @@ export async function POST(req: Request) {
           callbackUrl,
           targetEnvironment,
           currency,
-          externalTransactionId,
-          customerReference,
-          serviceProviderUserName,
+          externalId,
           amount,
-          couponId,
-          productId,
-          productOfferingId,
-          receiverMessage,
-          senderNote,
-          maxNumberOfRetries,
-          includeSenderCharges,
+          description,
+          payeePartyId,
+          intendedPayerPartyId,
+          validityDuration,
           referenceId,
         },
       });

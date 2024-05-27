@@ -1,5 +1,5 @@
 import prisma from "@/lib/db/prisma";
-import GenerateReferenceId from "@/lib/momo-utils/generate-reference-id";
+import generateReferenceId from "@/lib/momo-utils/generate-reference-id";
 import { updatePreApprovalSchema } from "@/lib/validation/pre-approval-validation";
 
 export async function POST(req: Request) {
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
 
   try {
     const subscriptionKey = primaryKey;
-    const referenceId = GenerateReferenceId();
+    const referenceId = generateReferenceId();
     const url = `https://sandbox.momodeveloper.mtn.com/collection/v2_0/preapproval`;
 
     const response = await fetch(url, {

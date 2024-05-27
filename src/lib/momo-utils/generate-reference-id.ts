@@ -1,4 +1,4 @@
-export default function GenerateReferenceId(): string {
+export default function generateReferenceId(): string {
   const hexDigits = "0123456789abcdef";
 
   let uuid = "";

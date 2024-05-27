@@ -1,15 +1,12 @@
-import ProductTitleContainer from "@/components/product-title-container";
-import {
-  fetchUserById,
-  fetchUserByIdWithRequestToPay,
-} from "@/lib/db/data/user-data";
-import CreateAccessToken from "./(buttons)/create-access_token";
-import RequestToPay from "./(buttons)/request-to-pay";
-import { User } from "@prisma/client";
 import BreadCrumb from "@/components/bread-crumb";
-import LayoutSideBar from "./layout-side-bar";
+import ProductTitleContainer from "@/components/product-title-container";
+import { fetchUserByIdWithRequestToPay } from "@/lib/db/data/user-data";
 import { Suspense } from "react";
-import CreatePayments from "./(buttons)/create-paymens";
+import CreateAccessToken from "./(buttons)/create-access_token";
+import CreatePayment from "./(buttons)/create-payment";
+import RequestToPay from "./(buttons)/request-to-pay";
+import LayoutSideBar from "./layout-side-bar";
+import CreateInvoice from "./(buttons)/create-invoice";
 
 export default async function Page() {
   const user = await fetchUserByIdWithRequestToPay();
@@ -34,7 +31,8 @@ export default async function Page() {
           {/* Main components */}
           <CreateAccessToken user={user} />
           <RequestToPay user={user} />
-          <CreatePayments user={user as User} />
+          <CreatePayment user={user!} />
+          <CreateInvoice user={user!} />
         </div>
         {/* side bar information  */}
         <div className="hidden lg:flex">

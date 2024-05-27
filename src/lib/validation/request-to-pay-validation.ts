@@ -22,7 +22,7 @@ export const createRequestToPaySchema = z.object({
 export const updateRequestToPaySchema = createRequestToPaySchema.extend({
   id: z.string().min(5),
 });
-export const deleteRequestToPaySchema = z.object({
+export const deleteRequestToPaySchema = createRequestToPaySchema.extend({
   id: z.string().min(5),
 });
 

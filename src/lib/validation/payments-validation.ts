@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const createPaymentsSchema = z.object({
-  primaryKey: z.string().min(1),
   authorization: z.string().min(1),
+  primaryKey: z.string().min(1),
   callbackUrl: z.string().min(1),
   referenceId: z.string().min(1),
   targetEnvironment: z.string().min(1),
@@ -23,4 +23,10 @@ export const createPaymentsSchema = z.object({
   maxNumberOfRetries: z.number().min(1).optional(),
   includeSenderCharges: z.boolean().default(false),
 });
+export const updatePaymentSchema = createPaymentsSchema.extend({
+  id: z.string().min(5),
+});
+export const deletePaymentSchema = z.object({ id: z.string().min(5) });
 export type CreatePaymentsSchema = z.infer<typeof createPaymentsSchema>;
+export type UpdatePaymentsSchema = z.infer<typeof updatePaymentSchema>;
+export type DeletePaymentsSchema = z.infer<typeof deletePaymentSchema>;

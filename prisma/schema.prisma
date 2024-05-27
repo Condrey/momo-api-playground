@@ -39,6 +39,8 @@ model User {
   updatedAt         DateTime            @updatedAt
   RequestToPay      RequestToPay[]
   RequestToWithdraw RequestToWithdraw[]
+  payments          Payment[]
+  invoices          Invoice[]
 }
 
 model Account {
@@ -143,8 +145,8 @@ model RequestToWithdraw {
   requestToPayId    String
 }
 
-model Payments {
-  id                      String  @id @unique @default(cuid())
+model Payment {
+  id                      String   @id @unique @default(cuid())
   authorization           String?
   primaryKey              String?
   callbackUrl             String?
@@ -162,6 +164,33 @@ model Payments {
   maxNumberOfRetries      Int?
   includeSenderCharges    Boolean
   referenceId             String?
+  isChecked               Boolean  @default(false)
+  user                    User?    @relation(fields: [userId], references: [id])
+  userId                  String?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+}
+
+model Invoice {
+  id                   String   @id @unique @default(cuid())
+  authorization        String?
+  primaryKey           String?
+  callbackUrl          String?
+  referenceId          String?
+  targetEnvironment    String?
+  externalId           Float?
+  currency             String?
+  amount               String?
+  validityDuration     Int
+  intendedPayerPartyId String?
+  payeePartyId         String?
+  description          String?
+  isChecked            Boolean  @default(false)
+  isCancelled          Boolean  @default(false)
+  user                 User?    @relation(fields: [userId], references: [id])
+  userId               String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 }
 
 enum Role {

@@ -29,7 +29,9 @@ export default function SmallCodeSnippetContainer(props: Props) {
     <>
       <div
         className={cn(
-          text === null || text === undefined ? "hidden" : "flex flex-col max-w-sm",
+          text === null || text === undefined
+            ? "hidden"
+            : "flex max-w-sm flex-col",
         )}
       >
         <span>{title}</span>
@@ -59,7 +61,7 @@ export default function SmallCodeSnippetContainer(props: Props) {
               "text-ellipsis whitespace-pre-line break-all",
               isMultiLine ? "line-clamp-3" : "line-clamp-1",
             )}
-          >{`${text ?? ""}`}</p>
+          >{`${text}`}</p>
         </div>
       </div>
     </>

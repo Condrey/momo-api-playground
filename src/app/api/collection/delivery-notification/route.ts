@@ -1,7 +1,5 @@
 import prisma from "@/lib/db/prisma";
-import GenerateReferenceId from "@/lib/momo-utils/generate-reference-id";
 import { createDeliveryNotificationSchema } from "@/lib/validation/delivery-notification-validation";
-import { updatePreApprovalSchema } from "@/lib/validation/pre-approval-validation";
 
 export async function POST(req: Request) {
   const body = await req.json();

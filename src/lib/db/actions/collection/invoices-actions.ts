@@ -1,16 +1,16 @@
 "use server";
 import { ServerMessage } from "@/lib/utils";
 import {
-  UpdateRequestToPaySchema,
-  updateRequestToPaySchema,
-} from "@/lib/validation/request-to-pay-validation";
+  DeleteInvoicesSchema,
+  deleteInvoiceSchema,
+} from "@/lib/validation/invoices-validation";
 import prisma from "../../prisma";
 
-export async function deleteRequestToPay(
-  formData: UpdateRequestToPaySchema,
+export async function deleteInvoice(
+  formData: DeleteInvoicesSchema,
 ): Promise<ServerMessage> {
   //Validate form fields using Zod
-  const parseResult = updateRequestToPaySchema.safeParse(formData);
+  const parseResult = deleteInvoiceSchema.safeParse(formData);
   //If form validation occurs, return errors early, otherwise, proceed.
   if (!parseResult.success) {
     console.error(parseResult.error);
@@ -18,24 +18,24 @@ export async function deleteRequestToPay(
       errors: JSON.stringify(parseResult.error.flatten().fieldErrors),
       type: "error",
       message:
-        "Missing fields. Failed to delete request to pay, you have missing fields.",
+        "Missing fields. Failed to delete invoice, you have missing fields.",
     };
   }
 
   try {
     const { id } = parseResult.data;
-    //  check if the request exists
-    const request = prisma.requestToPay.findUnique({ where: { id: id! } });
-    if (!request) {
+    //  check if the invoice exists
+    const invoice = prisma.invoice.findUnique({ where: { id: id! } });
+    if (!invoice) {
       return {
         type: "error",
-        message: "Transaction does not exist.",
+        message: "Invoice does not exist.",
       };
     } else {
-      await prisma.requestToPay.delete({ where: { id: id! } });
+      await prisma.invoice.delete({ where: { id: id! } });
       return {
         type: "success",
-        message: "Transaction deleted.",
+        message: "Invoice deleted.",
       };
     }
   } catch (e) {
@@ -43,26 +43,26 @@ export async function deleteRequestToPay(
     console.error(e);
     return {
       type: "error",
-      message: "Database error: Failed to delete transaction.",
+      message: "Database error: Failed to delete invoice.",
     };
   }
 }
 
-export async function deleteAllRequestsToPay(
+export async function deleteAllInvoices(
   userId: string,
 ): Promise<ServerMessage> {
   try {
-    await prisma.requestToPay.deleteMany({ where: { userId: userId! } });
+    await prisma.invoice.deleteMany({ where: { userId: userId! } });
     return {
       type: "success",
-      message: "All transactions deleted.",
+      message: "All invoices deleted.",
     };
   } catch (e) {
     //If a database error occurs, return a more specific error.
     console.error(e);
     return {
       type: "error",
-      message: "Database error: Failed to delete all transactions.",
+      message: "Database error: Failed to delete all invoices.",
     };
   }
 }

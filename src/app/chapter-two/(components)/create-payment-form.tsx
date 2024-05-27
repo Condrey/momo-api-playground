@@ -27,12 +27,11 @@ import { useForm } from "react-hook-form";
 interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
-  setResponseMsg: (responseMsg: string | undefined) => void;
   user: User | null;
 }
 
-export default function CreatePaymentsForm(props: Props) {
-  const { open, setOpen, user, setResponseMsg } = props;
+export default function CreatePaymentForm(props: Props) {
+  const { open, setOpen, user } = props;
   const router = useRouter();
   const randomIds = generateIds(user?.id!);
   const form = useForm<CreatePaymentsSchema>({
@@ -86,17 +85,11 @@ export default function CreatePaymentsForm(props: Props) {
         });
 
         if (response.ok) {
-          setResponseMsg(
-            `{\n"Status":"${response.status}"\n"StatusText":"${response.statusText}"\n}`,
-          );
           toast({
             title: "Payment Created",
             description: `${response.statusText}`,
           });
         } else {
-          setResponseMsg(
-            `{\n"Status":"${response.status}"\n"StatusText":"${response.statusText}"\n}`,
-          );
           toast({
             title: "Failed to create payment",
             description: JSON.stringify(response.statusText),
