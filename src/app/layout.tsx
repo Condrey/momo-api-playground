@@ -77,29 +77,9 @@ export default async function RootLayout({
           defaultTheme="system"
           disableTransitionOnChange
         >
-          <main className="flex size-full  w-auto flex-col  gap-4  p-4 *:before:pr-2 *:before:text-2xl *:before:font-bold md:flex-row md:bg-zinc-500/5">
-            <div className=" hidden size-full *:max-w-prose md:flex md:h-dvh md:w-1/4 lg:w-auto">
-              <div className="flex flex-col items-center gap-6">
-                <Image
-                  src="/momo-logo2.png"
-                  alt="logo"
-                  width={150}
-                  height={150}
-                  className=" rounded-none"
-                />
-                <hr className="w-full" />
-                <div
-                  className={cn(
-                    "flex flex-col gap-2  *:flex *:gap-2 *:rounded-full *:px-4  *:py-2",
-                  )}
-                >
-                  <Title title="Navigation" />
-                  <span>Sand box Environment</span>
-                  <ChapterLinks />
-                </div>
-              </div>
-            </div>
-            <div className=" flex size-full grow md:min-h-[95vh] md:overflow-y-auto md:rounded-3xl md:bg-white  md:p-4 md:shadow-xl md:ring-1 md:ring-black/5 dark:md:bg-background  ">
+          <main >
+         
+            <div >
               {session !== null ? (
                 <div className="flex w-full flex-col gap-4  *:before:pr-2 *:before:text-2xl *:before:font-bold  ">
                   <Header />

@@ -1,29 +1,32 @@
 import BreadCrumb from "@/components/bread-crumb";
 import Title from "@/components/title";
-import { fetchPaymentById } from "@/lib/db/data/payments-data";
 import { cn } from "@/lib/utils";
-import { Payment } from "@prisma/client";
+import { Invoice } from "@prisma/client";
 import { Metadata } from "next";
-import DeletePayment from "../(buttons)/delete-payment";
-import PaymentStatus from "../(buttons)/payment-status";
-import PaymentParams from "./payment-params";
+import InvoiceParams from "./invoice-params";
+import { fetchInvoiceById } from "@/lib/db/data/invoices-data";
+import DeleteInvoice from "../(buttons)/delete-invoice";
+import InvoiceStatus from "../(buttons)/invoice-status";
+import CancelInvoice from "../(buttons)/cancel-invoice";
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export const metadata: Metadata = {
-  title: "Payment",
+  title: "Invoice",
   description:
-    "Detailed information of a created payment. Get to know what happens under the hood.",
+    "Detailed information of a created invoice. Get to know what happens under the hood.",
 };
 
-export default async function Page({ params }: Props) {
+export default async function Page(props: Props) {
+  const params = await props.params;
   const { id } = params;
-  // fetch payment from the database
-  const payment: Payment | null = await fetchPaymentById(id);
-  const isChecked: boolean = payment?.isChecked!;
-  const timeDifference = Date.now() - payment!.createdAt.getTime();
+  // fetch invoice from the database
+  const invoice: Invoice | null = await fetchInvoiceById(id);
+  const isChecked: boolean = invoice?.isChecked!;
+  const isCancelled: boolean = invoice?.isCancelled!;
+  const timeDifference = Date.now() - invoice!.createdAt.getTime();
   const isExpired: boolean = timeDifference > 1 * 1000 * 60 * 60;
 
   return (
@@ -33,19 +36,20 @@ export default async function Page({ params }: Props) {
           { title: "Home", href: "/" },
           { title: "Collection", href: "/chapter-two" },
           {
-            title: "Payment",
-            href: `/chapter-two/payments/${id}`,
+            title: "Invoice",
+            href: `/chapter-two/invoices/${id}`,
           },
         ]}
       />
       <div className="flex flex-col gap-12 *:w-full lg:flex-row lg:gap-4">
         {/* Main div  */}
         <div className=" flex flex-col gap-4 pt-6 *:gap-4 lg:w-3/4">
-          <Title title="Created Payment" />
+          <Title title="Created Invoice" />
 
-          {/* payment status  */}
+          {/* invoice status  */}
           <div className="flex flex-wrap items-center space-x-2">
             <span className=" font-semibold">Status</span>
+            {/* checked */}
             <div
               className={cn(
                 " size-3 rounded-full",
@@ -53,6 +57,17 @@ export default async function Page({ params }: Props) {
               )}
             />
             <span>{isChecked ? "Checked, verified" : "Not checked"}</span>
+            {/* Cancelled  */}
+            <div
+              className={cn(
+                " size-3 rounded-full bg-fuchsia-700",
+                isCancelled ? " flex" : " hidden",
+              )}
+            />
+            <span className={cn(isCancelled ? "flex" : "hidden")}>
+              Cancelled
+            </span>
+            {/* Timed out  */}
             <div
               className={cn(
                 " size-3 rounded-full bg-red-700",
@@ -63,17 +78,18 @@ export default async function Page({ params }: Props) {
           </div>
 
           {/* Buttons  */}
-          <DeletePayment payment={payment!} />
-          <PaymentStatus payment={payment} />
+          <DeleteInvoice invoice={invoice!} />
+          <CancelInvoice invoice={invoice!} />
+          <InvoiceStatus invoice={invoice} />
 
-          {/* payment's params */}
+          {/* invoice's params */}
           <div className="flex flex-col items-center gap-4 *:gap-2 lg:hidden">
-            <PaymentParams payment={payment} />
+            <InvoiceParams invoice={invoice} />
           </div>
         </div>
         {/* side bar div*/}
         <div className="hidden flex-col gap-4 *:gap-2 lg:flex lg:items-center">
-          <PaymentParams payment={payment} />
+          <InvoiceParams invoice={invoice} />
         </div>
       </div>
     </>

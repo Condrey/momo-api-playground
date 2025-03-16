@@ -19,7 +19,7 @@ import TransactionParams from "./transaction-params";
 import DeliveryNotification from "../(buttons)/delivery-notification";
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export const metadata: Metadata = {
@@ -28,7 +28,8 @@ export const metadata: Metadata = {
     "Detailed information of request to pay. Get to know what happens under the hood.",
 };
 
-export default async function Page({ params }: Props) {
+export default async function Page(props: Props) {
+  const params = await props.params;
   const { id } = params;
   // fetch the request to pay from the database
   const request: GetFindResult<

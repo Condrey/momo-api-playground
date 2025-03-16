@@ -1,6 +1,6 @@
 "use client";
 
-import AddEditPrimaryAndSecondaryKeyForm from "@/app/chapter-one/(components)/add-edit-primary-and-secondary-key-form";
+import AddEditPrimaryAndSecondaryKeyForm from "@/app/(ui)/chapter-one/(components)/add-edit-primary-and-secondary-key-form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "@prisma/client";
 import { Key, User2, Variable } from "lucide-react";

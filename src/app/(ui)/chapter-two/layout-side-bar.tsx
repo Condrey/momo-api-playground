@@ -1,5 +1,5 @@
 import { fetchUserById } from "@/lib/db/data/user-data";
-import AccessTokenContainer from "../../components/small-code-snippet-container";
+import AccessTokenContainer from "../../../components/small-code-snippet-container";
 
 export default async function LayoutSideBar() {
   const user = await fetchUserById();
