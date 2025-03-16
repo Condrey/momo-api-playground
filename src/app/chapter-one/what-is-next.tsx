@@ -40,7 +40,8 @@ export default function WhatIsNext({ user }: Props) {
     <div
       className={cn(
         isApiKeyPresent
-          ? " flex w-full flex-col gap-4 *:before:pr-2 *:before:text-2xl *:before:font-bold lg:p-4  "
+          ?
+           " flex w-full flex-col gap-4 *:before:pr-2 *:before:text-2xl *:before:font-bold lg:p-4  "
           : "hidden",
       )}
     >
