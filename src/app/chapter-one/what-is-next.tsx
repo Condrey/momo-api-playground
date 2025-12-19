@@ -2,12 +2,12 @@
 
 import ChapterLinks from "@/components/chapter-links";
 import LoadingButton from "@/components/ui/loading-button";
-import { toast } from "@/components/ui/use-toast";
 import { resetUserVariables } from "@/lib/db/actions/primary-and-secondary-key-actions";
 import { ServerMessage, cn } from "@/lib/utils";
 import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 interface Props {
   user: User | null;
 }
@@ -20,16 +20,14 @@ export default function WhatIsNext({ user }: Props) {
     try {
       setIsLoading(true);
       const response: ServerMessage = await resetUserVariables();
-      toast({
-        title: response.title!,
+      
+      toast( response.title!,{      
         description: response.message,
-        variant: response.type === "error" ? "destructive" : "default",
       });
     } catch (e) {
-      toast({
-        title: "Server Error",
+      toast.error("Server Error",{
+        
         description: "Something is wrong with the server, please try again.!",
-        variant: "destructive",
       });
     } finally {
       setIsLoading(false);

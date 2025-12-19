@@ -2,11 +2,11 @@
 import ProductSubtitleContainer from "@/components/product-subtitle-container";
 import ResponseContainer from "@/components/response-container";
 import LoadingButton from "@/components/ui/loading-button";
-import { toast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 interface Props {
   user: User | null;
 }
@@ -33,8 +33,7 @@ export default function CreateApiKey({ user }: Props) {
         setResponseMsg(
           `{\n"Status":"${response.status}",\n"StatusText":"${response.statusText}",\n"apiKey":"${data.message}"\n}`,
         );
-        toast({
-          title: "Creating Api Key Success",
+        toast("Creating Api Key Success",{
           description: JSON.stringify(data.message),
         });
       } else {
@@ -42,20 +41,17 @@ export default function CreateApiKey({ user }: Props) {
         setResponseMsg(
           `{\n"Status": "${response.status}",\n"StatusText": "${response.statusText}\n}"`,
         );
-        toast({
-          title: "Failed to create Api Key",
+        toast.error("Failed to create Api Key",{
           description: JSON.stringify(
             `Status: ${response.status},StatusText: ${response.statusText}`,
           ),
-          variant: "destructive",
         });
       }
     } catch (error) {
       console.error("error: ", error);
-      toast({
-        title: "Err: 500",
+      toast.error(         "Err: 500",
+{
         description: "Server Error",
-        variant: "destructive",
       });
     } finally {
       setIsLoading(false);

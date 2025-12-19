@@ -13,7 +13,6 @@ import {
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
 import ResponsiveDrawer from "@/components/ui/responsive-drawer";
-import { toast } from "@/components/ui/use-toast";
 import { generateIds } from "@/lib/momo-utils/generate-ids";
 import {
   CreatePaymentsSchema,
@@ -23,6 +22,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface Props {
   open: boolean;
@@ -85,15 +85,12 @@ export default function CreatePaymentForm(props: Props) {
         });
 
         if (response.ok) {
-          toast({
-            title: "Payment Created",
+          toast("Payment Created",{
             description: `${response.statusText}`,
           });
         } else {
-          toast({
-            title: "Failed to create payment",
+          toast.error("Failed to create payment", {
             description: JSON.stringify(response.statusText),
-            variant: "destructive",
           });
         }
       } else {
@@ -102,10 +99,8 @@ export default function CreatePaymentForm(props: Props) {
       }
     } catch (e) {
       console.log("Server Error: ", e);
-      toast({
-        title: "Server Error",
+      toast.error("Server Error", {
         description: "Something is wrong with the server, please try again.!",
-        variant: "destructive",
       });
     } finally {
       router.refresh();

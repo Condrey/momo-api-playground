@@ -10,7 +10,6 @@ import {
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
 import ResponsiveDrawer from "@/components/ui/responsive-drawer";
-import { toast } from "@/components/ui/use-toast";
 import { createPrimaryAndSecondaryKey } from "@/lib/db/actions/primary-and-secondary-key-actions";
 import { ServerMessage } from "@/lib/utils";
 import {
@@ -23,6 +22,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface Props {
   open: boolean;
@@ -51,16 +51,12 @@ export default function AddEditPrimaryAndSecondaryKeyForm(props: Props) {
   async function onSubmit(input: CreatePrimaryAndSecondaryKeySchema) {
     try {
       const response: ServerMessage = await createPrimaryAndSecondaryKey(input);
-      toast({
-        title: response.title!,
+      toast(response.title!,{
         description: response.message,
-        variant: response.type === "error" ? "destructive" : "default",
       });
     } catch (e) {
-      toast({
-        title: "Server Error",
+      toast.error("Server Error",{
         description: "Something is wrong with the server, please try again.!",
-        variant: "destructive",
       });
     } finally {
       router.refresh();

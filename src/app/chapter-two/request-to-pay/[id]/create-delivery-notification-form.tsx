@@ -3,28 +3,23 @@
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
 import ResponsiveDrawer from "@/components/ui/responsive-drawer";
-import { toast } from "@/components/ui/use-toast";
 import {
   CreateDeliveryNotificationSchema,
   createDeliveryNotificationSchema,
 } from "@/lib/validation/delivery-notification-validation";
-import {
-  UpdatePreApprovalSchema,
-  updatePreApprovalSchema,
-} from "@/lib/validation/pre-approval-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RequestToPay } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface Props {
   open: boolean;
@@ -62,8 +57,7 @@ export default function CreateDeliveryNotificationForm(props: Props) {
         setResponseMsg(
           `{\n"Status":"${response.status}"\n"StatusText":"${response.statusText}"\n}`,
         );
-        toast({
-          title: "Request was a success",
+        toast("Request was a success",{
           description: `Accepted`,
         });
       } else {
@@ -71,18 +65,14 @@ export default function CreateDeliveryNotificationForm(props: Props) {
           `{\n"Status":"${response.status}"\n"StatusText":"${response.statusText}"\n}`,
         );
 
-        toast({
-          title: "Failed request",
+        toast.error("Failed request",{
           description: JSON.stringify(response.statusText),
-          variant: "destructive",
         });
       }
     } catch (e) {
       console.log("Server Error: ", e);
-      toast({
-        title: "Server Error",
+      toast.error("Server Error",{
         description: "Something is wrong with the server, please try again.!",
-        variant: "destructive",
       });
     } finally {
       router.refresh();

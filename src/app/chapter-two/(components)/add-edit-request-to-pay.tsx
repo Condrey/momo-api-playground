@@ -12,7 +12,6 @@ import {
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
 import ResponsiveDrawer from "@/components/ui/responsive-drawer";
-import { toast } from "@/components/ui/use-toast";
 import { generateIds } from "@/lib/momo-utils/generate-ids";
 import {
   CreateRequestToPaySchema,
@@ -21,8 +20,8 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface Props {
   open: boolean;
@@ -80,22 +79,18 @@ export default function AddEditRequestToPay(props: Props) {
         if (response.ok) {
           if (response.status === 500) {
             const data = await response.json();
-            toast({
-              title: "Request was a success",
+            toast( "Request was a success",{
               description: `${data.statusText}`,
             });
           } else {
             const data = await response.json();
-            toast({
-              title: "Request was a success",
+            toast("Request was a success",{
               description: `${data.message}`,
             });
           }
         } else {
-          toast({
-            title: "Failed request",
+          toast.error("Failed request",{
             description: JSON.stringify(response.statusText),
-            variant: "destructive",
           });
         }
       } else {
@@ -104,10 +99,8 @@ export default function AddEditRequestToPay(props: Props) {
       }
     } catch (e) {
       console.log("Server Error: ", e);
-      toast({
-        title: "Server Error",
+      toast.error("Server Error",{
         description: "Something is wrong with the server, please try again.!",
-        variant: "destructive",
       });
     } finally {
       router.refresh();

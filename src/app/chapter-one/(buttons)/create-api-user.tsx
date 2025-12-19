@@ -3,11 +3,11 @@
 import ProductSubtitleContainer from "@/components/product-subtitle-container";
 import ResponseContainer from "@/components/response-container";
 import LoadingButton from "@/components/ui/loading-button";
-import { toast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 import AddEditCAllbackUrl from "../(components)/add-edit-callback-url";
 
 interface Props {
@@ -37,21 +37,18 @@ export default function CreateApiUser({ user }: Props) {
       setResponseMsg(
         `{\n"Status": "${response.status}",\n"StatusText": "${response.statusText}"\n}`,
       );
-      toast({
-        title: response.ok
+      toast(response.ok
           ? "Creating Sandbox user"
-          : "Failed to create sandBox user",
+          : "Failed to create sandBox user",{
+        
         description: JSON.stringify(
           `Status: ${response.status},StatusText: ${response.statusText}`,
         ),
-        variant: response.ok ? "default" : "destructive",
       });
     } catch (error) {
       console.error("error: ", error);
-      toast({
-        title: "Err: 500",
+      toast.error("Server Error",{
         description: "Server Error",
-        variant: "destructive",
       });
     } finally {
       setIsLoading(false);

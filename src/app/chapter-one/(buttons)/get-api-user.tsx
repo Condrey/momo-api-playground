@@ -3,11 +3,11 @@
 import ProductSubtitleContainer from "@/components/product-subtitle-container";
 import ResponseContainer from "@/components/response-container";
 import LoadingButton from "@/components/ui/loading-button";
-import { toast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 interface Props {
   user: User | null;
 }
@@ -35,8 +35,7 @@ export default function GetApiUser({ user }: Props) {
         setResponseMsg(
           `{\n"providerCallbackHost": "${data.message.providerCallbackHost}",\n"targetEnvironment": "${data.message.targetEnvironment}"\n}`,
         );
-        toast({
-          title: "Creating Access Token",
+        toast("Creating Access Token",{
           description: JSON.stringify(
             `providerCallbackHost: ${data.message.providerCallbackHost},targetEnvironment: ${data.message.targetEnvironment}`,
           ),
@@ -45,20 +44,16 @@ export default function GetApiUser({ user }: Props) {
         setResponseMsg(
           `{\n"Status": "${response.status}",\n"StatusText": "${response.statusText}\n}"`,
         );
-        toast({
-          title: "Failed to create Access Token",
+        toast.error("Failed to create Access Token",{
           description: JSON.stringify(
             `Status: ${response.status},StatusText: ${response.statusText}`,
           ),
-          variant: "destructive",
         });
       }
     } catch (error) {
       console.error("error: ", error);
-      toast({
-        title: "Err: 500",
+      toast.error("Err: 500",{
         description: "Server Error",
-        variant: "destructive",
       });
     } finally {
       setIsLoading(false);

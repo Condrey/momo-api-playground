@@ -11,7 +11,6 @@ import {
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
 import ResponsiveDrawer from "@/components/ui/responsive-drawer";
-import { toast } from "@/components/ui/use-toast";
 import { createCallbackUrl } from "@/lib/db/actions/primary-and-secondary-key-actions";
 import { ServerMessage } from "@/lib/utils";
 import {
@@ -22,6 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface Props {
   open: boolean;
@@ -44,16 +44,12 @@ export default function AddEditCAllbackUrl(props: Props) {
   async function onSubmit(input: CallBackUrlSchema) {
     try {
       const response: ServerMessage = await createCallbackUrl(input);
-      toast({
-        title: response.title!,
+      toast(response.title!,{
         description: response.message,
-        variant: response.type === "error" ? "destructive" : "default",
       });
     } catch (e) {
-      toast({
-        title: "Server Error",
+      toast.error("Server Error",{
         description: "Something is wrong with the server, please try again.!",
-        variant: "destructive",
       });
     } finally {
       router.refresh();

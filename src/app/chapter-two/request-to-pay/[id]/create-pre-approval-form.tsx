@@ -1,6 +1,5 @@
 "use client";
 
-import CodeSnippet from "@/components/code-snippet";
 import {
   Form,
   FormControl,
@@ -13,21 +12,15 @@ import {
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
 import ResponsiveDrawer from "@/components/ui/responsive-drawer";
-import { toast } from "@/components/ui/use-toast";
 import {
-  CreatePreApprovalSchema,
   UpdatePreApprovalSchema,
-  createPreApprovalSchema,
-  updatePreApprovalSchema,
+  updatePreApprovalSchema
 } from "@/lib/validation/pre-approval-validation";
-import {
-  CreateRequestToPaySchema,
-  createRequestToPaySchema,
-} from "@/lib/validation/request-to-pay-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RequestToPay } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface Props {
   open: boolean;
@@ -67,8 +60,7 @@ export default function CreatePreApprovalForm(props: Props) {
         setResponseMsg(
           `{\n"Status":"${response.status}"\n"StatusText":"${response.statusText}"\n}`,
         );
-        toast({
-          title: "Request was a success",
+        toast("Request was a success",{
           description: `Accepted`,
         });
       } else {
@@ -76,18 +68,14 @@ export default function CreatePreApprovalForm(props: Props) {
           `{\n"Status":"${response.status}"\n"StatusText":"${response.statusText}"\n}`,
         );
 
-        toast({
-          title: "Failed request",
+        toast.error("Failed request",{
           description: JSON.stringify(response.statusText),
-          variant: "destructive",
         });
       }
     } catch (e) {
       console.log("Server Error: ", e);
-      toast({
-        title: "Server Error",
+      toast.error("Server Error",{
         description: "Something is wrong with the server, please try again.!",
-        variant: "destructive",
       });
     } finally {
       router.refresh();

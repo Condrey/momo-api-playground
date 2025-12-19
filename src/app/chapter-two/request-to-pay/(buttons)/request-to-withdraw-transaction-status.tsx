@@ -12,12 +12,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { toast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { RequestToWithdraw } from "@prisma/client";
 import { Info } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface Props {
   requestsToWithdraw: RequestToWithdraw[];
@@ -50,28 +50,23 @@ export default function RequestToWithdrawTransactionStatus({
         const data = await response.json();
 
         setResponseMsg(JSON.stringify(data.message));
-        toast({
-          title: "Verifying withdraw transaction status",
+        toast("Verifying withdraw transaction status",{
           description: `{\n"Status": "${response.status}",\n"StatusText": "${response.statusText}"\n}`,
         });
       } else {
         setResponseMsg(
           `{\n"Status": "${response.status}",\n"StatusText": "${response.statusText}"\n}`,
         );
-        toast({
-          title: "Failed to verify withdraw transaction status",
+        toast.error("Failed to verify withdraw transaction status",{
           description: JSON.stringify(
             `Status: ${response.status},StatusText: ${response.statusText}`,
           ),
-          variant: "destructive",
         });
       }
     } catch (error) {
       console.error("error: ", error);
-      toast({
-        title: "Err: 500",
+      toast("Err: 500",{
         description: "Server Error",
-        variant: "destructive",
       });
     } finally {
       router.refresh();

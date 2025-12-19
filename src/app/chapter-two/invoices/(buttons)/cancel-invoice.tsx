@@ -2,10 +2,10 @@
 import ProductSubtitleContainer from "@/components/product-subtitle-container";
 import ResponseContainer from "@/components/response-container";
 import LoadingButton from "@/components/ui/loading-button";
-import { toast } from "@/components/ui/use-toast";
 import { Invoice } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface Props {
   invoice: Invoice | null;
@@ -36,8 +36,7 @@ export default function CancelInvoice({ invoice }: Props) {
         setResponseMsg(
           `{\n"Status":"${response.status}",\n"StatusText":"${response.statusText}"\n}`,
         );
-        toast({
-          title: "Cancelling invoice",
+        toast("Cancelling invoice",{
           description: JSON.stringify(
             `Status: ${response.status},StatusText: ${response.statusText}`,
           ),
@@ -47,20 +46,16 @@ export default function CancelInvoice({ invoice }: Props) {
         setResponseMsg(
           `{\n"Status": "${response.status}",\n"StatusText": "${response.statusText}\n}"`,
         );
-        toast({
-          title: "Failed to cancel invoice",
+        toast.error( "Failed to cancel invoice",{
           description: JSON.stringify(
             `Status: ${response.status},StatusText: ${response.statusText}`,
           ),
-          variant: "destructive",
         });
       }
     } catch (error) {
       console.error("error: ", error);
-      toast({
-        title: "Err: 500",
+      toast.error("Err: 500",{
         description: "Server Error",
-        variant: "destructive",
       });
     } finally {
       setIsLoading(false);

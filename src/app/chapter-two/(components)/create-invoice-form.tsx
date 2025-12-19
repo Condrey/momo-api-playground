@@ -1,6 +1,5 @@
 "use client";
 
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -13,7 +12,6 @@ import {
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
 import ResponsiveDrawer from "@/components/ui/responsive-drawer";
-import { toast } from "@/components/ui/use-toast";
 import { generateIds } from "@/lib/momo-utils/generate-ids";
 import {
   CreateInvoicesSchema,
@@ -23,6 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface Props {
   open: boolean;
@@ -80,15 +79,12 @@ export default function CreateInvoiceForm(props: Props) {
         });
 
         if (response.ok) {
-          toast({
-            title: "Invoice Created",
+          toast("Invoice Created", {
             description: `${response.statusText}`,
           });
         } else {
-          toast({
-            title: "Failed to create invoice",
+          toast.error("Failed to create invoice", {
             description: JSON.stringify(response.statusText),
-            variant: "destructive",
           });
         }
       } else {
@@ -97,10 +93,8 @@ export default function CreateInvoiceForm(props: Props) {
       }
     } catch (e) {
       console.log("Server Error: ", e);
-      toast({
-        title: "Server Error",
+      toast.error("Server Error", {
         description: "Something is wrong with the server, please try again.!",
-        variant: "destructive",
       });
     } finally {
       router.refresh();

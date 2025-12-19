@@ -3,10 +3,10 @@
 import ProductSubtitleContainer from "@/components/product-subtitle-container";
 import ResponseContainer from "@/components/response-container";
 import LoadingButton from "@/components/ui/loading-button";
-import { toast } from "@/components/ui/use-toast";
 import { RequestToPay } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface Props {
   request: RequestToPay | null;
@@ -32,28 +32,23 @@ export default function BasicUserInfo({ request }: Props) {
         const data = await response.json();
 
         setResponseMsg(JSON.stringify(data.message));
-        toast({
-          title: "Getting basic user info",
+        toast("Getting basic user info",{
           description: `Status: "${response.status}",StatusText: "${response.statusText}`,
         });
       } else {
         setResponseMsg(
           `{\n"Status": "${response.status}",\n"StatusText": "${response.statusText}"\n}`,
         );
-        toast({
-          title: "Failed to get basic user info",
+        toast.error("Failed to get basic user info",{
           description: JSON.stringify(
             `Status: ${response.status},StatusText: ${response.statusText}`,
           ),
-          variant: "destructive",
         });
       }
     } catch (error) {
       console.error("error: ", error);
-      toast({
-        title: "Err: 500",
+      toast.error("Err: 500",{
         description: "Server Error",
-        variant: "destructive",
       });
     } finally {
       setIsLoading(false);

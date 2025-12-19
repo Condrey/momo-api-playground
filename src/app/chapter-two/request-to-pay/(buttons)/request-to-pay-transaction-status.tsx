@@ -2,12 +2,12 @@
 import ProductSubtitleContainer from "@/components/product-subtitle-container";
 import ResponseContainer from "@/components/response-container";
 import LoadingButton from "@/components/ui/loading-button";
-import { toast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { UpdateRequestToPaySchema } from "@/lib/validation/request-to-pay-validation";
 import { RequestToPay } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface Props {
   request: RequestToPay;
@@ -30,26 +30,21 @@ export default function RequestToPayTransactionStatus({ request }: Props) {
       if (response.ok) {
         const data = await response.json();
         setResponseMsg(JSON.stringify(data.message2));
-        toast({
-          title: "Request was a success",
+        toast("Request was a success",{
           description: `${data.message}`,
         });
       } else {
         setResponseMsg(
           `{\n"Status":"${response.status}"\n"StatusText":"${response.statusText}"\n}`,
         );
-        toast({
-          title: "Failed request",
+        toast.error("Failed request",{
           description: JSON.stringify(response.statusText),
-          variant: "destructive",
         });
       }
     } catch (e) {
       console.log("Server Error: ", e);
-      toast({
-        title: "Server Error",
+      toast.error("Server Error",{
         description: "Something is wrong with the server, please try again.!",
-        variant: "destructive",
       });
     } finally {
       setIsCheckingStatus(false);

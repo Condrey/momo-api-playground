@@ -12,7 +12,6 @@ import {
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
 import ResponsiveDrawer from "@/components/ui/responsive-drawer";
-import { toast } from "@/components/ui/use-toast";
 import {
   UpdateRequestToWithdrawSchema,
   updateRequestToWithdrawSchema,
@@ -21,6 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { RequestToPay } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface Props {
   open: boolean;
@@ -63,8 +63,7 @@ export default function CreateRequestToWithdrawV2Form(props: Props) {
         setResponseMsg(
           `{\n"Status":"${response.status}"\n"StatusText":"${response.statusText}"\n}`,
         );
-        toast({
-          title: "Request was a success",
+        toast("Request was a success",{
           description: response.statusText,
         });
       } else {
@@ -72,19 +71,15 @@ export default function CreateRequestToWithdrawV2Form(props: Props) {
           `{\n"Status":"${response.status}"\n"StatusText":"${response.statusText}"\n}`,
         );
 
-        toast({
-          title: "Failed request",
+        toast.error("Failed request",{
           description: JSON.stringify(response.statusText),
-          variant: "destructive",
         });
       }
     } catch (e) {
       console.log("Server Error: ", e);
-      toast({
-        title: "Server Error",
+      toast.error("Server Error",{
         description: "Something is wrong with the server, please try again.!",
-        variant: "destructive",
-      });
+      }); 
     } finally {
       router.refresh();
       setOpen(false);

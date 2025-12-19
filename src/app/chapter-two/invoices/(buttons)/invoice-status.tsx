@@ -3,10 +3,10 @@
 import ProductSubtitleContainer from "@/components/product-subtitle-container";
 import ResponseContainer from "@/components/response-container";
 import LoadingButton from "@/components/ui/loading-button";
-import { toast } from "@/components/ui/use-toast";
 import { Invoice } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface Props {
   invoice: Invoice | null;
@@ -33,28 +33,23 @@ export default function InvoiceStatus({ invoice }: Props) {
         const data = await response.json();
 
         setResponseMsg(JSON.stringify(data.message));
-        toast({
-          title: "Verifying invoice status",
+        toast("Verifying invoice status",{
           description: `{\n"Status": "${response.status}",\n"StatusText": "${response.statusText}"\n}`,
         });
       } else {
         setResponseMsg(
           `{\n"Status": "${response.status}",\n"StatusText": "${response.statusText}"\n}`,
         );
-        toast({
-          title: "Failed to verify invoice status",
+        toast.error("Failed to verify invoice status",{
           description: JSON.stringify(
             `Status: ${response.status},StatusText: ${response.statusText}`,
           ),
-          variant: "destructive",
         });
       }
     } catch (error) {
       console.error("error: ", error);
-      toast({
-        title: "Err: 500",
+      toast.error("Err: 500",{
         description: "Server Error",
-        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
