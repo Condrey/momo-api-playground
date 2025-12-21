@@ -1,15 +1,12 @@
-import ChapterLinks from "@/components/chapter-links";
 import Header from "@/components/header";
-import Title from "@/components/title";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
-import { cn } from "@/lib/utils";
+import { verifySession } from "@/lib/verify-session";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Image from "next/image";
 import { ThemeProvider } from "../components/theme-provider";
-import { auth } from "./auth";
+import { AppSidebar } from "./app-side-bar";
 import "./globals.css";
-import NewComer from "./new-comer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -65,7 +62,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
+  const session = await verifySession();
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -77,41 +74,35 @@ export default async function RootLayout({
           defaultTheme="system"
           disableTransitionOnChange
         >
-          <main className="flex size-full  w-auto flex-col  gap-4  p-4 *:before:pr-2 *:before:text-2xl *:before:font-bold md:flex-row md:bg-zinc-500/5">
-            <div className=" hidden size-full *:max-w-prose md:flex md:h-dvh md:w-1/4 lg:w-auto">
-              <div className="flex flex-col items-center gap-6">
-                <Image
-                  src="/momo-logo2.png"
-                  alt="logo"
-                  width={150}
-                  height={150}
-                  className=" rounded-none"
-                />
-                <hr className="w-full" />
-                <div
-                  className={cn(
-                    "flex flex-col gap-2  *:flex *:gap-2 *:rounded-full *:px-4  *:py-2",
-                  )}
-                >
-                  <Title title="Navigation" />
-                  <span>Sand box Environment</span>
-                  <ChapterLinks />
-                </div>
+          {/* <SessionProvider value={session}> */}
+          <div className="[--header-height:calc(--spacing(30))] sm:[--header-height:calc(--spacing(18))] md:bg-zinc-500/5">
+            <SidebarProvider className="flex flex-col">
+              <header className="bg-mtn-blue text-mtn-blue-foreground sticky top-0 z-50 flex h-(--header-height) w-full items-center dark:border-b">
+                <Header />
+              </header>
+              <div className="flex size-full flex-1">
+                <AppSidebar />
+                <SidebarInset className="flex size-full flex-col space-y-4 bg-transparent py-12">
+                  <main className="bg-card max-w-9xl mx-auto flex size-full flex-1 flex-col gap-4 overflow-y-auto scroll-auto rounded-3xl md:shadow-xl">
+                    {/* CONTENT */}
+                    <div className="flex size-full grow min-h-[75vh] md:overflow-y-auto md:p-4 md:ring-1 md:ring-black/5">
+                      <div className="flex w-full flex-col gap-2 *:before:pr-2 *:before:text-2xl *:before:font-bold">
+                        <>{children}</>
+                      </div>
+                    </div>
+                  </main>
+                  <footer className="w-full">
+                    <p className="text-center">
+                      <q className="italic">Be simple. Be legit.</q> - Coundrey
+                      James Ogwang
+                    </p>
+                  </footer>
+                </SidebarInset>
               </div>
-            </div>
-            <div className=" flex size-full grow md:min-h-[95vh] md:overflow-y-auto md:rounded-3xl md:bg-white  md:p-4 md:shadow-xl md:ring-1 md:ring-black/5 dark:md:bg-background  ">
-              {session !== null ? (
-                <div className="flex w-full flex-col gap-4  *:before:pr-2 *:before:text-2xl *:before:font-bold  ">
-                  <Header />
-                  <>{children}</>
-                </div>
-              ) : (
-                <div className="flex size-full h-dvh flex-col items-center justify-center gap-4 p-4 *:before:pr-2 *:before:text-2xl *:before:font-bold md:h-auto  ">
-                  <NewComer />
-                </div>
-              )}
-            </div>
-          </main>
+            </SidebarProvider>
+          </div>
+          {/* </SessionProvider> */}
+
           <Toaster />
         </ThemeProvider>
       </body>

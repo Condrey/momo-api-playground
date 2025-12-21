@@ -1,11 +1,14 @@
-import { auth } from "@/app/auth";
 import prisma from "@/lib/db/prisma";
-import { unstable_noStore as noStore } from "next/dist/server/web/spec-extension/unstable-no-store";
-export async function fetchUserById(id?: string) {
-  noStore();
+import { verifySession } from "@/lib/verify-session";
+import { cache } from "react";
+
+export async function userById(id?: string) {
   try {
-    const session = await auth();
-    const userId = id || session?.user.id;
+    const session = await verifySession();
+    if (!session) {
+      return null;
+    }
+    const userId = id || session.user.id;
     return await prisma.user.findUnique({
       where: { id: userId },
     });
@@ -14,11 +17,10 @@ export async function fetchUserById(id?: string) {
     throw new Error("Failed to fetch user.");
   }
 }
-
+export const fetchUserById = cache(userById);
 export async function fetchUserByIdWithRequestToPay(id?: string) {
-  noStore();
   try {
-    const session = await auth();
+    const session = await verifySession();
     const userId = id || session?.user.id;
     return await prisma.user.findUnique({
       where: { id: userId },

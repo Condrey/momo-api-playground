@@ -1,7 +1,7 @@
-import { auth } from "@/app/auth";
 import prisma from "@/lib/db/prisma";
 import generateReferenceId from "@/lib/momo-utils/generate-reference-id";
 import { updateRequestToWithdrawSchema } from "@/lib/validation/request-to-withdraw-validation";
+import { verifySession } from "@/lib/verify-session";
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     const referenceId = generateReferenceId();
     const url = `https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttowithdraw`;
 
-    const session = await auth();
+    const session = await verifySession();
 
     const response = await fetch(url, {
       method: "POST",

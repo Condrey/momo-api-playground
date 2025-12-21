@@ -1,7 +1,7 @@
-import { auth } from "@/app/auth";
 import prisma from "@/lib/db/prisma";
 import getAuthorization from "@/lib/momo-utils/get-authorization";
 import { createSandboxUserProvisioningSchema } from "@/lib/validation/sandbox-user-provisioning-validation";
+import { verifySession } from "@/lib/verify-session";
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     const subscriptionKey = primaryKey;
     const url = `https://sandbox.momodeveloper.mtn.com//v1_0/apiuser/${referenceId}/apikey`;
 
-    const session = await auth();
+    const session = await verifySession();
 
     const response = await fetch(url, {
       method: "POST",

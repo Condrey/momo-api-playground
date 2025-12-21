@@ -1,5 +1,4 @@
 "use server";
-import { auth } from "@/app/auth";
 import { ServerMessage } from "@/lib/utils";
 import {
   CallBackUrlSchema,
@@ -9,6 +8,7 @@ import {
   CreatePrimaryAndSecondaryKeySchema,
   createPrimaryAndSecondaryKeySchema,
 } from "@/lib/validation/primary-and-secondary-key-validation";
+import { verifySession } from "@/lib/verify-session";
 import { Session } from "next-auth";
 import prisma from "../prisma";
 
@@ -30,7 +30,7 @@ export async function createPrimaryAndSecondaryKey(
   //Prepare data for insertion into the database
   const { primaryKey, secondaryKey } = parseResult.data;
 
-  const session: Session | null = await auth();
+  const session = await verifySession();
   const userId = session?.user.id!;
 
   //Check if user is permitted to perform this action
@@ -69,7 +69,7 @@ export async function createPrimaryAndSecondaryKey(
 }
 
 export async function resetUserVariables(): Promise<ServerMessage> {
-  const session: Session | null = await auth();
+  const session: Session | null = await verifySession();
   const userId = session?.user.id!;
 
   //Check if user is permitted to perform this action
@@ -130,7 +130,7 @@ export async function createCallbackUrl(
   //Prepare data for insertion into the database
   const { callbackUrl, callbackHost } = parseResult.data;
 
-  const session: Session | null = await auth();
+  const session: Session | null = await verifySession();
   const userId = session?.user.id!;
 
   //Check if user is permitted to perform this action

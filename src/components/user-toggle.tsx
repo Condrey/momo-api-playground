@@ -4,7 +4,7 @@ import AddEditPrimaryAndSecondaryKeyForm from "@/app/chapter-one/(components)/ad
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "@prisma/client";
 import { Key, User2, Variable } from "lucide-react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "./ui/button";
@@ -20,7 +20,6 @@ interface Props {
 }
 export default function UserToggle({ user }: Props) {
   const [open, setOpen] = useState(false);
-  const { data: session } = useSession();
   const userImage = user?.image || undefined;
   const router = useRouter();
 
@@ -30,34 +29,44 @@ export default function UserToggle({ user }: Props) {
         <DropdownMenuTrigger
           title="Click to view more"
           className="rounded-full"
+          asChild
         >
-          <Avatar className="ring-offset-3 size-[30px] ring-1 ring-stone-700/20 md:size-[40px] xl:size-[50px]">
-            <AvatarFallback>
-              <User2 />
-            </AvatarFallback>
-            <AvatarImage src={userImage} alt="user image" />
-          </Avatar>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className=" mr-12 min-w-[200px] space-y-2 p-4 *:space-x-2  *:px-2">
-          <div className="flex items-center justify-center">
-            <Avatar className="size-[150px] ">
+          <Button variant="secondary" size="icon">
+            <Avatar className="size-full">
               <AvatarFallback>
                 <User2 />
               </AvatarFallback>
               <AvatarImage src={userImage} alt="user image" />
             </Avatar>
-          </div>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="mr-12 min-w-50 space-y-2 p-4 *:space-x-2 *:px-2">
+          {!!user && (
+            <div className="flex items-center justify-center">
+              <Avatar className="size-37.5">
+                <AvatarFallback>
+                  <User2 />
+                </AvatarFallback>
+                <AvatarImage src={userImage} alt="user image" />
+              </Avatar>
+            </div>
+          )}
           <span className="font-bold">
             {user?.name || user?.email || "Unregistered User"}
           </span>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setOpen(true)}>
-            <Key /> <span>Primary & secondary Keys</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push("/my-variables")}>
-            <Variable /> <span>All my variables</span>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
+
+          {!!user && (
+            <>
+              <DropdownMenuItem onClick={() => setOpen(true)}>
+                <Key /> <span>Primary & secondary Keys</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/my-variables")}>
+                <Variable /> <span>All my variables</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
+          )}
 
           <DropdownMenuItem asChild>
             {user ? (
@@ -76,6 +85,7 @@ export default function UserToggle({ user }: Props) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
       <AddEditPrimaryAndSecondaryKeyForm
         open={open}
         setOpen={setOpen}

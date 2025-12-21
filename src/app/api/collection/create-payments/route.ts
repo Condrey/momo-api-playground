@@ -1,7 +1,7 @@
-import { auth } from "@/app/auth";
 import prisma from "@/lib/db/prisma";
 import generateReferenceId from "@/lib/momo-utils/generate-reference-id";
 import { createPaymentsSchema } from "@/lib/validation/payments-validation";
+import { verifySession } from "@/lib/verify-session";
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     const subscriptionKey = primaryKey;
     const referenceId = generateReferenceId();
     const url = `https://sandbox.momodeveloper.mtn.com/collection/v2_0/payment`;
-    const session = await auth();
+    const session = await verifySession();
 
     const response = await fetch(url, {
       method: "POST",

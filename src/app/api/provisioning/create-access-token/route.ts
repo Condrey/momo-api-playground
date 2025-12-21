@@ -1,5 +1,5 @@
-import { auth } from "@/app/auth";
 import prisma from "@/lib/db/prisma";
+import { verifySession } from "@/lib/verify-session";
 import { z } from "zod";
 
 export async function POST(req: Request) {
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     const subscriptionKey = primaryKey;
     const url = `https://sandbox.momodeveloper.mtn.com/collection/token/`;
 
-    const session = await auth();
+    const session = await verifySession();
 
     const response = await fetch(url, {
       method: "POST",

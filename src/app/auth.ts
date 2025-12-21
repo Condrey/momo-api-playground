@@ -8,11 +8,20 @@ export const {
   handlers: { GET, POST },
   auth,
 } = NextAuth({
+  theme: {
+    colorScheme: "auto",
+    brandColor: "--primary",
+    logo: "/momo-logo2.png",
+  },
   providers: [Google, GitHub],
   adapter: PrismaAdapter(prisma),
   callbacks: {
     async session({ session, user }) {
       const { id } = user;
+      console.log(
+        "User ID in session callback:----------------------------------------------------------------------------",
+        id,
+      );
       const roleUser = await prisma.user.findUnique({ where: { id } });
 
       if (!roleUser) {

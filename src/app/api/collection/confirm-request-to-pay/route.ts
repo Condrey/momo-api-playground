@@ -1,4 +1,3 @@
-import { auth } from "@/app/auth";
 import prisma from "@/lib/db/prisma";
 import { updateRequestToPaySchema } from "@/lib/validation/request-to-pay-validation";
 
@@ -33,8 +32,6 @@ export async function POST(req: Request) {
   try {
     const subscriptionKey = primaryKey;
     const url = `https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttopay/${referenceId}`;
-
-    const session = await auth();
 
     const response = await fetch(url, {
       method: "GET",

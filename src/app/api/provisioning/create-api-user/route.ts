@@ -1,7 +1,7 @@
-import { auth } from "@/app/auth";
 import prisma from "@/lib/db/prisma";
 import generateReferenceId from "@/lib/momo-utils/generate-reference-id";
 import { createSandboxUserProvisioningSchema } from "@/lib/validation/sandbox-user-provisioning-validation";
+import { verifySession } from "@/lib/verify-session";
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
       );
     }
     const referenceId = generateReferenceId();
-    const session = await auth();
+    const session = await verifySession();
 
     const { primaryKey, secondaryKey } = parseResult.data;
     const user = await prisma.user.findUnique({
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
         "Content-Type": "application/json",
         "Cache-Control": "no-cache",
         "X-Reference-Id": referenceId,
-        "Ocp-Apim-Subscription-Key": '464a62ef20e445c2814f62ae56f96353',
+        "Ocp-Apim-Subscription-Key": "464a62ef20e445c2814f62ae56f96353",
       },
       body: JSON.stringify({ providerCallbackHost: callbackHost }),
     });
@@ -51,7 +51,10 @@ export async function POST(req: Request) {
         where: { id: session?.user.id! },
         data: { referenceId: referenceId },
       });
-      return Response.json({ message: response }, { status: response.status ,statusText:response.statusText});
+      return Response.json(
+        { message: response },
+        { status: response.status, statusText: response.statusText },
+      );
     } else {
       return Response.json(
         { message: response.statusText },
@@ -59,7 +62,7 @@ export async function POST(req: Request) {
       );
     }
   } catch (error) {
-    console.error("Server error: ", `${error}`)
+    console.error("Server error: ", `${error}`);
     return Response.json({ message: `ServerError: ${error}` }, { status: 500 });
   }
 }

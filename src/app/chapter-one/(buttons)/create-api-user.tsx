@@ -2,6 +2,8 @@
 
 import ProductSubtitleContainer from "@/components/product-subtitle-container";
 import ResponseContainer from "@/components/response-container";
+import { SubtitleOnly } from "@/components/title";
+import { Badge } from "@/components/ui/badge";
 import LoadingButton from "@/components/ui/loading-button";
 import { cn } from "@/lib/utils";
 import { User } from "@prisma/client";
@@ -37,17 +39,17 @@ export default function CreateApiUser({ user }: Props) {
       setResponseMsg(
         `{\n"Status": "${response.status}",\n"StatusText": "${response.statusText}"\n}`,
       );
-      toast(response.ok
-          ? "Creating Sandbox user"
-          : "Failed to create sandBox user",{
-        
-        description: JSON.stringify(
-          `Status: ${response.status},StatusText: ${response.statusText}`,
-        ),
-      });
+      toast(
+        response.ok ? "Creating Sandbox user" : "Failed to create sandBox user",
+        {
+          description: JSON.stringify(
+            `Status: ${response.status},StatusText: ${response.statusText}`,
+          ),
+        },
+      );
     } catch (error) {
       console.error("error: ", error);
-      toast.error("Server Error",{
+      toast.error("Server Error", {
         description: "Server Error",
       });
     } finally {
@@ -65,13 +67,19 @@ export default function CreateApiUser({ user }: Props) {
         <span
           className={cn(
             isReferenceIdSaved
-              ? ' before:content-["Created_User:"]'
-              : ' before:content-["Create_User:"]',
+              ? 'before:content-["Created_User:"]'
+              : 'before:content-["Create_User:"]',
           )}
         >
-          /v1_0/apiuser - POST
+          /v1_0/apiuser - <Badge variant={"api"}>POST</Badge>
         </span>
       </ProductSubtitleContainer>
+      <SubtitleOnly>
+        To create an API user, you must first provide a callback host. For
+        example, if your website url is{" "}
+        <Badge variant={"secondary"}>https://example.shop</Badge>, your provider
+        callBackHost is <Badge variant={"secondary"}>example.com</Badge>
+      </SubtitleOnly>
       <LoadingButton
         onClick={addCallBackUrlClicked}
         loading={false}
