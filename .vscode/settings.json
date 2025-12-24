@@ -8,5 +8,6 @@
     "lucide",
     "momodeveloper",
     "okaidia"
-  ]
+  ],
+  "prisma.pinToPrisma6": true
 }

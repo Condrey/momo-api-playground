@@ -4,43 +4,52 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
-datasource db {
-  provider = "postgresql"
-}
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id                     String          @id @default(uuid())
-  name                   String?
-  email                  String          @unique
-  emailVerified          DateTime?
-  image                  String?
-  role                   Role            @default(USER)
-  primaryKey             String?
-  secondaryKey           String?
-  referenceId            String?
-  isUserPresent          Boolean?        @default(false)
-  authorization          String?
-  apiKey                 String?
-  accessToken            String?
-  accessTokenCreatedTime String?
-  callbackUrl            String?
-  callbackHost           String?
-  accounts               Account[]
-  sessions               Session[]
-  // Optional for WebAuthn support
-  Authenticator          Authenticator[]
-
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
+  id                String              @id @default(uuid())
+  name              String?
+  email             String              @unique
+  emailVerified     DateTime?
+  image             String?
+  role              Role                @default(USER)
+  isUserPresent     Boolean?            @default(false)
+  accounts          Account[]
+  sessions          Session[]
+  momoVariable      MomoVariable?       @relation(fields: [momoVariableId], references: [id])
   RequestToPay      RequestToPay[]
   RequestToWithdraw RequestToWithdraw[]
   payments          Payment[]
   invoices          Invoice[]
+  // Optional for WebAuthn support
+  Authenticator     Authenticator[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  momoVariableId String?
+}
+
+model MomoVariable {
+  id                     String  @id @unique @default(uuid())
+  primaryKey             String?
+  secondaryKey           String?
+  referenceId            String?
+  callbackUrl            String?
+  callbackHost           String?
+  authorization          String?
+  apiKey                 String?
+  accessToken            String?
+  accessTokenCreatedTime String?
+  users                  User[]
+
+  @@map("momo_variables")
 }
 
 model Account {

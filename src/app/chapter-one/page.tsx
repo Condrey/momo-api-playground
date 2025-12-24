@@ -1,8 +1,8 @@
 import Title from "@/components/title";
 import { fetchUserById } from "@/lib/db/data/user-data";
-import CreateApiKey from "./(buttons)/create-api-key";
-import CreateApiUser from "./(buttons)/create-api-user";
-import GetApiUser from "./(buttons)/get-api-user";
+import CreateApiKey from "./create-api-key/create-api-key";
+import CreateApiUser from "./create-api-user/create-api-user";
+import GetApiUser from "./get-api-user/get-api-user";
 import LayoutSideBar from "./layout-side-bar";
 import WhatIsNext from "./what-is-next";
 

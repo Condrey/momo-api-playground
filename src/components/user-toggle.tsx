@@ -1,8 +1,8 @@
 "use client";
 
-import AddEditPrimaryAndSecondaryKeyForm from "@/app/chapter-one/(components)/add-edit-primary-and-secondary-key-form";
+import AddEditPrimaryAndSecondaryKeyForm from "@/app/chapter-one/add-edit-primary-and-secondary-key-form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User } from "@prisma/client";
+import { UserData } from "@/lib/types";
 import { Key, User2, Variable } from "lucide-react";
 import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 interface Props {
-  user: User | null;
+  user: UserData;
 }
 export default function UserToggle({ user }: Props) {
   const [open, setOpen] = useState(false);

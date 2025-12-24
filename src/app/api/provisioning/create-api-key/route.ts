@@ -1,25 +1,31 @@
 import prisma from "@/lib/db/prisma";
+import generateReferenceId from "@/lib/momo-utils/generate-reference-id";
 import getAuthorization from "@/lib/momo-utils/get-authorization";
-import { createSandboxUserProvisioningSchema } from "@/lib/validation/sandbox-user-provisioning-validation";
+import { userDataSelect } from "@/lib/types";
 import { verifySession } from "@/lib/verify-session";
 
 export async function POST(req: Request) {
   const body = await req.json();
 
   try {
-    const parseResult = createSandboxUserProvisioningSchema.safeParse(body);
-    if (!parseResult.success) {
+    const session = await verifySession();
+    const user = await prisma.user.findUnique({
+      where: { id: session?.user.id! },
+      select: userDataSelect,
+    });
+    if (!user) {
+      console.error("User not found in the database");
       return Response.json(
-        { error: "Invalid input, check your request body." },
-        { status: 400 },
+        {
+          error: "User not found in the database",
+        },
+        { status: 401, statusText: "User not found in the database." },
       );
     }
 
-    const { referenceId, primaryKey, secondaryKey } = parseResult.data;
-    const subscriptionKey = primaryKey;
-    const url = `https://sandbox.momodeveloper.mtn.com//v1_0/apiuser/${referenceId}/apikey`;
-
-    const session = await verifySession();
+    const referenceId = user.momoVariable?.referenceId ?? generateReferenceId();
+    const subscriptionKey = user.momoVariable?.secondaryKey!;
+    const url = `https://sandbox.momodeveloper.mtn.com/v1_0/apiuser/${referenceId}/apikey`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -35,19 +41,22 @@ export async function POST(req: Request) {
 
       await prisma.user.update({
         where: { id: session?.user.id! },
-        data: { apiKey, authorization },
+        data: { momoVariable: { update: { apiKey, authorization } } },
       });
       return Response.json(
-        { message: data.apiKey },
-        { status: response.status },
+        { message: data },
+        { status: response.status, statusText: response.statusText },
       );
     } else {
       return Response.json(
         { message: response.statusText },
-        { status: response.status },
+        { status: response.status, statusText: response.statusText },
       );
     }
   } catch (error) {
-    return Response.json({ error: `ServerError: ${error}` }, { status: 500 });
+    return Response.json(
+      { error: `ServerError: ${error}` },
+      { status: 500, statusText: "Internal server error" },
+    );
   }
 }

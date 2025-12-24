@@ -4,10 +4,8 @@ import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
-export const {
-  handlers: { GET, POST },
-  auth,
-} = NextAuth({
+export const { handlers, signIn, signOut, auth } = NextAuth({
+  // debug: true,
   theme: {
     colorScheme: "auto",
     brandColor: "--primary",
@@ -18,11 +16,7 @@ export const {
   callbacks: {
     async session({ session, user }) {
       const { id } = user;
-      console.log(
-        "User ID in session callback:----------------------------------------------------------------------------",
-        id,
-      );
-      const roleUser = await prisma.user.findUnique({ where: { id } });
+      const roleUser = await prisma.user.findFirst({ where: { id } });
 
       if (!roleUser) {
         // Handle the case where the user is not found
@@ -36,6 +30,7 @@ export const {
         id: id,
         role: roleUser.role || "USER",
       };
+      session.user.id = user.id;
 
       return session;
     },

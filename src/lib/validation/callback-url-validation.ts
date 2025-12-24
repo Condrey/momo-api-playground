@@ -1,7 +1,10 @@
 import { z } from "zod";
 
+const requiredString = z.string().min(1, "This field is required").trim();
+
 export const callBackUrlSchema = z.object({
-  callbackUrl: z.string(),
-  callbackHost: z.string(),
+  momoVariableId: z.string().optional(),
+  callbackUrl: z.url().min(1, "Please provide a valid url").trim(),
+  callbackHost: requiredString,
 });
 export type CallBackUrlSchema = z.infer<typeof callBackUrlSchema>;

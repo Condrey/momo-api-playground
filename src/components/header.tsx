@@ -11,12 +11,12 @@ export default async function Header() {
   const user = await fetchUserById();
 
   return (
-    <div className="max-w-9xl px-3 bg-mtn-blue mx-auto flex flex-col sm:flex-row w-full items-center justify-between sm:gap-4">
-      <h1 className=" line-clamp-2 text-lg font-bold tracking-tighter sm:text-2xl lg:text-3xl">
+    <div className="max-w-9xl bg-mtn-blue mx-auto flex w-full flex-col items-center justify-between px-3 sm:flex-row sm:gap-4">
+      <h1 className="line-clamp-2 text-lg font-bold tracking-tighter sm:text-2xl lg:text-3xl">
         <span className="text-primary"> MTN MoMo API playground </span>
         <span> - By Coundrey James</span>
       </h1>
-      <div className="bg-secondary/20 flex ms-auto items-center gap-2 rounded-3xl border px-1.5 py-1 text-sm">
+      <div className="bg-secondary/20 ms-auto flex items-center gap-2 rounded-3xl border px-1.5 py-1 text-sm">
         <Button size={"icon"} asChild>
           <Link href={`tel:${phoneNumber}`}>
             <PhoneCallIcon />
@@ -34,7 +34,7 @@ export default async function Header() {
         </Button>
         <ThemeToggle />
         <SessionProvider>
-          <UserToggle user={user} />
+          <UserToggle user={user!} />
         </SessionProvider>
       </div>
     </div>

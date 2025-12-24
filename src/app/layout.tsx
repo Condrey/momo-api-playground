@@ -1,4 +1,5 @@
 import Header from "@/components/header";
+import ReactQueryProvider from "@/components/react-query-provider";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { verifySession } from "@/lib/verify-session";
@@ -7,6 +8,7 @@ import { Inter } from "next/font/google";
 import { ThemeProvider } from "../components/theme-provider";
 import { AppSidebar } from "./app-side-bar";
 import "./globals.css";
+import NewComer from "./new-comer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -74,36 +76,43 @@ export default async function RootLayout({
           defaultTheme="system"
           disableTransitionOnChange
         >
-          {/* <SessionProvider value={session}> */}
-          <div className="[--header-height:calc(--spacing(30))] sm:[--header-height:calc(--spacing(18))] md:bg-zinc-500/5">
-            <SidebarProvider className="flex flex-col">
-              <header className="bg-mtn-blue text-mtn-blue-foreground sticky top-0 z-50 flex h-(--header-height) w-full items-center dark:border-b">
-                <Header />
-              </header>
-              <div className="flex size-full flex-1">
-                <AppSidebar />
-                <SidebarInset className="flex size-full flex-col space-y-4 bg-transparent py-12">
-                  <main className="bg-card max-w-9xl mx-auto flex size-full flex-1 flex-col gap-4 overflow-y-auto scroll-auto rounded-3xl md:shadow-xl">
-                    {/* CONTENT */}
-                    <div className="flex size-full grow min-h-[75vh] md:overflow-y-auto md:p-4 md:ring-1 md:ring-black/5">
-                      <div className="flex w-full flex-col gap-2 *:before:pr-2 *:before:text-2xl *:before:font-bold">
-                        <>{children}</>
+          <ReactQueryProvider>
+            {/* <SessionProvider value={session}> */}
+            <div className="[--header-height:calc(--spacing(30))] sm:[--header-height:calc(--spacing(18))] md:bg-zinc-500/5">
+              <SidebarProvider className="flex flex-col">
+                <header className="bg-mtn-blue text-mtn-blue-foreground sticky top-0 z-50 flex h-(--header-height) w-full items-center dark:border-b">
+                  <Header />
+                </header>
+                <div className="flex size-full flex-1">
+                  <AppSidebar />
+                  <SidebarInset className="flex size-full flex-col space-y-4 bg-transparent py-12">
+                    <main className="bg-card max-w-9xl mx-auto flex size-full flex-1 flex-col gap-4 overflow-y-auto scroll-auto rounded-3xl md:shadow-xl">
+                      {/* CONTENT */}
+                      <div className="flex size-full min-h-[75vh] grow md:overflow-y-auto md:p-4 md:ring-1 md:ring-black/5">
+                        {!!session ? (
+                          <div className="flex w-full flex-col gap-2 *:before:pr-2 *:before:text-2xl *:before:font-bold">
+                            <>{children}</>
+                          </div>
+                        ) : (
+                          <div className="flex size-full h-dvh flex-col items-center justify-center gap-4 p-4 *:before:pr-2 *:before:text-2xl *:before:font-bold md:h-auto">
+                            <NewComer />
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  </main>
-                  <footer className="w-full">
-                    <p className="text-center">
-                      <q className="italic">Be simple. Be legit.</q> - Coundrey
-                      James Ogwang
-                    </p>
-                  </footer>
-                </SidebarInset>
-              </div>
-            </SidebarProvider>
-          </div>
-          {/* </SessionProvider> */}
-
-          <Toaster />
+                    </main>
+                    <footer className="w-full">
+                      <p className="text-center">
+                        <q className="italic">Be simple. Be legit.</q> -
+                        Coundrey James Ogwang
+                      </p>
+                    </footer>
+                  </SidebarInset>
+                </div>
+              </SidebarProvider>
+            </div>
+            {/* </SessionProvider> */}
+          </ReactQueryProvider>
+          <Toaster richColors />
         </ThemeProvider>
       </body>
     </html>

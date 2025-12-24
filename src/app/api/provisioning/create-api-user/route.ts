@@ -1,26 +1,15 @@
 import prisma from "@/lib/db/prisma";
 import generateReferenceId from "@/lib/momo-utils/generate-reference-id";
-import { createSandboxUserProvisioningSchema } from "@/lib/validation/sandbox-user-provisioning-validation";
+import { userDataSelect } from "@/lib/types";
 import { verifySession } from "@/lib/verify-session";
 
 export async function POST(req: Request) {
   const body = await req.json();
   try {
-    const parseResult = createSandboxUserProvisioningSchema.safeParse(body);
-    if (!parseResult.success) {
-      console.error("err invINput:", body);
-
-      return Response.json(
-        { error: "Invalid input, check your request body." },
-        { status: 400 },
-      );
-    }
-    const referenceId = generateReferenceId();
     const session = await verifySession();
-
-    const { primaryKey, secondaryKey } = parseResult.data;
     const user = await prisma.user.findUnique({
       where: { id: session?.user.id! },
+      select: userDataSelect,
     });
     if (!user) {
       console.error("User not found in the database");
@@ -32,8 +21,9 @@ export async function POST(req: Request) {
       );
     }
 
-    const callbackHost = user.callbackHost;
-    const subscriptionKey = primaryKey;
+    const referenceId = user.momoVariable?.referenceId ?? generateReferenceId();
+    const providerCallbackHost = user.momoVariable?.callbackHost!;
+    const subscriptionKey = user.momoVariable?.secondaryKey!;
     const url = `https://sandbox.momodeveloper.mtn.com/v1_0/apiuser`;
 
     const response = await fetch(url, {
@@ -42,27 +32,25 @@ export async function POST(req: Request) {
         "Content-Type": "application/json",
         "Cache-Control": "no-cache",
         "X-Reference-Id": referenceId,
-        "Ocp-Apim-Subscription-Key": "464a62ef20e445c2814f62ae56f96353",
+        "Ocp-Apim-Subscription-Key": subscriptionKey,
       },
-      body: JSON.stringify({ providerCallbackHost: callbackHost }),
+      body: JSON.stringify({ providerCallbackHost }),
     });
     if (response.ok) {
       await prisma.user.update({
         where: { id: session?.user.id! },
-        data: { referenceId: referenceId },
+        data: { momoVariable: { update: { referenceId } } },
       });
-      return Response.json(
-        { message: response },
-        { status: response.status, statusText: response.statusText },
-      );
-    } else {
-      return Response.json(
-        { message: response.statusText },
-        { status: response.status },
-      );
     }
+    return Response.json(
+      { message: response.statusText },
+      { status: response.status, statusText: response.statusText },
+    );
   } catch (error) {
     console.error("Server error: ", `${error}`);
-    return Response.json({ message: `ServerError: ${error}` }, { status: 500 });
+    return Response.json(
+      { message: `ServerError: ${error}` },
+      { status: 500, statusText: "Internal server error" },
+    );
   }
 }

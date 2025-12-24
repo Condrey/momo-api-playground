@@ -6,69 +6,56 @@ import {
   FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
 import ResponsiveDrawer from "@/components/ui/responsive-drawer";
-import { createCallbackUrl } from "@/lib/db/actions/primary-and-secondary-key-actions";
-import { ServerMessage } from "@/lib/utils";
-import {
-  CallBackUrlSchema,
-  callBackUrlSchema,
-} from "@/lib/validation/callback-url-validation";
+import { UserData } from "@/lib/types";
+import { CallBackUrlSchema, callBackUrlSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "@prisma/client";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { useProvideCallbackHostMutation } from "../mutations";
 
-interface Props {
+interface FormAddEditCAllbackUrlProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  user: User | null;
+  user: UserData | null;
 }
 
-export default function AddEditCAllbackUrl(props: Props) {
-  const { open, setOpen, user } = props;
-  const router = useRouter();
-
+export default function FormAddEditCAllbackUrl({
+  open,
+  setOpen,
+  user,
+}: FormAddEditCAllbackUrlProps) {
   const form = useForm<CallBackUrlSchema>({
     resolver: zodResolver(callBackUrlSchema),
     defaultValues: {
-      callbackUrl: user?.callbackUrl || "",
-      callbackHost: user?.callbackHost || "",
+      momoVariableId: user?.momoVariable?.id || "",
+      callbackUrl: user?.momoVariable?.callbackUrl || "",
+      callbackHost: user?.momoVariable?.callbackHost || "",
     },
   });
+  const { mutate, isPending } = useProvideCallbackHostMutation(user?.id!);
 
   async function onSubmit(input: CallBackUrlSchema) {
-    try {
-      const response: ServerMessage = await createCallbackUrl(input);
-      toast(response.title!,{
-        description: response.message,
-      });
-    } catch (e) {
-      toast.error("Server Error",{
-        description: "Something is wrong with the server, please try again.!",
-      });
-    } finally {
-      router.refresh();
-      setOpen(false);
-    }
+    mutate(input, { onSuccess: () => setOpen(false) });
   }
   return (
     <ResponsiveDrawer
       open={open}
       setOpen={setOpen}
-      title={`${user?.primaryKey === null || user?.secondaryKey === null ? "Add your callback host & url " : "Callback host & url"}`}
+      title={"Update your callback host & url "}
     >
       <Form {...form}>
-        <form className="space-y-4  " onSubmit={form.handleSubmit(onSubmit)}>
+        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
             name={"callbackHost"}
             render={({ field }) => (
               <FormItem>
+                <FormLabel>Callback Host</FormLabel>
                 <FormControl>
                   <Input placeholder="Callback host" {...field} />
                 </FormControl>
@@ -84,6 +71,7 @@ export default function AddEditCAllbackUrl(props: Props) {
             name={"callbackUrl"}
             render={({ field }) => (
               <FormItem>
+                <FormLabel>Callback URL</FormLabel>
                 <FormControl>
                   <Input placeholder="Callback url" {...field} />
                 </FormControl>
@@ -96,7 +84,7 @@ export default function AddEditCAllbackUrl(props: Props) {
           />
 
           <div className="flex justify-end">
-            <LoadingButton loading={form.formState.isSubmitting} type="submit">
+            <LoadingButton loading={isPending} type="submit">
               Save Callback Url & Host
             </LoadingButton>
           </div>
