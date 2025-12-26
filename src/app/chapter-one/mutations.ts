@@ -3,7 +3,11 @@
 import { UserData } from "@/lib/types";
 import { QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { createCallbackUrl, createPrimaryAndSecondaryKey } from "./actions";
+import {
+  createCallbackUrl,
+  createPrimaryAndSecondaryKey,
+  resetUserVariables,
+} from "./actions";
 
 export const usePrimaryAndSecondaryKeyMutation = (user: UserData) => {
   const queryClient = useQueryClient();
@@ -17,7 +21,7 @@ export const usePrimaryAndSecondaryKeyMutation = (user: UserData) => {
       } else {
         queryClient.setQueryData<UserData>(queryKey, (oldData) => {
           if (!oldData) return;
-          return { ...oldData, data };
+          return { ...oldData, momoVariable: data };
         });
         toast.success("Hooray", {
           description: "Successfully updated your secondary and primary keys.",
@@ -145,6 +149,27 @@ export const useCreateApiKeyMutation = (userId: string) => {
     onError(error, variables, context) {
       console.error("Failed to create Api key: ", error);
       toast.error("Failed to create Api key.");
+    },
+  });
+};
+
+export const useResetUserVariablesMutation = (userId: string) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: resetUserVariables,
+    async onSuccess(data) {
+      const queryKey: QueryKey = ["user", userId];
+      await queryClient.cancelQueries({ queryKey });
+      if (typeof data === "string") {
+        toast.info(data);
+      } else {
+        queryClient.invalidateQueries({ queryKey });
+        toast.success("Boo-yah.! Your variables were reset.");
+      }
+    },
+    onError(error, variables, context) {
+      console.error("Error resetting your drills: ", error);
+      toast.error("Failed to reset your drills");
     },
   });
 };

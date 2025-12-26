@@ -6,24 +6,23 @@ import LoadingButton from "@/components/ui/loading-button";
 import { UserData } from "@/lib/types";
 import { CheckCircleIcon } from "lucide-react";
 import { useState } from "react";
-import { useCreateApiUserMutation } from "../mutations";
+import { useCreateAccessTokenMutation } from "../mutation";
 
-interface ButtonCreateApiUserProps extends ButtonProps {
+interface ButtonCreateAccessTokenProps extends ButtonProps {
   user: UserData | null;
 }
 
-export default function ButtonCreateApiUser({
+export default function ButtonCreateAccessToken({
   user,
   children,
   ...props
-}: ButtonCreateApiUserProps) {
+}: ButtonCreateAccessTokenProps) {
   const [responseMsg, setResponseMsg] = useState<string | undefined>(undefined);
-  const disableButton =
-    !user?.momoVariable?.callbackUrl || !!user?.momoVariable?.referenceId;
+  const isAccessTokenGot = !!user?.momoVariable?.accessToken;
   if (!user) {
     throw new Error("Unauthenticated user");
   }
-  const { isPending, mutate } = useCreateApiUserMutation(user?.id);
+  const { isPending, mutate } = useCreateAccessTokenMutation(user?.id);
 
   async function handleClick() {
     mutate(undefined, {
@@ -32,9 +31,9 @@ export default function ButtonCreateApiUser({
         setResponseMsg(
           JSON.stringify(
             {
-              returnedMessage,
               status: response.status,
               statusText: response.statusText,
+              returnedMessage,
             },
             null,
             2,
@@ -46,13 +45,12 @@ export default function ButtonCreateApiUser({
   return (
     <>
       <LoadingButton
-        disabled={disableButton}
         onClick={handleClick}
         loading={isPending}
-        variant={disableButton ? "secondary" : "default"}
+        variant={isAccessTokenGot ? "green" : "default"}
         {...props}
       >
-        {disableButton && (
+        {isAccessTokenGot && !isPending && (
           <CheckCircleIcon className="mr-2 inline" strokeWidth={0.8} />
         )}{" "}
         {children}

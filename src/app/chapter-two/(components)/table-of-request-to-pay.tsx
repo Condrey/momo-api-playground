@@ -1,3 +1,7 @@
+"use client";
+
+import { useUserQuery } from "@/app/chapter-one/query";
+import ErrorContainer from "@/components/query-containers/error-container";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -8,22 +12,25 @@ import {
   TableHead,
   TableHeader,
 } from "@/components/ui/table";
+import { UserData } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { Prisma } from "@prisma/client";
-import { DefaultArgs, GetFindResult } from "@prisma/client/runtime/library";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import DeleteAllTransactions from "../request-to-pay/(buttons)/delete-all-transactions";
+import ButtonAddEditRequestToPay from "../request-to-pay/button-add-edit-request-to-pay";
 
 interface Props {
-  user: GetFindResult<
-    Prisma.$UserPayload<DefaultArgs>,
-    { include: { RequestToPay: boolean } }
-  > | null;
+  user: UserData;
 }
 
 export default function TableOfRequestToPay({ user }: Props) {
-  const requestsToPay = user?.RequestToPay;
+  const query = useUserQuery(user);
+  const { data, status } = query;
+  if (status === "error")
+    return <ErrorContainer errorMessage="Failed to get user" query={query} />;
+  if (status === "success" && !data) return null;
+  const requestsToPay = data?.RequestToPay;
   const numberOfRequests = `${requestsToPay?.length} request${requestsToPay?.length === 1 ? "" : "s"}`;
   const [showTable, setShowTable] = useState(true);
 
@@ -35,12 +42,12 @@ export default function TableOfRequestToPay({ user }: Props) {
       >
         <span
           title={showTable ? "Hide table" : "Show table"}
-          className="peer flex flex-wrap items-center gap-2 text-xl font-semibold uppercase hover:text-amber-500 dark:hover:text-amber-300"
+          className="peer hover:text-primary flex flex-wrap items-center gap-2 text-xl font-semibold uppercase"
         >
           {!showTable ? <EyeOff /> : <Eye />} Table showing requests made{" "}
-          <Badge variant={"destructive"}>{numberOfRequests}</Badge>
+          <Badge variant={"secondary"}>{numberOfRequests}</Badge>
         </span>
-        <span className="hidden md:hover:flex md:peer-hover:flex">
+        <span className="hidden md:peer-hover:flex md:hover:flex">
           {showTable ? "Hide table" : "Show table"}
         </span>
       </div>
@@ -52,24 +59,30 @@ export default function TableOfRequestToPay({ user }: Props) {
             : "hidden",
         )}
       >
-        <AlertTitle className=" underline">Table key</AlertTitle>
+        <AlertTitle className="underline">Table key</AlertTitle>
         <AlertDescription>
           <div className="mb-3 flex flex-wrap items-center justify-center gap-2 lg:items-start lg:justify-start">
             <span className="font-bold">Status</span>
             <div className="flex items-center gap-2">
-              <div className=" size-3 rounded-full bg-green-700" /> Checked,
+              <div className="size-3 rounded-full bg-green-700" /> Checked,
               verified
             </div>
             <div className="flex items-center gap-2">
-              <div className=" size-3 rounded-full bg-blue-700" /> Not checked
+              <div className="size-3 rounded-full bg-blue-700" /> Not checked
             </div>
             <div className="flex items-center gap-2">
-              <div className=" size-3 rounded-full bg-red-700" /> Timed out
+              <div className="size-3 rounded-full bg-red-700" /> Timed out
             </div>
           </div>
         </AlertDescription>
       </Alert>
-      <Table className={cn(showTable ? "table " : "hidden")}>
+      <div className="flex items-center justify-end gap-2">
+        <DeleteAllTransactions userId={user?.id!} />
+        <ButtonAddEditRequestToPay user={user}>
+          Request To Pay
+        </ButtonAddEditRequestToPay>
+      </div>
+      <Table className={cn(showTable ? "table" : "hidden")}>
         <TableHeader>
           <TableHead>#</TableHead>
           <TableHead>Amount</TableHead>
@@ -92,7 +105,7 @@ export default function TableOfRequestToPay({ user }: Props) {
                 title="click to view transaction"
                 key={request.id}
                 href={`/chapter-two/request-to-pay/${request.id}`}
-                className="table-row cursor-pointer odd:bg-stone-700 odd:text-stone-50 even:bg-amber-300 even:text-slate-950 odd:hover:bg-stone-500 odd:hover:text-stone-50 even:hover:bg-amber-200 dark:border dark:odd:bg-secondary dark:even:bg-background dark:even:text-foreground dark:odd:hover:bg-secondary/50"
+                className="dark:odd:bg-secondary dark:even:bg-background dark:even:text-foreground dark:odd:hover:bg-secondary/50 table-row cursor-pointer odd:bg-stone-700 odd:text-stone-50 even:bg-amber-300 even:text-slate-950 odd:hover:bg-stone-500 odd:hover:text-stone-50 even:hover:bg-amber-200 dark:border"
               >
                 <TableCell> {numbering}</TableCell>
                 <TableCell>{request.amount}</TableCell>
@@ -101,32 +114,32 @@ export default function TableOfRequestToPay({ user }: Props) {
                   <div className="flex items-center space-x-2">
                     <div
                       className={cn(
-                        " size-3 rounded-full",
-                        isChecked ? " bg-green-700" : " bg-blue-700",
+                        "size-3 rounded-full",
+                        isChecked ? "bg-green-700" : "bg-blue-700",
                       )}
                     />
                     <div
                       className={cn(
-                        " size-3 rounded-full bg-red-700",
-                        isExpired ? " flex" : " hidden",
+                        "size-3 rounded-full bg-red-700",
+                        isExpired ? "flex" : "hidden",
                       )}
                     />
                   </div>
                 </TableCell>
                 <TableCell>
-                  <span className="line-clamp-1 flex w-96  select-all flex-nowrap overflow-ellipsis ">
+                  <span className="line-clamp-1 flex w-96 flex-nowrap overflow-ellipsis select-all">
                     {request.referenceId}
                   </span>
                 </TableCell>
                 <TableCell>{request.externalId}</TableCell>
                 <TableCell>{request.partyId}</TableCell>
                 <TableCell>
-                  <span className="line-clamp-1 flex w-64  flex-nowrap overflow-ellipsis ">
+                  <span className="line-clamp-1 flex w-64 flex-nowrap overflow-ellipsis">
                     {request.payerMessage}
                   </span>
                 </TableCell>
                 <TableCell>
-                  <span className="line-clamp-1 flex w-64 flex-nowrap overflow-ellipsis ">
+                  <span className="line-clamp-1 flex w-64 flex-nowrap overflow-ellipsis">
                     {request.payeeNote}
                   </span>
                 </TableCell>

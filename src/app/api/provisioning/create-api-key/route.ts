@@ -24,8 +24,22 @@ export async function POST(req: Request) {
     }
 
     const referenceId = user.momoVariable?.referenceId ?? generateReferenceId();
-    const subscriptionKey = user.momoVariable?.secondaryKey!;
+    const subscriptionKey = user.momoVariable?.primaryKey;
     const url = `https://sandbox.momodeveloper.mtn.com/v1_0/apiuser/${referenceId}/apikey`;
+
+    if (!subscriptionKey) {
+      console.error("Please provide a subscription key as it is missing");
+      return Response.json(
+        {
+          message:
+            "Missing subscription key (Please register your primary and secondary keys in our database to proceed) ",
+        },
+        {
+          status: 401,
+          statusText: "Missing subscription key .",
+        },
+      );
+    }
 
     const response = await fetch(url, {
       method: "POST",

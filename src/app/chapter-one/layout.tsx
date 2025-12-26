@@ -1,7 +1,8 @@
 import BreadCrumb from "@/components/bread-crumb";
 import { Metadata } from "next";
 import { Suspense } from "react";
-import LayoutSideBar from "./layout-side-bar";
+import { fetchUserById } from "./actions";
+import ChapterOneSidebar from "./chapter-one-side-bar";
 
 export const metadata: Metadata = {
   title: {
@@ -18,7 +19,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const user = await fetchUserById();
+
   return (
     <div className="flex flex-col gap-4">
       <BreadCrumb
@@ -27,15 +34,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           { title: "Sandbox user provisioning", href: "/chapter-one" },
         ]}
       />
-      <div className="flex flex-col-reverse  gap-4 lg:flex-row ">
+      <div className="flex flex-col-reverse gap-4 lg:flex-row">
         {/* children  */}
-        <div className=" flex w-full flex-col gap-4 *:before:pr-2 *:before:text-2xl *:before:font-bold lg:w-2/3 lg:p-4 ">
+        <div className="flex w-full flex-col gap-4 *:before:pr-2 *:before:text-2xl *:before:font-bold lg:w-2/3 lg:p-4">
           {children}
         </div>
         {/* side bar information  */}
         <div className="hidden lg:flex">
           <Suspense>
-            <LayoutSideBar />
+            <ChapterOneSidebar user={user} />
           </Suspense>
         </div>
       </div>

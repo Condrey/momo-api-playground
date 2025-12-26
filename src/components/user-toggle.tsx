@@ -1,6 +1,7 @@
 "use client";
 
 import AddEditPrimaryAndSecondaryKeyForm from "@/app/chapter-one/add-edit-primary-and-secondary-key-form";
+import { useUserQuery } from "@/app/chapter-one/query";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserData } from "@/lib/types";
 import { Key, User2, Variable } from "lucide-react";
@@ -20,7 +21,8 @@ interface Props {
 }
 export default function UserToggle({ user }: Props) {
   const [open, setOpen] = useState(false);
-  const userImage = user?.image || undefined;
+  const { data } = useUserQuery(user);
+  const userImage = data?.image || undefined;
   const router = useRouter();
 
   return (
@@ -41,7 +43,7 @@ export default function UserToggle({ user }: Props) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="mr-12 min-w-50 space-y-2 p-4 *:space-x-2 *:px-2">
-          {!!user && (
+          {!!data && (
             <div className="flex items-center justify-center">
               <Avatar className="size-37.5">
                 <AvatarFallback>
@@ -52,11 +54,11 @@ export default function UserToggle({ user }: Props) {
             </div>
           )}
           <span className="font-bold">
-            {user?.name || user?.email || "Unregistered User"}
+            {data?.name || data?.email || "Unregistered User"}
           </span>
           <DropdownMenuSeparator />
 
-          {!!user && (
+          {!!data && (
             <>
               <DropdownMenuItem onClick={() => setOpen(true)}>
                 <Key /> <span>Primary & secondary Keys</span>
@@ -69,7 +71,7 @@ export default function UserToggle({ user }: Props) {
           )}
 
           <DropdownMenuItem asChild>
-            {user ? (
+            {data ? (
               <Button
                 variant={"destructive"}
                 className="w-full"
@@ -89,7 +91,7 @@ export default function UserToggle({ user }: Props) {
       <AddEditPrimaryAndSecondaryKeyForm
         open={open}
         setOpen={setOpen}
-        user={user}
+        user={data!}
       />
     </>
   );

@@ -1,7 +1,7 @@
 "use client";
 import { CheckCheckIcon, CopyIcon, FileCode2Icon } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
 import {
@@ -21,14 +21,13 @@ export default function CodeSnippet({
   filePath?: string;
 }) {
   const { theme } = useTheme();
-  const [isCopied, setIsCopied] = useState<boolean>(false);
   const [isPending, startTransition] = useTransition();
+
   async function handleCopy() {
     if (code !== null) {
       navigator.clipboard
         .writeText(code)
         .then(() => {
-          setIsCopied(true);
           toast.info("code snippet copied to clipboard Successfully");
         })
         .catch((error) => {
@@ -68,7 +67,9 @@ export default function CodeSnippet({
 
         <SyntaxHighlighter
           language={language}
-          style={theme === "light" ? oneLight : oneDark}
+          style={
+            theme === "light" ? oneLight : theme === "dark" ? oneDark : oneLight
+          }
           wrapLongLines
           wrapLines
           showLineNumbers

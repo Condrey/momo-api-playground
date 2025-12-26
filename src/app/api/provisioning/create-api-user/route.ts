@@ -22,10 +22,32 @@ export async function POST(req: Request) {
     }
 
     const referenceId = user.momoVariable?.referenceId ?? generateReferenceId();
-    const providerCallbackHost = user.momoVariable?.callbackHost!;
-    const subscriptionKey = user.momoVariable?.secondaryKey!;
+    const providerCallbackHost = user.momoVariable?.callbackHost;
+    const subscriptionKey = user.momoVariable?.primaryKey;
     const url = `https://sandbox.momodeveloper.mtn.com/v1_0/apiuser`;
 
+    if (!providerCallbackHost) {
+      console.error("Please provide a callbackHost");
+      return Response.json(
+        {
+          error: "Missing callbackHost ",
+        },
+        { status: 401, statusText: "Missing callbackHost ." },
+      );
+    }
+    if (!subscriptionKey) {
+      console.error("Please provide a subscription key as it is missing");
+      return Response.json(
+        {
+          message:
+            "Missing subscription key (Please register your primary and secondary keys in our database to proceed) ",
+        },
+        {
+          status: 401,
+          statusText: "Missing subscription key .",
+        },
+      );
+    }
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -42,10 +64,10 @@ export async function POST(req: Request) {
         data: { momoVariable: { update: { referenceId } } },
       });
     }
-    return Response.json(
-      { message: response.statusText },
-      { status: response.status, statusText: response.statusText },
-    );
+    return Response.json({
+      status: response.status,
+      statusText: response.statusText,
+    });
   } catch (error) {
     console.error("Server error: ", `${error}`);
     return Response.json(

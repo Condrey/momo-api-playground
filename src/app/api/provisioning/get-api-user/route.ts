@@ -32,7 +32,20 @@ export async function POST(req: Request) {
         { status: 401, statusText: msg },
       );
     }
-    const subscriptionKey = user.momoVariable?.secondaryKey!;
+    const subscriptionKey = user.momoVariable?.primaryKey;
+    if (!subscriptionKey) {
+      console.error("Please provide a subscription key as it is missing");
+      return Response.json(
+        {
+          message:
+            "Missing subscription key (Please register your primary and secondary keys in our database to proceed) ",
+        },
+        {
+          status: 401,
+          statusText: "Missing subscription key .",
+        },
+      );
+    }
     const url = `https://sandbox.momodeveloper.mtn.com/v1_0/apiuser/${referenceId}`;
 
     const response = await fetch(url, {
@@ -51,7 +64,7 @@ export async function POST(req: Request) {
       });
       return Response.json(
         { message: data },
-        { statusText: data, status: response.status },
+        { statusText: response.statusText, status: response.status },
       );
     } else {
       return Response.json(

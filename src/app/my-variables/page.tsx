@@ -1,21 +1,28 @@
 import BreadCrumb from "@/components/bread-crumb";
+import EmptyContainer from "@/components/query-containers/empty-container";
 import SmallCodeSnippetContainer from "@/components/small-code-snippet-container";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
-import { fetchUserById } from "@/lib/db/data/user-data";
 import { cn } from "@/lib/utils";
+import { differenceInMilliseconds, formatDate } from "date-fns";
 import {
   Box,
+  BoxIcon,
   CircleDashed,
+  CircleDashedIcon,
   CircleSlash2,
+  CircleSlash2Icon,
   Star,
+  StarIcon,
   Stars,
   Triangle,
+  TriangleIcon,
   User2,
-  Variable,
+  VariableIcon,
 } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
+import { fetchUserById } from "../chapter-one/actions";
 
 export const metadata: Metadata = {
   title: "My Variables",
@@ -25,6 +32,8 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   const user = await fetchUserById();
+  if (!user) return <EmptyContainer message={"Please sign in first"} />;
+  const { momoVariable, image } = user;
   return (
     <>
       <BreadCrumb
@@ -35,90 +44,82 @@ export default async function Page() {
       />
 
       <div className="flex flex-col gap-6 *:flex *:w-full *:flex-col *:gap-4 lg:flex-row">
-        <div className="w-full items-center  lg:w-1/3">
-          <Avatar className="size-[150px] rounded-full ">
+        <div className="w-full items-center lg:w-1/3">
+          <Avatar className="size-37.5 rounded-full">
             <AvatarFallback>
               <User2 />
             </AvatarFallback>
-            <AvatarImage src={user?.image!} alt="user-image" />
+            <AvatarImage src={image!} alt="user-image" />
           </Avatar>
           <span>My Variables</span>
-          <div className="hidden size-[150px] items-center justify-center lg:flex ">
-            <Variable className=" peer absolute z-50  size-[50px] animate-spin text-amber-500 hover:text-foreground dark:text-amber-300" />
-            <CircleDashed className="absolute size-[90px] peer-hover:animate-spin peer-hover:text-amber-500 dark:peer-hover:text-amber-300" />
-            <Star className="relative inset-12 peer-hover:animate-spin" />
-            <Triangle className="relative -inset-12 peer-hover:animate-spin" />
-            <CircleSlash2 className="relative inset-x-12 peer-hover:animate-spin" />
-            <Box className="relative  -inset-y-12 peer-hover:animate-spin" />
+          <div className="hidden size-37.5 items-center justify-center lg:flex">
+            <VariableIcon className="peer hover:text-foreground text-primary absolute z-50 size-12.5 animate-spin" />
+            <CircleDashedIcon className="text-mtn-blue peer-hover:text-primary absolute size-22.5 peer-hover:animate-spin" />
+            <StarIcon className="text-mtn-blue relative inset-12 peer-hover:animate-spin" />
+            <TriangleIcon className="text-mtn-blue relative -inset-12 peer-hover:animate-spin" />
+            <CircleSlash2Icon className="text-mtn-blue relative inset-x-12 peer-hover:animate-spin" />
+            <BoxIcon className="text-mtn-blue relative -inset-y-12 peer-hover:animate-spin" />
           </div>
         </div>
-        <div className="rounded-md border p-4 *:max-w-prose">
-          {/**
-           *
-           * chapter one
-           *
-           *
-           */}
-          <SmallCodeSnippetContainer
-            text={user?.callbackHost!}
-            title="Your callbackHost"
-          />
-          <SmallCodeSnippetContainer
-            text={user?.callbackUrl!}
-            title="Your callbackUrl"
-          />
-          <SmallCodeSnippetContainer
-            text={user?.referenceId!}
-            title="Your X-Reference-Id"
-          />
-          <SmallCodeSnippetContainer text={user?.apiKey!} title="Your apiKey" />
-          <SmallCodeSnippetContainer
-            text={user?.authorization!}
-            title="Your Authorization"
-            subtitle="Please note, authorization expires in 1 hour"
-          />
-          <hr />
-          {/**
-           *
-           * chapter two
-           *
-           *
-           */}
-          <SmallCodeSnippetContainer
-            text={user?.accessToken!}
-            title="Your accessToken"
-          />
-          <div
-            className={cn(
-              user?.referenceId !== null
-                ? "hidden"
-                : "flex size-full flex-col items-center justify-center gap-4 ",
-            )}
-          >
-            <div className="flex size-[150px] items-center justify-center ">
-              <Stars className=" peer absolute z-50  size-[50px]  text-amber-500 hover:text-foreground dark:text-amber-300" />
-              <CircleDashed className="absolute size-[90px] peer-hover:animate-spin peer-hover:text-amber-500 dark:peer-hover:text-amber-300" />
-              <Star className="relative inset-12 peer-hover:animate-spin" />
-              <Triangle className="relative -inset-12 peer-hover:animate-spin" />
-              <CircleSlash2 className="relative inset-x-12 peer-hover:animate-spin" />
-              <Box className="relative  -inset-y-12 peer-hover:animate-spin" />
+        <div className="rounded-md border p-4">
+          {!!momoVariable ? (
+            <div className="grid gap-4 *:max-w-prose sm:grid-cols-2">
+              {Object.entries(momoVariable).map(([key, val]) => {
+                if (val == null) return null;
+                if (val instanceof Date) {
+                  const expiresMs =
+                    3600 * 1000 - differenceInMilliseconds(new Date(), val);
+
+                  return (
+                    <SmallCodeSnippetContainer
+                      key={key}
+                      text={formatDate(val, "PPPpp")}
+                      title={`Your ${key}`}
+                      subtitle={
+                        expiresMs <= 0
+                          ? "Expired"
+                          : `expires in ${expiresMs} ms`
+                      }
+                    />
+                  );
+                }
+                const display =
+                  typeof val === "object" ? JSON.stringify(val) : String(val);
+                return (
+                  <SmallCodeSnippetContainer
+                    key={key}
+                    text={display}
+                    title={`Your ${key}`}
+                  />
+                );
+              })}
             </div>
-            <span>Seems you have nothing.!</span>
-            <span>
-              You need to get started with Sandbox user provisioning ASAP.!
-            </span>
-            <Link
-              href="/chapter-one"
-              className={cn(
-                buttonVariants({
-                  className:
-                    "bg-amber-500 hover:bg-amber-300 dark:bg-amber-300 dark:hover:bg-amber-500",
-                }),
-              )}
+          ) : (
+            <EmptyContainer
+              message={
+                "Seems you have nothing.! You need to get started with Sandbox user provisioning ASAP.!"
+              }
             >
-              Get started
-            </Link>
-          </div>
+              <div
+                className={cn(
+                  "flex size-full flex-col items-center justify-center gap-4",
+                )}
+              >
+                <div className="flex size-37.5 items-center justify-center">
+                  <Stars className="peer hover:text-foreground text-primary absolute z-50 size-12.5" />
+                  <CircleDashed className="peer-hover:text-primary text-mtn-blue absolute size-22.5 peer-hover:animate-spin" />
+                  <Star className="text-mtn-blue relative inset-12 peer-hover:animate-spin" />
+                  <Triangle className="text-mtn-blue relative -inset-12 peer-hover:animate-spin" />
+                  <CircleSlash2 className="text-mtn-blue relative inset-x-12 peer-hover:animate-spin" />
+                  <Box className="text-mtn-blue relative -inset-y-12 peer-hover:animate-spin" />
+                </div>
+
+                <Link href="/chapter-one" className={cn(buttonVariants())}>
+                  Get started
+                </Link>
+              </div>
+            </EmptyContainer>
+          )}
         </div>
       </div>
     </>

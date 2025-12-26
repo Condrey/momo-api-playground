@@ -1,29 +1,49 @@
 import prisma from "@/lib/db/prisma";
+import generateReferenceId from "@/lib/momo-utils/generate-reference-id";
+import getAuthorization from "@/lib/momo-utils/get-authorization";
+import { userDataSelect } from "@/lib/types";
 import { verifySession } from "@/lib/verify-session";
-import { z } from "zod";
 
 export async function POST(req: Request) {
   const body = await req.json();
 
-  const schema = z.object({
-    primaryKey: z.string().min(1),
-    authorization: z.string().min(1),
-  });
-
   try {
-    const parseResult = schema.safeParse(body);
-    if (!parseResult.success) {
+    const session = await verifySession();
+    const user = await prisma.user.findUnique({
+      where: { id: session?.user.id! },
+      select: userDataSelect,
+    });
+    if (!user) {
+      console.error("User not found in the database");
       return Response.json(
-        { error: "Invalid input, check your request body." },
-        { status: 400 },
+        {
+          error: "User not found in the database",
+        },
+        { status: 401, statusText: "User not found in the database." },
       );
     }
 
-    const { authorization, primaryKey } = parseResult.data;
-    const subscriptionKey = primaryKey;
+    const subscriptionKey = user.momoVariable?.primaryKey;
+    const referenceId = user.momoVariable?.referenceId ?? generateReferenceId();
+    const apiKey = user.momoVariable?.apiKey;
+    const authorization =
+      user.momoVariable?.authorization ??
+      getAuthorization(referenceId, apiKey!);
     const url = `https://sandbox.momodeveloper.mtn.com/collection/token/`;
 
-    const session = await verifySession();
+    if (!subscriptionKey) {
+      console.error("Please provide a subscription key as it is missing");
+      return Response.json(
+        {
+          message:
+            "Missing subscription key (Please register your primary and secondary keys in our database to proceed) ",
+        },
+        {
+          status: 401,
+          statusText: "Missing subscription key .",
+        },
+      );
+    }
 
     const response = await fetch(url, {
       method: "POST",
@@ -40,13 +60,20 @@ export async function POST(req: Request) {
 
       await prisma.user.update({
         where: { id: session?.user.id! },
-        data: { accessToken, accessTokenCreatedTime: `${currentTime}` },
+        data: {
+          momoVariable: {
+            update: { accessToken },
+          },
+        },
       });
-      return Response.json({ message: data }, { status: response.status });
+      return Response.json(
+        { message: data },
+        { status: response.status, statusText: response.statusText },
+      );
     } else {
       return Response.json(
         { message: response.statusText },
-        { status: response.status },
+        { status: response.status, statusText: response.statusText },
       );
     }
   } catch (error) {

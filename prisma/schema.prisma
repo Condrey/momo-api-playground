@@ -37,7 +37,7 @@ model User {
 }
 
 model MomoVariable {
-  id                     String  @id @unique @default(uuid())
+  id                     String    @id @unique @default(uuid())
   primaryKey             String?
   secondaryKey           String?
   referenceId            String?
@@ -46,7 +46,7 @@ model MomoVariable {
   authorization          String?
   apiKey                 String?
   accessToken            String?
-  accessTokenCreatedTime String?
+  accessTokenCreatedTime DateTime? @default(now())
   users                  User[]
 
   @@map("momo_variables")
@@ -129,6 +129,19 @@ model RequestToPay {
   createdAt              DateTime            @default(now())
   updatedAt              DateTime            @updatedAt
   RequestToWithdraw      RequestToWithdraw[]
+}
+
+model Payer {
+  id          String      @id @unique @default(uuid())
+  partyIdType PartyIdType
+  partyId     String
+  response    String      @unique
+}
+
+enum PartyIdType {
+  MSISDN
+  EMAIL
+  PARTY_CODE
 }
 
 model RequestToWithdraw {

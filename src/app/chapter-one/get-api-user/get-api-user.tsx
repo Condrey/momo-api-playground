@@ -11,7 +11,7 @@ interface Props {
   user: UserData;
 }
 export default function GetApiUser({ user }: Props) {
-  const isUserPresent = user?.isUserPresent !== false;
+  const isUserPresent = !!user?.isUserPresent;
   const query = useUserQuery(user);
   const { data, status } = query;
   return (

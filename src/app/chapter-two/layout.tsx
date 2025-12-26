@@ -1,7 +1,4 @@
-import BreadCrumb from "@/components/bread-crumb";
 import { Metadata } from "next";
-import { Suspense } from "react";
-import LayoutSideBar from "./layout-side-bar";
 
 export const metadata: Metadata = {
   title: {

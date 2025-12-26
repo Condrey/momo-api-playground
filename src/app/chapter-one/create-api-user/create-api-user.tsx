@@ -16,8 +16,7 @@ interface Props {
 }
 export default function CreateApiUser({ user }: Props) {
   const isReferenceIdSaved = !!user.momoVariable?.referenceId;
-  const query = useUserQuery(user);
-  const { data, status } = query;
+  const { data } = useUserQuery(user);
 
   return (
     <>
@@ -47,7 +46,7 @@ export default function CreateApiUser({ user }: Props) {
           uuid generator <ArrowUpRightIcon className="inline size-3" />
         </Link>
       </SubtitleOnly>
-      {!user?.momoVariable?.callbackHost && (
+      {!data?.momoVariable?.callbackHost && (
         <ButtonProvideCallbackHost user={data}>
           Provide callBack host
         </ButtonProvideCallbackHost>

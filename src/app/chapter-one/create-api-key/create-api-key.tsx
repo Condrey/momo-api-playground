@@ -31,9 +31,12 @@ export default function CreateApiKey({ user }: Props) {
       </ProductSubtitleContainer>
       <SubtitleOnly>
         Used to create an API key for an API user in the sandbox target
-        environment.
+        environment. The user must use the UUIDv4 reference id used to create
+        the sandbox user and pass it as a parameter.
       </SubtitleOnly>
-      <ButtonCreateApiKey user={data}>Create Api Key</ButtonCreateApiKey>
+      <ButtonCreateApiKey user={data}>
+        {isApiKeyPresent ? "Create another API key" : "Create Api Key"}
+      </ButtonCreateApiKey>
     </>
   );
 }
